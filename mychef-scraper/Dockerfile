@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     zlib1g-dev \
     libffi-dev \
     libssl-dev \
+    libpq-dev \
 && rm -rf /var/lib/apt/lists/*
 
 
@@ -18,5 +19,5 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 
-ENTRYPOINT ["gunicorn", "-c", "mychef_scraper/gunicorn_conf.py", "--reload"]
+ENTRYPOINT ["gunicorn", "app:api" "-c", "mychef_scraper/config/gunicorn_conf.py", "--reload"]
 
