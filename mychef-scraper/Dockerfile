@@ -18,5 +18,5 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 
-COPY . .
+ENTRYPOINT ["gunicorn", "-c", "mychef_scraper/gunicorn_conf.py", "--reload"]
 
