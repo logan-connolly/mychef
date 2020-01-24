@@ -7,6 +7,10 @@ authors = ["Logan Connolly <logan.connolly@protonmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 scrapy = "^1.8.0"
+falcon = "^2.0.0"
+sqlalchemy = "^1.3.13"
+gunicorn = "^20.0.4"
+psycopg2 = "^2.8.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
