@@ -1,5 +1,5 @@
+import json
 import falcon
-import msgpack
 
 
 class Source(object):
@@ -22,13 +22,15 @@ class Source(object):
     def on_get(self, req, resp, sid):
         source = [s for s in self.doc['sources'] if s.get('id') == sid]
         if source:
-            resp.data = msgpack.packb({"source": source}, use_bin_type=True)
+            resp.body = json.dumps(source[0])
+            resp.status = falcon.HTTP_200
         else:
-            resp.data = msgpack.packb({"message": "Source not found."})
-        resp.content_type = falcon.MEDIA_MSGPACK
-        resp.status = falcon.HTTP_200
+            resp.body = json.dumps({"message": "source not found."})
+            resp.status = falcon.HTTP_404
 
     def on_get_collection(self, req, resp):
-        resp.data = msgpack.packb(self.doc, use_bin_type=True)
-        resp.content_type = falcon.MEDIA_MSGPACK
+        resp.body = json.dumps(self.doc, ensure_ascii=False)
         resp.status = falcon.HTTP_200
+
+    def on_post(self, req, resp):
+        pass
