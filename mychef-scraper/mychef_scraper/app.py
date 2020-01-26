@@ -1,6 +1,6 @@
 import falcon
 
-from resources.sources import Source
+from mychef_scraper.resources.sources import Source
 
 
 api = falcon.API()
