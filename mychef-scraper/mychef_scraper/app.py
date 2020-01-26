@@ -1,8 +1,10 @@
 import falcon
 
-from resources.sources import SourceList
+from resources.sources import Source
+
 
 api = falcon.API()
 
-sources = SourceList()
-api.add_route('/sources', sources)
+source = Source()
+api.add_route('/source/{sid:int}', source)
+api.add_route('/sources', source, suffix='collection')
