@@ -16,8 +16,13 @@ RUN apt-get update && apt-get install -y \
 
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pypy3 -m venv /venv \
+    && . /venv/bin/activate \
+    && pip install -U pip setuptools \
+    && pip install --no-cache-dir -r requirements.txt
 
 
-ENTRYPOINT ["gunicorn", "app:api" "-c", "mychef_scraper/config/gunicorn_conf.py", "--reload"]
+COPY . .
 
+
+CMD [ "sh", "entrypoint.sh" ]
