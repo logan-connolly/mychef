@@ -42,6 +42,17 @@ async def update_source(id: int, payload: SourceSchema):
     return response_object
 
 
+@router.delete("/{id}/", response_model=SourceDB, status_code=200)
+async def remove_source(id: int):
+    source = await CRUD.get(id)
+    if not source:
+        raise HTTPException(status_code=404, detail="Source not found")
+
+    await CRUD.delete(id)
+
+    return source
+
+
 class CRUD:
     @classmethod
     async def post(payload: SourceSchema):
@@ -63,3 +74,8 @@ class CRUD:
             .returning(sources.c.id)
         )
         return await database.execute(query=query)
+
+    @classmethod
+    async def delete(id: int):
+        query = sources.delete().where(id == sources.c.id)
+        return await database.execture(query=query)
