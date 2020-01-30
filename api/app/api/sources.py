@@ -26,6 +26,22 @@ async def get_source(id: int):
     return source
 
 
+@router.put("/{id}/", response_model=SourceDB, status_code=200)
+async def update_source(id: int, payload: SourceSchema):
+    source = await CRUD.get(id)
+    if not source:
+        raise HTTPException(status_code=404, detail="Source not found")
+
+    source_id = await CRUD.put(id, payload)
+
+    response_object = {
+        "id": source_id,
+        "name": payload.name,
+        "url": payload.url,
+    }
+    return response_object
+
+
 class CRUD:
     @classmethod
     async def post(payload: SourceSchema):
@@ -36,3 +52,14 @@ class CRUD:
     async def get(id: int):
         query = sources.select().where(id == sources.c.id)
         return await database.fetch_one(query=query)
+
+    @classmethod
+    async def put(id: int, payload: SourceSchema):
+        query = (
+            sources
+            .update()
+            .where(id == sources.c.id)
+            .values(name=payload.name, url=payload.url)
+            .returning(sources.c.id)
+        )
+        return await database.execute(query=query)
