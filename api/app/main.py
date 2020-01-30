@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.api import sources, ping
+from app.api import sources
 from app.db import engine, metadata, database
 
 
@@ -19,5 +19,5 @@ async def shutdown():
     await database.disconnect()
 
 
-app.include_router(ping.router)
 app.include_router(sources.router, prefix="/source", tags=["sources"])
+
