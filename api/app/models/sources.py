@@ -1,3 +1,4 @@
+from pydantic import BaseModel
 from sqlalchemy import (
     Column,
     DateTime,
@@ -6,6 +7,15 @@ from sqlalchemy import (
     Table
 )
 from sqlalchemy.sql import func
+
+
+class SourceSchema(BaseModel):
+    name: str
+    url: str
+
+
+class SourceDB(SourceSchema):
+    id: int
 
 
 class Source:
@@ -20,7 +30,7 @@ class Source:
             self.metadata,
             Column("id", Integer, primary_key=True),
             Column("name", String(50)),
-            Column("homepage", String(50)),
+            Column("url", String(50)),
             Column("created_date", DateTime, default=func.now(), nullable=False),
        )
 
