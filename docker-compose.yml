@@ -24,5 +24,5 @@ services:
       - POSTGRES_DB=mychef_dev
 
 volumes:
-  postgres_data
+  postgres_data:
 

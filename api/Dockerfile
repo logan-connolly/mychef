@@ -17,8 +17,7 @@ RUN set -eux \
         postgresql-dev \
     && pip install --upgrade pip setuptools wheel \
     && pip install -r requirements.txt \
-    && rm -rf /root/.cache/pip \
-    && apk del .build-deps
+    && rm -rf /root/.cache/pip
 
 # copy project
 COPY . .
