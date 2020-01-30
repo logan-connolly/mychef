@@ -1,3 +1,5 @@
+from typing import List
+
 from app.models.sources import SourceDB, SourceSchema
 from app.db import sources, database
 from fastapi import APIRouter, HTTPException
@@ -24,6 +26,11 @@ async def get_source(id: int):
     if not source:
         raise HTTPException(status_code=404, detail="Source not found")
     return source
+
+
+@router.get("/", response_model=List[SourceDB], status_code=200)
+async def list_sources():
+    return await CRUD.get_all()
 
 
 @router.put("/{id}/", response_model=SourceDB, status_code=200)
@@ -54,17 +61,22 @@ async def remove_source(id: int):
 
 
 class CRUD:
-    @classmethod
+    @staticmethod
     async def post(payload: SourceSchema):
         query = sources.insert().values(name=payload.name, url=payload.url)
         return await database.execute(query=query)
 
-    @classmethod
+    @staticmethod
     async def get(id: int):
         query = sources.select().where(id == sources.c.id)
         return await database.fetch_one(query=query)
 
-    @classmethod
+    @staticmethod
+    async def get_all():
+        query = sources.select()
+        return await database.fetch_all(query=query)
+
+    @staticmethod
     async def put(id: int, payload: SourceSchema):
         query = (
             sources
@@ -75,7 +87,7 @@ class CRUD:
         )
         return await database.execute(query=query)
 
-    @classmethod
+    @staticmethod
     async def delete(id: int):
         query = sources.delete().where(id == sources.c.id)
-        return await database.execture(query=query)
+        return await database.execute(query=query)

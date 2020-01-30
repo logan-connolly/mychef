@@ -19,4 +19,4 @@ async def shutdown():
     await database.disconnect()
 
 
-app.include_router(sources.router, prefix="/source", tags=["sources"])
+app.include_router(sources.router, prefix="/sources", tags=["sources"])
