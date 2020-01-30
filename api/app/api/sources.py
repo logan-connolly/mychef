@@ -11,10 +11,10 @@ async def add_source(payload: SourceSchema):
     source_id = await CRUD.post(payload)
 
     response_object = {
-         "id": source_id,
-         "name": payload.name,
-         "url": payload.url,
-     }
+        "id": source_id,
+        "name": payload.name,
+        "url": payload.url,
+    }
     return response_object
 
 
@@ -36,4 +36,3 @@ class CRUD:
     async def get(id: int):
         query = sources.select().where(id == sources.c.id)
         return await database.fetch_one(query=query)
-

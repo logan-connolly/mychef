@@ -8,4 +8,3 @@ from app.main import app
 def test_app():
     client = TestClient(app)
     yield client  # testing happens here
-

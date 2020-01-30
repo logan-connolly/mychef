@@ -48,4 +48,3 @@ def test_read_source_invalid(test_app, monkeypatch):
     response = test_app.get("/source/999")
     assert response.status_code == 404
     assert response.json()["detail"] == "Source not found"
-

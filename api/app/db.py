@@ -15,4 +15,3 @@ metadata = MetaData()
 sources = Source(metadata).create_table()
 
 database = Database(DATABASE_URL)
-
