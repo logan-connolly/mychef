@@ -1,0 +1,18 @@
+version: '3'
+services:
+
+  scraper:
+    build: ./mychef-scraper
+    ports:
+      - "9000:8000"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:alpine
+    environment:
+      POSTGRES_DB: test_dev
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    ports:
+      - '5432:5432'
