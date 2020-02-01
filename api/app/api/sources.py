@@ -10,12 +10,15 @@ router = APIRouter()
 
 @router.post("/", response_model=SourceDB, status_code=201)
 async def add_source(payload: SourceSchema):
+    if await url_exists(payload.url.host):
+        raise HTTPException(status_code=400, detail="URL already exists")
+
     source_id = await CRUD.post(payload)
 
     response_object = {
         "id": source_id,
         "name": payload.name,
-        "url": payload.url,
+        "url": payload.url.host,
     }
     return response_object
 
@@ -63,7 +66,7 @@ async def remove_source(id: int):
 class CRUD:
     @staticmethod
     async def post(payload: SourceSchema):
-        query = sources.insert().values(name=payload.name, url=payload.url)
+        query = sources.insert().values(name=payload.name, url=payload.url.host)
         return await database.execute(query=query)
 
     @staticmethod
@@ -82,7 +85,7 @@ class CRUD:
             sources
             .update()
             .where(id == sources.c.id)
-            .values(name=payload.name, url=payload.url)
+            .values(name=payload.name, url=payload.url.host)
             .returning(sources.c.id)
         )
         return await database.execute(query=query)
@@ -91,3 +94,8 @@ class CRUD:
     async def delete(id: int):
         query = sources.delete().where(id == sources.c.id)
         return await database.execute(query=query)
+
+
+async def url_exists(url: str):
+    query = sources.select().where(url == sources.c.url)
+    return await database.fetch_one(query=query)
