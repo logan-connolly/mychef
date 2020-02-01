@@ -3,28 +3,29 @@ from sqlalchemy import Column, DateTime, Integer, String, Table
 from sqlalchemy.sql import func
 
 
-class SourceSchema(BaseModel):
+class RecipeSchema(BaseModel):
     name: str
     url: AnyUrl
+    image: AnyUrl
 
 
-class SourceDB(SourceSchema):
+class RecipeDB(RecipeSchema):
     id: int
-    url: str
 
 
-class Source:
-    """Model for recipe source website"""
+class Recipe:
+    """Model for recipe metadata (name, url, image link)"""
 
     def __init__(self, metadata):
         self.metadata = metadata
 
     def create_table(self):
         return Table(
-            "sources",
+            "recipes",
             self.metadata,
             Column("id", Integer, primary_key=True),
             Column("name", String(50)),
             Column("url", String(255)),
+            Column("image", String(255)),
             Column("created_date", DateTime, default=func.now(), nullable=False),
         )
