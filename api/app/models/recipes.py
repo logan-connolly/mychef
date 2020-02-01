@@ -1,5 +1,5 @@
 from pydantic import BaseModel, AnyUrl
-from sqlalchemy import Column, DateTime, Integer, String, Table
+from sqlalchemy import Column, DateTime, Integer, String, Table, ForeignKey
 from sqlalchemy.sql import func
 
 
@@ -11,6 +11,7 @@ class RecipeSchema(BaseModel):
 
 class RecipeDB(RecipeSchema):
     id: int
+    sid: int
 
 
 class Recipe:
@@ -27,5 +28,6 @@ class Recipe:
             Column("name", String(50)),
             Column("url", String(255)),
             Column("image", String(255)),
+            Column("sid", Integer, ForeignKey("sources.id", ondelete="CASCADE")),
             Column("created_date", DateTime, default=func.now(), nullable=False),
         )
