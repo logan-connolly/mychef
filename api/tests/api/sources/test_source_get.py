@@ -13,7 +13,7 @@ def test_read_source(test_app, monkeypatch):
 
     monkeypatch.setattr(CRUD, "get", mock_get)
 
-    response = test_app.get("/source/1")
+    response = test_app.get("/sources/1")
 
     assert response.status_code == 200
     assert response.json() == test_data
@@ -25,6 +25,6 @@ def test_read_source_invalid(test_app, monkeypatch):
 
     monkeypatch.setattr(CRUD, "get", mock_get)
 
-    response = test_app.get("/source/999")
+    response = test_app.get("/sources/999")
     assert response.status_code == 404
     assert response.json()["detail"] == "Source not found"

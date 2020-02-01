@@ -18,7 +18,7 @@ def test_delete_source(test_app, monkeypatch):
 
     monkeypatch.setattr(CRUD, "delete", mock_delete)
 
-    response = test_app.delete("/source/1/")
+    response = test_app.delete("/sources/1/")
     assert response.status_code == 200
     assert response.json() == test_data
 
@@ -29,6 +29,6 @@ def test_delete_invalid_source_id(test_app, monkeypatch):
 
     monkeypatch.setattr(CRUD, "get", mock_get)
 
-    response = test_app.delete("/source/1/")
+    response = test_app.delete("/sources/1/")
     assert response.status_code == 404
     assert response.json()["detail"] == "Source not found"

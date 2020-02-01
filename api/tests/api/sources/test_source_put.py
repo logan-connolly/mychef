@@ -18,7 +18,7 @@ def test_update_source(test_app, monkeypatch):
 
     monkeypatch.setattr(CRUD, "put", mock_put)
 
-    response = test_app.put("/source/1/", data=json.dumps(test_update_payload),)
+    response = test_app.put("/sources/1/", data=json.dumps(test_update_payload),)
     assert response.status_code == 200
     assert response.json() == test_update_payload
 
@@ -28,8 +28,8 @@ def test_update_source(test_app, monkeypatch):
     [
         [1, {}, 422],
         [1, {"name": "only name"}, 422],
-        [1, {"url": "only url"}, 422],
-        [999, {"name": "bad id", "url": "bad id"}, 404],
+        [1, {"url": "http://example.com"}, 422],
+        [999, {"name": "bad id", "url": "http://example.com"}, 404],
     ],
 )
 def test_update_source_invalid(test_app, monkeypatch, id, payload, status_code):
@@ -38,5 +38,5 @@ def test_update_source_invalid(test_app, monkeypatch, id, payload, status_code):
 
     monkeypatch.setattr(CRUD, "get", mock_get)
 
-    response = test_app.put(f"/source/{id}/", data=json.dumps(payload),)
+    response = test_app.put(f"/sources/{id}/", data=json.dumps(payload),)
     assert response.status_code == status_code
