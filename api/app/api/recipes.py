@@ -1,5 +1,6 @@
 from typing import List
 
+from asyncpg.exceptions import ForeignKeyViolationError
 from app.models.recipes import RecipeDB, RecipeSchema
 from app.db import recipes, database
 from fastapi import APIRouter, HTTPException
@@ -13,7 +14,10 @@ async def add_recipe(sid: int, payload: RecipeSchema):
     if await url_exists(payload.url):
         raise HTTPException(status_code=400, detail="URL already exists")
 
-    recipe_id = await CRUD.post(sid, payload)
+    try:
+        recipe_id = await CRUD.post(sid, payload)
+    except ForeignKeyViolationError:
+        raise HTTPException(status_code=404, detail="Source does not exist")
 
     response_object = {
         "id": recipe_id,
@@ -76,7 +80,12 @@ class CRUD:
 
     @staticmethod
     async def get(sid: int, id: int):
-        query = recipes.select().where(id == recipes.c.id)
+        query = (
+            recipes
+            .select()
+            .where(id == recipes.c.id)
+            .where(sid == recipes.c.sid)
+        )
         return await database.fetch_one(query=query)
 
     @staticmethod
@@ -90,6 +99,7 @@ class CRUD:
             recipes
             .update()
             .where(id == recipes.c.id)
+            .where(sid == recipes.c.sid)
             .values(name=payload.name, url=payload.url, image=payload.image)
             .returning(recipes.c.id)
         )
@@ -100,8 +110,8 @@ class CRUD:
         query = (
             recipes
             .delete()
-            .where(sid == recipes.c.sid)
             .where(id == recipes.c.id)
+            .where(sid == recipes.c.sid)
         )
         return await database.execute(query=query)
 
