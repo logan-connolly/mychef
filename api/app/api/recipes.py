@@ -39,8 +39,10 @@ async def get_recipe(sid: int, id: int):
 
 @router.get("/", response_model=List[RecipeDB], status_code=200)
 async def list_recipes(sid: int):
-    return await CRUD.get_all(sid)
-
+    recipes = await CRUD.get_all(sid)
+    if not recipes:
+        raise HTTPException(status_code=404, detail="No recipes found for source")
+    return recipes
 
 @router.put("/{id}/", response_model=RecipeDB, status_code=200)
 async def update_recipe(sid: int, id: int, payload: RecipeSchema):

@@ -25,7 +25,7 @@ class Recipe:
             "recipes",
             self.metadata,
             Column("id", Integer, primary_key=True),
-            Column("name", String(50)),
+            Column("name", String(255)),
             Column("url", String(255)),
             Column("image", String(255)),
             Column("sid", Integer, ForeignKey("sources.id", ondelete="CASCADE")),
