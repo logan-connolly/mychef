@@ -29,6 +29,7 @@ queuelib==1.5.0
 requests==2.23.0
 Scrapy==2.0.1
 scrapyd==1.2.1
+scrapyd-client==1.1.0
 service-identity==18.1.0
 six==1.14.0
 spacy==2.2.4
