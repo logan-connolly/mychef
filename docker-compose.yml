@@ -14,6 +14,15 @@ services:
     environment:
       - DATABASE_URL=${PG_DB_URL}
 
+  scraper:
+    build: ./scraper
+    image: mychef_scraper:dev
+    command: scrapyd-deploy scraper
+    volumes:
+      - ./scraper/:/usr/src/app/
+    ports:
+      - ${SCRAPER_PORT}:6023
+
   db:
     image: postgres:12.1-alpine
     volumes:
