@@ -21,7 +21,7 @@ services:
     volumes:
       - ./scraper/:/usr/src/app/
     ports:
-      - ${SCRAPER_PORT}:6023
+      - ${SCRAPER_PORT}:6800
 
   db:
     image: postgres:12.1-alpine
