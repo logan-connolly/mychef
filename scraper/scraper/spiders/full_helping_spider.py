@@ -2,17 +2,23 @@ import os
 import string
 
 import scrapy
-import spacy
 import requests
+
+from bs4 import BeautifulSoup
 
 
 def get_latest_recipe():
-    index_url = "https://www.thefullhelping.com/recipe-index/",
-    return ["https://www.thefullhelping.com/spicy-cabbage-chickpea-soup/"]
+    """Extract first url from recipe index on fullhelping webpage"""
+    index_url = "https://www.thefullhelping.com/recipe-index/"
+    res = requests.get(index_url)
+    soup = BeautifulSoup(res.content)
+    start_url = soup.find("div", {"class": "single-posty"}).find("a")["href"]
+    return [start_url]
 
 
 class FullHelpingSpider(scrapy.Spider):
     """Scrapes the website <thefullhelping.com> and posts to mychef"""
+
     name = "full_helping"
     sid = 1
     download_delay = 8
@@ -24,7 +30,6 @@ class FullHelpingSpider(scrapy.Spider):
                 "name": response.css(".title::text").get(),
                 "url": response.url,
                 "image": self.get_image_url(response),
-
             }
             requests.post(f"http://api:8000/sources/{self.sid}/recipes/", json=payload)
 

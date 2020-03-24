@@ -1,6 +1,8 @@
 attrs==19.3.0
 Automat==20.2.0
+beautifulsoup4==4.8.2
 blis==0.4.1
+bs4==0.0.1
 catalogue==1.0.0
 certifi==2019.11.28
 cffi==1.14.0
@@ -10,6 +12,7 @@ cryptography==2.8
 cssselect==1.1.0
 cymem==2.0.3
 demjson==2.2.4
+en-core-web-sm==2.2.5
 hyperlink==19.0.0
 idna==2.9
 incremental==17.5.0
@@ -32,6 +35,7 @@ Scrapy==2.0.1
 scrapyrt==0.11.0
 service-identity==18.1.0
 six==1.14.0
+soupsieve==2.0
 spacy==2.2.4
 srsly==1.0.2
 thinc==7.4.0
