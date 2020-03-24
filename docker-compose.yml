@@ -17,7 +17,7 @@ services:
   scraper:
     build: ./scraper
     image: mychef_scraper:dev
-    command: scrapyd-deploy scraper
+    command: scrapyrt -p 6800 
     volumes:
       - ./scraper/:/usr/src/app/
     ports:
