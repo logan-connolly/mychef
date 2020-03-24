@@ -22,6 +22,8 @@ services:
       - ./scraper/:/usr/src/app/
     ports:
       - ${SCRAPER_PORT}:6800
+    links:
+      - "api:api"
 
   db:
     image: postgres:12.1-alpine

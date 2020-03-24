@@ -1,6 +1,8 @@
+import os
+import string
+
 import scrapy
 import spacy
-import string
 import requests
 
 
@@ -17,16 +19,14 @@ class FullHelpingSpider(scrapy.Spider):
     start_urls = get_latest_recipe()
 
     def parse(self, response):
-        if not response.css(".wprm-recipe-ingredients-contain"):
-            continue
+        if response.css(".wprm-recipe-ingredients-container"):
+            payload = {
+                "name": response.css(".title::text").get(),
+                "url": response.url,
+                "image": self.get_image_url(response),
 
-        payload = {
-            "name": response.css(".title::text").get(),
-            "url": response.url,
-            "image": self.get_image_url(response),
-
-        }
-        requests.post(f"http://localhost:8002/sources/{self.sid}/recipes/", json=payload)
+            }
+            requests.post(f"http://api:8000/sources/{self.sid}/recipes/", json=payload)
 
         next_page_link = response.css(".nav-previous a::attr(href)").get()
         if next_page_link:
@@ -34,7 +34,7 @@ class FullHelpingSpider(scrapy.Spider):
             yield scrapy.Request(url=next_page, callback=self.parse)
 
     def get_image_url(self, response):
-        img = response.css("p > img").get()
+        img = response.css("p > img")
         return img.re_first(r'src="(http.*?)\"')
 
     def get_ingredients(self, response):
