@@ -9,6 +9,7 @@ constantly==15.1.0
 cryptography==2.8
 cssselect==1.1.0
 cymem==2.0.3
+demjson==2.2.4
 hyperlink==19.0.0
 idna==2.9
 incremental==17.5.0
@@ -28,8 +29,7 @@ pyOpenSSL==19.1.0
 queuelib==1.5.0
 requests==2.23.0
 Scrapy==2.0.1
-scrapyd==1.2.1
-scrapyd-client==1.1.0
+scrapyrt==0.11.0
 service-identity==18.1.0
 six==1.14.0
 spacy==2.2.4
@@ -40,4 +40,4 @@ Twisted==20.3.0
 urllib3==1.25.8
 w3lib==1.21.0
 wasabi==0.6.0
-zope.interface==5.0.0
+zope.interface==5.0.1
