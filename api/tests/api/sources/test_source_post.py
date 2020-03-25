@@ -7,7 +7,8 @@ from app.api.sources import CRUD
 
 def test_create_source(test_app, monkeypatch):
     test_request_payload = {"name": "Site Name", "url": "http://site.com"}
-    test_response_payload = {"id": 1, "name": "Site Name", "url": "http://site.com"}
+    # pydantic removes http(s) prefix
+    test_response_payload = {"id": 1, "name": "Site Name", "url": "site.com"}
 
     async def mock_post(payload):
         return 1

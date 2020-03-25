@@ -44,6 +44,7 @@ async def list_recipes(sid: int):
         raise HTTPException(status_code=404, detail="No recipes found for source")
     return recipes
 
+
 @router.put("/{id}/", response_model=RecipeDB, status_code=200)
 async def update_recipe(sid: int, id: int, payload: RecipeSchema):
     recipe = await CRUD.get(sid, id)
@@ -75,7 +76,7 @@ async def remove_recipe(sid: int, id: int):
 
 class CRUD:
     @staticmethod
-    async def post(sid:int, payload: RecipeSchema):
+    async def post(sid: int, payload: RecipeSchema):
         query = recipes.insert().values(name=payload.name, url=payload.url,
                                         image=payload.image, sid=sid)
         return await database.execute(query=query)

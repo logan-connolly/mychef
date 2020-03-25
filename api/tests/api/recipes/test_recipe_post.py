@@ -18,6 +18,7 @@ def test_create_recipe(test_app, monkeypatch):
         "image": "http://image.com",
         "sid": 1,
     }
+
     async def mock_post(sid, payload):
         return 1
 
