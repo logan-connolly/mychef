@@ -11,6 +11,6 @@ def test_get_latest_recipe(full_helping_homepage, monkeypatch):
 
     monkeypatch.setattr(UrlExtractor, "get_homepage", mock_get_homepage)
 
-    start_url = UrlExtractor("http://example.com").get_latest_recipe()
+    start_url = UrlExtractor("http://example.com").get_recipe_url()
     expected_url = ["https://www.thefullhelping.com/chai-spice-energy-balls/"]
     assert start_url == expected_url

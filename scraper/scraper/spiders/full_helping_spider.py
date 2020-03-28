@@ -8,15 +8,15 @@ class UrlExtractor:
     """Utility for extracting the start url for the spider"""
     def __init__(self, url):
         self.url = url
-        self.content = self.get_homepage()
+        self.content = self.get_start_page()
 
-    def get_homepage(self):
+    def get_start_page(self):
         try:
             return requests.get(self.url).content
         except requests.exceptions.ConnectionError as e:
             raise(e)
 
-    def get_latest_recipe(self):
+    def get_recipe_url(self):
         soup = BeautifulSoup(self.content, "html.parser")
         latest_post = soup.find("div", {"class": "single-posty"})
         start_url = latest_post.find("a")["href"]
@@ -24,15 +24,16 @@ class UrlExtractor:
 
 
 class FullHelpingSpider(scrapy.Spider):
-    """Scrapes the website <thefullhelping.com> and posts to mychef"""
+    """Scrape the website thefullhelping.com and post results to mychef"""
     name = "full_helping"
-    url = "https://www.thefullhelping.com/recipe-index/"
-    sid = 1
     download_delay = 8
-    start_urls = UrlExtractor(url).get_latest_recipe()
+    sid = 1
+
+    def __init__(self, page=1):
+        self.url = f"https://www.thefullhelping.com/recipe-index/?sf_paged={page}"
+        self.start_urls = UrlExtractor(self.url).get_recipe_url()
 
     def parse(self, response):
-        """Post recipe results to mychef api"""
         if response.css(".wprm-recipe-ingredients-container"):
             payload = {
                 "name": response.css(".title::text").get(),
