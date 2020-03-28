@@ -15,7 +15,7 @@ RUN set -eux \
     && apk add --no-cache --virtual .build-deps build-base \
         libressl-dev libffi-dev libxslt-dev g++ gcc musl-dev python3-dev \
     && pip install --upgrade pip setuptools wheel \
-    && pip install pytest \
+    && pip install ipython pytest \
     && pip install -r requirements.txt \
     && python -m spacy download en_core_web_sm \
     && rm -rf /root/.cache/pip
