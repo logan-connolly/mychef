@@ -1,28 +1,35 @@
-import os
-import string
-
 import scrapy
 import requests
 
 from bs4 import BeautifulSoup
 
 
-def get_latest_recipe():
-    """Extract first url from recipe index on fullhelping webpage"""
-    index_url = "https://www.thefullhelping.com/recipe-index/"
-    res = requests.get(index_url)
-    soup = BeautifulSoup(res.content)
-    start_url = soup.find("div", {"class": "single-posty"}).find("a")["href"]
-    return [start_url]
+class UrlExtractor:
+    """Utility for extracting the start url for the spider"""
+    def __init__(self, url):
+        self.url = url
+        self.content = self.get_homepage()
+
+    def get_homepage(self):
+        try:
+            return requests.get(self.url).content
+        except requests.exceptions.ConnectionError as e:
+            raise(e)
+
+    def get_latest_recipe(self):
+        soup = BeautifulSoup(self.content, "html.parser")
+        latest_post = soup.find("div", {"class": "single-posty"})
+        start_url = latest_post.find("a")["href"]
+        return [start_url]
 
 
 class FullHelpingSpider(scrapy.Spider):
     """Scrapes the website <thefullhelping.com> and posts to mychef"""
-
     name = "full_helping"
+    url = "https://www.thefullhelping.com/recipe-index/"
     sid = 1
     download_delay = 8
-    start_urls = get_latest_recipe()
+    start_urls = UrlExtractor(url).get_latest_recipe()
 
     def parse(self, response):
         if response.css(".wprm-recipe-ingredients-container"):
