@@ -32,6 +32,7 @@ class FullHelpingSpider(scrapy.Spider):
     start_urls = UrlExtractor(url).get_latest_recipe()
 
     def parse(self, response):
+        """Post recipe results to mychef api"""
         if response.css(".wprm-recipe-ingredients-container"):
             payload = {
                 "name": response.css(".title::text").get(),
@@ -40,10 +41,8 @@ class FullHelpingSpider(scrapy.Spider):
             }
             requests.post(f"http://api:8000/sources/{self.sid}/recipes/", json=payload)
 
-        next_page_link = response.css(".nav-previous a::attr(href)").get()
-        if next_page_link:
-            next_page = response.urljoin(next_page_link)
-            yield scrapy.Request(url=next_page, callback=self.parse)
+        for a in response.css(".nav-previous a"):
+            yield response.follow(a, callback=self.parse)
 
     def get_image_url(self, response):
         img = response.css("p > img")
