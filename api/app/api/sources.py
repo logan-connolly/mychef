@@ -1,5 +1,6 @@
 from typing import List
 
+from asyncpg.exceptions import UniqueViolationError
 from fastapi import APIRouter, HTTPException
 from orm.exceptions import NoMatch
 
@@ -14,7 +15,7 @@ async def add_source(payload: SourceSchema):
     try:
         source = await Source.objects.create(name=payload.name, url=payload.url)
     except:
-        raise HTTPException(status_code=400, detail="Url already exists")
+        raise HTTPException(status_code=400, detail="Source url already exists")
 
     response_object = {
         "id": source.pk,
