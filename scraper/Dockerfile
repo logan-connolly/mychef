@@ -1,24 +1,16 @@
-# pull official base image
-FROM python:3.8.1-alpine 
+FROM python:3.8-slim-buster
 
-# set work directory
 WORKDIR /usr/src/app
 
-# set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 COPY ./requirements.txt . 
 
-# install dependencies
-RUN set -eux \
-    && apk add --no-cache --virtual .build-deps build-base \
-        libressl-dev libffi-dev libxslt-dev g++ gcc musl-dev python3-dev \
+RUN apt-get update && apt-get install -y build-essential \
     && pip install --upgrade pip setuptools wheel \
-    && pip install ipython pytest \
     && pip install -r requirements.txt \
     && python -m spacy download en_core_web_sm \
-    && rm -rf /root/.cache/pip
+    && rm -rf /var/lib/apt/lists/* 
 
-# copy project
 COPY . .
