@@ -61,7 +61,6 @@ async def remove_source(id: int):
         raise HTTPException(status_code=404, detail="Source not found")
 
     await CRUD.delete(id)
-
     return source
 
 
@@ -75,8 +74,7 @@ class CRUD:
 
     @staticmethod
     async def get(id: int):
-        source = session.query(Source).filter_by(id=id).first()
-        return await source
+        return await session.query(Source).filter_by(id=id).first()
 
     @staticmethod
     async def get_all():
