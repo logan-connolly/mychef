@@ -1,6 +1,8 @@
 from pydantic import BaseModel, AnyUrl
-from sqlalchemy import Column, DateTime, Integer, String, Table
+from sqlalchemy import Column, DateTime, Integer, String
 from sqlalchemy.sql import func
+
+from app.models.base import Base
 
 
 class SourceSchema(BaseModel):
@@ -13,18 +15,13 @@ class SourceDB(SourceSchema):
     url: str
 
 
-class Source:
-    """Model for recipe source website"""
+class Source(Base):
+    __tablename__ = "sources"
 
-    def __init__(self, metadata):
-        self.metadata = metadata
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    url = Column(String(255))
+    ts = Column(DateTime, default=func.now(), nullable=False)
 
-    def create_table(self):
-        return Table(
-            "sources",
-            self.metadata,
-            Column("id", Integer, primary_key=True),
-            Column("name", String(50)),
-            Column("url", String(255)),
-            Column("created_date", DateTime, default=func.now(), nullable=False),
-        )
+    def __repr__(self):
+        return f"Source({self.id}, '{self.name}')"

@@ -1,6 +1,8 @@
 from pydantic import BaseModel, AnyUrl
-from sqlalchemy import Column, DateTime, Integer, String, Table, ForeignKey
+from sqlalchemy import Column, DateTime, Integer, String, ForeignKey
 from sqlalchemy.sql import func
+
+from app.models.base import Base
 
 
 class RecipeSchema(BaseModel):
@@ -14,20 +16,15 @@ class RecipeDB(RecipeSchema):
     sid: int
 
 
-class Recipe:
-    """Model for recipe metadata (name, url, image link)"""
+class Recipe(Base):
+    __tablename__ = "recipes"
 
-    def __init__(self, metadata):
-        self.metadata = metadata
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    url = Column(String(255))
+    image = Column(String(255))
+    sid = Column(Integer, ForeignKey("sources.id", ondelete="CASCADE"))
+    ts = DateTime(default=func.now(), nullable=False)
 
-    def create_table(self):
-        return Table(
-            "recipes",
-            self.metadata,
-            Column("id", Integer, primary_key=True),
-            Column("name", String(255)),
-            Column("url", String(255)),
-            Column("image", String(255)),
-            Column("sid", Integer, ForeignKey("sources.id", ondelete="CASCADE")),
-            Column("created_date", DateTime, default=func.now(), nullable=False),
-        )
+    def __repr__(self):
+        return f"Recipe({self.id}, '{self.name}')"
