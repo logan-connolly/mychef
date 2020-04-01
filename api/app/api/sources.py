@@ -1,8 +1,6 @@
 from typing import List
 
-from app.models.sources import SourceDB, SourceSchema
-from app.db import session
-from app.models.sources import Source
+from app.models.sources import Source, SourceDB, SourceSchema
 from fastapi import APIRouter, HTTPException
 
 
@@ -11,8 +9,7 @@ router = APIRouter()
 
 @router.post("/", response_model=SourceDB, status_code=201)
 async def add_source(payload: SourceSchema):
-    url_check = session.query(Source.id).filter_by(url=payload.url).scalar()
-    if await url_check is None:
+    if not await Source.objects.get(url=payload.url):
         raise HTTPException(status_code=400, detail="URL already exists")
 
     source_id = await CRUD.post(payload)
@@ -67,28 +64,22 @@ async def remove_source(id: int):
 class CRUD:
     @staticmethod
     async def post(payload: SourceSchema):
-        source = Source(name=payload.name, url=payload.url.host).add()
-        session.add(source.add)
-        session.commit()
-        return await source.id
+        return await Source.objects.create(name=payload.name, url=payload.url.host)
 
     @staticmethod
     async def get(id: int):
-        return await session.query(Source).filter_by(id=id).first()
+        return await Source.objects.get(id=id)
 
     @staticmethod
     async def get_all():
-        return await session.query(Source).all()
+        return await Source.objects.all()
 
     @staticmethod
     async def put(id: int, payload: SourceSchema):
-        source = session.query(Source).filter_by(id=id)
-        source.name = payload.name
-        source.url = payload.url.host
-        session.commit()
-        return await source.id
+        source = await Source.objects.get(id)
+        return await source.update(name=payload.name, url=payload.url)
 
     @staticmethod
     async def delete(id: int):
-        session.query(Source).filter_by(id=id).delete()
-        return await session.commit()
+        source = await Source.objects.get(id)
+        return await source.delete()

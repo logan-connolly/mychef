@@ -3,9 +3,7 @@ from typing import List
 from asyncpg.exceptions import ForeignKeyViolationError
 from fastapi import APIRouter, HTTPException
 
-from app.models.recipes import RecipeDB, RecipeSchema
-from app.db import session
-from app.models.recipes import Recipe
+from app.models.recipes import Recipe, RecipeDB, RecipeSchema
 
 
 router = APIRouter()
@@ -13,8 +11,7 @@ router = APIRouter()
 
 @router.post("/", response_model=RecipeDB, status_code=201)
 async def add_recipe(sid: int, payload: RecipeSchema):
-    url_check = session.query(Recipe.id).filter_by(url=payload.url).scalar()
-    if await url_check is None:
+    if not await Recipe.objects.get(url=payload.url):
         raise HTTPException(status_code=400, detail="URL already exists")
 
     try:
@@ -73,38 +70,30 @@ async def remove_recipe(sid: int, id: int):
         raise HTTPException(status_code=404, detail="Recipe not found")
 
     await CRUD.delete(sid, id)
-
     return recipe
 
 
 class CRUD:
     @staticmethod
     async def post(sid: int, payload: RecipeSchema):
-        recipe = Recipe(
-            name=payload.name, url=payload.url, image=payload.image, sid=sid
-        )
-        recipe.add()
-        recipe.commit()
-        return await recipe.id
+        return await Recipe.objects.create(name=payload.name, url=payload.url, sid=sid)
 
     @staticmethod
     async def get(sid: int, id: int):
-        return await session.query(Recipe).filter_by(sid=sid, id=id).first()
+        return await Recipe.objects.get(sid=sid, id=id)
 
     @staticmethod
     async def get_all(sid: int):
-        return await session.query(Recipe).filter_by(sid=sid)
+        return await Recipe.objects.all()
 
     @staticmethod
     async def put(sid: int, id: int, payload: RecipeSchema):
-        recipe = session.query(Recipe).filter_by(id=id, sid=sid)
-        recipe.name = payload.name
-        recipe.url = payload.url
-        recipe.image = payload.image
-        session.commit()
-        return await recipe.id
+        recipe = await Recipe.objects.get(sid=sid, id=id)
+        return await recipe.update(
+            name=payload.name, url=payload.url, image=payload.image
+        )
 
     @staticmethod
     async def delete(sid: int, id: int):
-        session.query(Recipe).filter_by(sid=sid, id=id).delete()
-        return await session.commit()
+        recipe = await Recipe.objects.get(sid=sid, id=id)
+        return await recipe.delete()
