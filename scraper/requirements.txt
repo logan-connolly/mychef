@@ -14,7 +14,6 @@ cssselect==1.1.0
 cymem==2.0.3
 decorator==4.4.2
 demjson==2.2.4
-en-core-web-sm==2.2.5
 hyperlink==19.0.0
 idna==2.9
 incremental==17.5.0
