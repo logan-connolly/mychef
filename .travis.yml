@@ -9,4 +9,5 @@ before_script:
   pip install docker-compose
 
 script:
-  - docker-compose run api pytest .
+  - docker-compose up --build -d
+  - docker-compose exec api pytest .
