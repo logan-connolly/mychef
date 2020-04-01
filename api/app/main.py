@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 from app.api import sources, recipes
-from app.db import engine, metadata, database
+from app.db import engine, database
+from app.models.base import Base
 
 
-metadata.create_all(engine)
+Base.metadata.create_all(engine)
 
 
 app = FastAPI()
