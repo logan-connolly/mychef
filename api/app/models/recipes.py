@@ -23,8 +23,8 @@ class Recipe(Model):
     __metadata__ = metadata
 
     id = Integer(primary_key=True)
-    name = String(255)
-    url = String(255)
-    image = String(255)
+    name = String(max_length=255)
+    url = String(max_length=255)
+    image = String(max_length=255)
     sid = ForeignKey(Source)
     ts = DateTime(default=func.now())
