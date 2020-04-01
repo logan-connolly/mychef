@@ -1,0 +1,12 @@
+language: python
+python:
+  - "3.7"
+
+services:
+  - docker
+
+before_script:
+  pip install docker-compose
+
+script:
+  - docker-compose run api pytest .
