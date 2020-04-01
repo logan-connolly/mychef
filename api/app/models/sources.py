@@ -22,5 +22,5 @@ class Source(Model):
 
     id = Integer(primary_key=True)
     name = String(max_length=255)
-    url = String(max_length=255)
+    url = String(max_length=255, unique=True)
     ts = DateTime(default=func.now())

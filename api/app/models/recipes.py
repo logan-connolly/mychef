@@ -24,7 +24,7 @@ class Recipe(Model):
 
     id = Integer(primary_key=True)
     name = String(max_length=255)
-    url = String(max_length=255)
+    url = String(max_length=255, unique=True)
     image = String(max_length=255)
     sid = ForeignKey(Source)
     ts = DateTime(default=func.now())
