@@ -1,8 +1,9 @@
 from typing import List
 
-from app.models.sources import Source, SourceDB, SourceSchema
 from fastapi import APIRouter, HTTPException
 from orm.exceptions import NoMatch
+
+from app.models.sources import Source, SourceDB, SourceSchema
 
 
 router = APIRouter()
@@ -11,10 +12,9 @@ router = APIRouter()
 @router.post("/", response_model=SourceDB, status_code=201)
 async def add_source(payload: SourceSchema):
     try:
-        await Source.objects.get(url=payload.url)
-        raise HTTPException(status_code=400, detail="URL already exists")
-    except NoMatch:
         source = await Source.objects.create(name=payload.name, url=payload.url)
+    except:
+        raise HTTPException(status_code=400, detail="Url already exists")
 
     response_object = {
         "id": source.pk,
@@ -27,7 +27,7 @@ async def add_source(payload: SourceSchema):
 @router.get("/{id}/", response_model=SourceDB, status_code=200)
 async def get_source(id: int):
     try:
-        source = await Source.objects.get(id)
+        source = await Source.objects.get(id=id)
     except NoMatch:
         raise HTTPException(status_code=404, detail="Source not found")
     return source

@@ -1,6 +1,6 @@
 from typing import List
 
-from asyncpg.exceptions import ForeignKeyViolationError
+from asyncpg.exceptions import ForeignKeyViolationError, UniqueViolationError
 from fastapi import APIRouter, HTTPException
 from orm.exceptions import NoMatch
 
@@ -18,6 +18,8 @@ async def add_recipe(sid: int, payload: RecipeSchema):
         )
     except ForeignKeyViolationError:
         raise HTTPException(status_code=404, detail="Source does not exist")
+    except UniqueViolationError:
+        raise HTTPException(status_code=400, detail="Recipe url already exists")
 
     response_object = {
         "id": recipe.pk,
@@ -34,7 +36,7 @@ async def get_recipe(sid: int, id: int):
     try:
         recipe = await Recipe.objects.get(sid=sid, id=id)
     except NoMatch:
-        raise HTTPException(status_code=404, detail="Source not found")
+        raise HTTPException(status_code=404, detail="Recipe not found")
     return recipe
 
 
