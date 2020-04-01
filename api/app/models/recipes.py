@@ -24,7 +24,7 @@ class Recipe(Base):
     url = Column(String(255))
     image = Column(String(255))
     sid = Column(Integer, ForeignKey("sources.id", ondelete="CASCADE"))
-    ts = DateTime(default=func.now(), nullable=False)
+    ts = Column(DateTime, default=func.now(), nullable=False)
 
     def __repr__(self):
         return f"Recipe({self.id}, '{self.name}')"
