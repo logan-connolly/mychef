@@ -14,7 +14,7 @@ router = APIRouter()
 async def add_source(payload: SourceSchema):
     try:
         source = await Source.objects.create(name=payload.name, url=payload.url)
-    except:
+    except UniqueViolationError:
         raise HTTPException(status_code=400, detail="Source url already exists")
 
     response_object = {
@@ -35,7 +35,7 @@ async def get_source(id: int):
 
 
 @router.get("/", response_model=List[SourceDB], status_code=200)
-async def list_sources():
+async def get_sources():
     return await Source.objects.all()
 
 

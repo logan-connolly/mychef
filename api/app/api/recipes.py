@@ -41,7 +41,7 @@ async def get_recipe(sid: int, id: int):
 
 
 @router.get("/", response_model=List[RecipeDB], status_code=200)
-async def list_recipes(sid: int):
+async def get_recipes(sid: int):
     return await Recipe.objects.get(sid=sid).all()
 
 
