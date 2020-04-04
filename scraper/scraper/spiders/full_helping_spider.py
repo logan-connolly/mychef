@@ -24,7 +24,7 @@ class FullHelpingSpider(scrapy.Spider):
                 "image": self.get_image_url(response),
             }
             if self.sid is None:
-                CloseSpider("No source id found in database. Cannot write results.")
+                raise CloseSpider("No source id found in database.")
             requests.post(f"http://api:8000/sources/{self.sid}/recipes/", json=payload)
 
         for a in response.css(".nav-previous a"):
