@@ -2,8 +2,8 @@ from pydantic import BaseModel, AnyUrl
 from orm import Model, DateTime, Integer, String, ForeignKey
 from sqlalchemy.sql import func
 
-from app.db import database, metadata
-from app.models.sources import Source
+from ..db import database, metadata
+from .sources import Source
 
 
 class RecipeSchema(BaseModel):

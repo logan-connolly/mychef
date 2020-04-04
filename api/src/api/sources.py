@@ -4,7 +4,7 @@ from asyncpg.exceptions import UniqueViolationError
 from fastapi import APIRouter, HTTPException
 from orm.exceptions import NoMatch
 
-from app.models.sources import Source, SourceDB, SourceSchema
+from ..models.sources import Source, SourceDB, SourceSchema
 
 
 router = APIRouter()

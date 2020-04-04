@@ -4,7 +4,7 @@ from asyncpg.exceptions import ForeignKeyViolationError, UniqueViolationError
 from fastapi import APIRouter, HTTPException
 from orm.exceptions import NoMatch
 
-from app.models.recipes import Recipe, RecipeDB, RecipeSchema
+from ..models.recipes import Recipe, RecipeDB, RecipeSchema
 
 
 router = APIRouter()

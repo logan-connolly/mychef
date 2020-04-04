@@ -2,7 +2,7 @@ from pydantic import BaseModel, AnyUrl
 from orm import Model, DateTime, Integer, String
 from sqlalchemy.sql import func
 
-from app.db import database, metadata
+from ..db import database, metadata
 
 
 class SourceSchema(BaseModel):
