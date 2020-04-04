@@ -14,7 +14,6 @@ class RecipeSchema(BaseModel):
 
 class RecipeDB(RecipeSchema):
     id: int
-    sid: int
 
 
 class Recipe(Model):
@@ -23,8 +22,8 @@ class Recipe(Model):
     __metadata__ = metadata
 
     id = Integer(primary_key=True)
+    source = ForeignKey(Source)
     name = String(max_length=255)
     url = String(max_length=255, unique=True)
     image = String(max_length=255)
-    sid = ForeignKey(Source)
     ts = DateTime(default=func.now())
