@@ -1,6 +1,5 @@
 import json
 
-import aiohttp
 import pytest
 
 
