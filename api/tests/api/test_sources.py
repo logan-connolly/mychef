@@ -8,7 +8,6 @@ host = "http://127.0.0.1:5000"
 
 @pytest.mark.usefixtures("create_tables")
 class TestSource:
-
     @pytest.mark.asyncio
     async def test_add_source(self, event_loop, server, session):
         payload = dict(name="Example", url="http://example.com")
@@ -70,15 +69,14 @@ class TestSource:
 
 @pytest.mark.usefixtures("create_tables")
 class TestSourceInvalid:
-
     @pytest.mark.asyncio
     @pytest.mark.parametrize(
         "payload, code",
         [
-            [{"name": "No URL"}, 422],
-            [{"name": "Not URL", "url": "notaurl"}, 422],
-            [{"name": "No http", "url": "notaurl.com"}, 422],
-        ]
+            (dict(name="no url"), 422),
+            (dict(name="bad url", url="url"), 422),
+            (dict(name="no http", url="url.com"), 422),
+        ],
     )
     async def test_add_source_invalid(self, event_loop, server, session, payload, code):
         dumps = json.dumps(payload)
@@ -99,19 +97,22 @@ class TestSourceInvalid:
         async with session.get(f"{host}/sources/") as resp:
             status = resp.status
 
+
         assert status == 404
 
     @pytest.mark.asyncio
     @pytest.mark.parametrize(
         "id, payload, code",
         [
-            [1, {}, 422],
-            [1, {"name": "only name"}, 422],
-            [1, {"url": "http://example.com"}, 422],
-            [999, {"name": "bad id", "url": "http://example.com"}, 404],
+            (1, {}, 422),
+            (1, dict(name="no url"), 422),
+            (1, dict(url="http://noname.com"), 422),
+            (999, dict(name="no source", url="http://url.com"), 404),
         ],
     )
-    async def test_update_source_invalid(self, event_loop, server, session, id, payload, code):
+    async def test_update_source_invalid(
+        self, event_loop, server, session, id, payload, code
+    ):
         dumps = json.dumps(payload)
         async with session.put(f"{host}/sources/{id}", data=dumps) as resp:
             status = resp.status
