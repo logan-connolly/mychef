@@ -1,17 +1,10 @@
-from typing import Tuple
-
 from databases import Database
 from sqlalchemy import create_engine, MetaData
 
-from .config import settings
+from app.core.config import settings
 
 
-def init_db() -> Tuple[Database, MetaData]:
-    uri = settings.test_db_url if settings.testing else settings.db_url
-    engine = create_engine(uri)
-    metadata = MetaData()
-    metadata.create_all(engine)
-    return Database(uri), metadata
-
-
-database, metadata = init_db()
+metadata = MetaData()
+engine = create_engine(settings.URI)
+metadata.create_all(engine)
+database = Database(settings.URI)
