@@ -1,12 +1,5 @@
 # mychef 
 
-An application that assists you with what meal you want to make.
+[![Build Status](https://travis-ci.com/logan-connolly/mychef.svg?branch=master)](https://travis-ci.com/logan-connolly/mychef)
 
-# problem
-
-I often have a lot of ingredients, but don't know exactly what I can make with them. 
-Often it is the case that if I would have just one or two additional ingredients I could make something really great.
-
-# solution 
-
-*mychef* helps match your ingredients to what you could possibly make by scanning through a repository of popular recipes
+*mychef* is an application that helps you decide what meal to make. By entering into the application the ingredients that you have at home, *mychef* offers recommendations based on recipes that it's extracted from the web.
