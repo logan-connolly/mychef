@@ -13,13 +13,13 @@ class TestSource:
         async with session.post(f"{host}/sources/", data=dumps(source)) as resp:
             assert resp.status == 201
             response = await resp.json()
-            source.update({"id": response.get("id")})
+            source.update({"id": response.get("id"), "url": "example.com"})
             assert response == source
 
     @pytest.mark.asyncio
     async def test_get_source(self, event_loop, server, host, session):
         global source
-        async with session.get(f"{host}/sources/1") as resp:
+        async with session.get(f"{host}/sources/{source.get('id')}") as resp:
             assert resp.status == 200
             assert await resp.json() == source
 
@@ -36,7 +36,7 @@ class TestSource:
         new_url = "http://newexample.com"
         source["url"] = new_url
         async with session.put(
-            f"{host}/sources/1", data=dumps(dict(url=new_url))
+            f"{host}/sources/{source.get('id')}", data=dumps(dict(url=new_url))
         ) as resp:
             assert resp.status == 200
             assert await resp.json() == source
@@ -44,6 +44,6 @@ class TestSource:
     @pytest.mark.asyncio
     async def test_remove_source(self, event_loop, server, host, session):
         global source
-        async with session.delete(f"{host}/sources/1") as resp:
+        async with session.delete(f"{host}/sources/{source.get('id')}") as resp:
             assert resp.status == 200
             assert await resp.json() == source

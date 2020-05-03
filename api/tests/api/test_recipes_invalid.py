@@ -16,7 +16,7 @@ class TestRecipeInvalid:
             assert resp.status == 201
             response = await resp.json()
             sid = response["id"]
-            source.update({"id": sid})
+            source.update({"id": sid, "url": "source.com"})
             assert response == source
 
     @pytest.mark.asyncio
@@ -50,7 +50,9 @@ class TestRecipeInvalid:
     @pytest.mark.asyncio
     async def test_update_recipe_invalid(self, event_loop, server, host, session):
         global sid
-        async with session.put(f"{host}/sources/{sid}/recipes/0", data=dumps) as resp:
+        async with session.put(
+            f"{host}/sources/{sid}/recipes/0", data=dumps(dict())
+        ) as resp:
             assert resp.status == 404
 
     @pytest.mark.asyncio

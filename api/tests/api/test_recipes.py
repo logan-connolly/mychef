@@ -16,7 +16,7 @@ class TestRecipe:
             assert resp.status == 201
             response = await resp.json()
             sid = response.get("id")
-            source.update({"id": sid})
+            source.update({"id": sid, "url": "source.com"})
             assert response == source
 
     @pytest.mark.asyncio
@@ -51,9 +51,10 @@ class TestRecipe:
     async def test_update_recipe(self, event_loop, server, host, session):
         global recipe
         global sid
-        recipe["name"] == "Recipe 2.0"
+        recipe["name"] = "Recipe 2.0"
         async with session.put(
-            f"{host}/sources/{sid}/recipes/{recipe['id']}/", data=dumps(recipe)
+            f"{host}/sources/{sid}/recipes/{recipe['id']}/",
+            data=dumps(dict(name="Recipe 2.0")),
         ) as resp:
             assert resp.status == 200
             assert await resp.json() == recipe
@@ -74,4 +75,4 @@ class TestRecipe:
         global sid
         async with session.delete(f"{host}/sources/{sid}") as resp:
             assert resp.status == 200
-            assert await resp.json() == recipe
+            assert await resp.json() == source
