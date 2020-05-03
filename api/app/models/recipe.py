@@ -1,8 +1,8 @@
 from orm import Model, DateTime, Integer, String, ForeignKey
 from sqlalchemy.sql import func
 
-from ..db.database import database, metadata
-from .sources import Source
+from app.db.database import database, metadata
+from .source import Source
 
 
 class Recipe(Model):

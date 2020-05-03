@@ -1,7 +1,7 @@
 from orm import Model, DateTime, Integer, String
 from sqlalchemy.sql import func
 
-from ..db import database, metadata
+from app.db.database import database, metadata
 
 
 class Source(Model):
