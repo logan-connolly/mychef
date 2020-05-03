@@ -1,16 +1,27 @@
-FROM python:3.8-slim-buster
+FROM python:3.8-alpine3.10
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app
 
-COPY ./requirements.txt . 
+ARG POETRY="https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py"
+ARG BUILD_DEPS="curl gcc g++ libressl-dev libffi-dev libc-dev musl-dev python3-dev make"
 
-RUN apt-get update && apt-get install -y build-essential \
-    && pip install --upgrade pip setuptools wheel \
-    && pip install -r requirements.txt \
-    && python -m spacy download en_core_web_sm \
-    && rm -rf /var/lib/apt/lists/* 
+# Copy using poetry.lock* in case it doesn't exist yet
+COPY ./pyproject.toml ./poetry.lock* /app/
+
+# Install poetry
+RUN set -eux \
+    && apk add --no-cache --virtual .build-deps $BUILD_DEPS \
+    && curl -sSL $POETRY | POETRY_HOME=/opt/poetry python \
+    && cd /usr/local/bin \
+    && ln -s /opt/poetry/bin/poetry \
+    && poetry config virtualenvs.create false \
+    && cd /app \
+    && poetry install --no-root \
+		&& python -m spacy download en_core_web_sm \
+    && apk del .build-deps $BUILD_DEPS
 
 COPY . .
