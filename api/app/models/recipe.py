@@ -1,19 +1,8 @@
-from pydantic import BaseModel, AnyUrl
 from orm import Model, DateTime, Integer, String, ForeignKey
 from sqlalchemy.sql import func
 
-from ..db import database, metadata
-from .sources import Source
-
-
-class RecipeSchema(BaseModel):
-    name: str
-    url: AnyUrl
-    image: AnyUrl
-
-
-class RecipeDB(RecipeSchema):
-    id: int
+from app.db.database import database, metadata
+from .source import Source
 
 
 class Recipe(Model):

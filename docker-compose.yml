@@ -3,42 +3,40 @@ version: '3.7'
 
 services:
 
+  db:
+    image: postgres:12.1-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+
+  scraper:
+    build: ./scraper
+    image: mychef_scraper:dev
+    tty: true
+    volumes:
+      - ./scraper/:/app
+    links:
+      - "api:api"
+        
   api:
     build: ./api
     image: mychef_api:dev
-    command: uvicorn src.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
-    volumes:
-      - ./api/:/usr/src/app/
     ports:
       - ${API_PORT}:8000
+    volumes:
+      - ./api/:/app
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_DB=${POSTGRES_DB}
-      - TESTING=${TESTING}
+    command: uvicorn app.main:app --reload --host 0.0.0.0
+    depends_on:
+      - db
 
-  scraper:
-    build: ./scraper
-    image: mychef_scraper:dev
-    command: scrapyrt -p 6800 
-    volumes:
-      - ./scraper/:/usr/src/app/
-    ports:
-      - ${SCRAPER_PORT}:6800
-    links:
-      - "api:api"
-
-  db:
-    image: postgres:12.1-alpine
-    volumes:
-      - ./scripts/pg-init-scripts:/docker-entrypoint-initdb.d
-      - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_MULTIPLE_DATABASES=${POSTGRES_DB},${POSTGRES_DB}_test
 
 volumes:
   postgres_data:
-
