@@ -16,6 +16,8 @@ services:
     image: lvconnolly/mychef_scraper:alpine3.10
     volumes:
       - ./scraper:/app
+    command:
+      - tail -F Dockerfile
     links:
       - "api:api" 
 
