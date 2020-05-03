@@ -15,7 +15,7 @@ services:
   scraper:
     build: ./scraper
     image: mychef_scraper:dev
-    command: tail -F Dockerfile
+    tty: true
     volumes:
       - ./scraper/:/app
     links:
