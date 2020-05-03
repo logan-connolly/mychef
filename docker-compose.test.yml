@@ -13,13 +13,9 @@ services:
       - POSTGRES_DB=mychef_db 
 
   scraper:
-    build: ./scraper
-    image: lvconnolly/mychef_scraper:dev
-    command: scrapyrt -p 6800
+    image: lvconnolly/mychef_scraper:alpine3.10
     volumes:
-      - ./scraper/:/app
-    ports:
-      - ${SCRAPER_PORT}:6800
+      - ./scraper:/app
     links:
       - "api:api" 
 
@@ -34,7 +30,7 @@ services:
       - POSTGRES_PASSWORD=mychef
       - POSTGRES_HOST=db
       - POSTGRES_DB=mychef_db
-    command: uvicorn app.main:app --reload
+    command: uvicorn app.main:app --reload --host 0.0.0.0
     depends_on:
       - db
 
