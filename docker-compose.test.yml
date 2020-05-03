@@ -1,0 +1,40 @@
+version: '3.7'
+
+
+services:
+
+  db:
+    image: postgres:12.1-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=mychef
+      - POSTGRES_PASSWORD=mychef
+      - POSTGRES_DB=mychef_db 
+
+  scraper:
+    image: lvconnolly/mychef_scraper:alpine3.10
+    volumes:
+      - ./scraper:/app
+    tty: true
+    links:
+      - "api:api" 
+
+  api:
+    image: lvconnolly/mychef_api:alpine3.10
+    ports:
+      - 8000:8000
+    volumes:
+      - ./api:/app
+    environment:
+      - POSTGRES_USER=mychef
+      - POSTGRES_PASSWORD=mychef
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=mychef_db
+    command: uvicorn app.main:app --reload --host 0.0.0.0
+    depends_on:
+      - db
+
+
+volumes:
+    postgres_data:

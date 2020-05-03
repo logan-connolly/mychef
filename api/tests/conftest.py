@@ -6,12 +6,11 @@ import aiohttp
 import pytest
 import uvicorn
 
-from sqlalchemy import create_engine
+from app import main
+from app.core.config import settings
 
-from src import config, main, db
 
-
-@pytest.yield_fixture(scope="module")
+@pytest.fixture(scope="module")
 def event_loop(request):
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
@@ -29,15 +28,11 @@ async def server():
 
 
 @pytest.fixture(scope="module")
+def host():
+    yield f"http://127.0.0.1:5000{settings.API_V1_STR}"
+
+
+@pytest.fixture(scope="module")
 async def session():
     async with aiohttp.ClientSession() as session:
         yield session
-
-
-@pytest.fixture(scope="class")
-def create_tables():
-    test_url = config.settings.test_db_url
-    engine = create_engine(test_url)
-    db.metadata.create_all(engine)
-    yield
-    db.metadata.drop_all(engine)

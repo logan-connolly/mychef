@@ -1,18 +1,7 @@
-from pydantic import BaseModel, AnyUrl
 from orm import Model, DateTime, Integer, String
 from sqlalchemy.sql import func
 
-from ..db import database, metadata
-
-
-class SourceSchema(BaseModel):
-    name: str
-    url: AnyUrl
-
-
-class SourceDB(SourceSchema):
-    id: int
-    url: str
+from app.db.database import database, metadata
 
 
 class Source(Model):
