@@ -47,7 +47,7 @@ async def get_source(id: int):
 
 
 @router.put("/{id}/", response_model=schemas.SourceDB, status_code=HTTP_200_OK)
-async def update_source(id: int, payload: models.SourceUpdate):
+async def update_source(id: int, payload: schemas.SourceUpdate):
     source = await get_source(id)
     payload = {k: v for k, v in payload.dict().items() if v is not None}
     await source.update(**payload)

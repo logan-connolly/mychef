@@ -31,9 +31,7 @@ async def get_recipes(sid: int, limit: Optional[int] = None):
 async def add_recipe(sid: int, payload: schemas.RecipeCreate):
     try:
         source = await get_source(id=sid)
-        return await models.Recipe.objects.create(
-            source=source, name=payload.name, url=payload.url, image=payload.image
-        )
+        return await models.Recipe.objects.create(source=source, **payload.dict())
     except UniqueViolationError:
         raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Recipe exists")
 
@@ -46,7 +44,7 @@ async def get_recipe(sid: int, id: int):
         raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="Recipe not found")
 
 
-@router.put("/{id}/", response_model=models.RecipeDB, status_code=HTTP_200_OK)
+@router.put("/{id}/", response_model=schemas.RecipeDB, status_code=HTTP_200_OK)
 async def update_recipe(sid: int, id: int, payload: schemas.RecipeUpdate):
     recipe = await get_recipe(sid=sid, id=id)
     payload = {k: v for k, v in payload.dict().items() if v is not None}
