@@ -2,12 +2,14 @@ from fastapi import FastAPI
 
 from .api.api_v1.api import api_router
 from .core.config import settings
-from .db.database import database
+from .db.database import database, engine, metadata
 
 
 def get_app():
 
     app = FastAPI(title="mychef", openapi_url=f"{settings.API_V1_STR}/openapi.json")
+
+    metadata.create_all(engine)
 
     @app.on_event("startup")
     async def startup():
