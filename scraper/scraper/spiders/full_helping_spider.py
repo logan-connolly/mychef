@@ -37,31 +37,3 @@ class FullHelpingSpider(scrapy.Spider):
 
     def get_ingredients(self, response):
         pass
-
-
-class TrainData(scrapy.Spider):
-    """Scrape the website thefullhelping.com and post results to mychef"""
-    name = "train_data"
-    download_delay = 8
-    nlp = spacy.load("en_core_web_sm")
-
-    def __init__(self, page=1):
-        self.url = f"https://www.thefullhelping.com/recipe-index/?sf_paged={page}"
-        self.start_urls = UrlExtractor(self.url).get_recipe_url()
-
-    def parse(self, response):
-        if response.css(".wprm-recipe-ingredients-container"):
-            yield {
-                "url": response.url,
-                "ingredients": self.get_ingredients(response)
-            }
-
-        for a in response.css(".nav-previous a"):
-            yield response.follow(a, callback=self.parse)
-
-    def get_ingredients(self, response):
-        ingredients_css = response.css(".wprm-recipe-ingredient-name::text")
-        ingredients_raw = " ".join(ing.get() for ing in ingredients_css)
-        doc = self.nlp(ingredients_raw)
-        remove_punct = [tk.orth_ for tk in doc if not tk.is_punct | tk.is_space]
-        return " ".join(word for word in remove_punct)

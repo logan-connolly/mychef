@@ -22,7 +22,7 @@ class RedditComments:
     def get_posts(self) -> ListingGenerator:
         return self.reddit.subreddit(self.subreddit).top(limit=self.n_posts)
 
-    def get_comments(self) -> Iterator[Dict["str", "str"]]:
+    def get_comments(self) -> Iterator[Dict[str, str]]:
         posts = self.get_posts()
         return ({"text": self._extract_comment(c)} for p in posts for c in p.comments)
 
