@@ -12,7 +12,7 @@ class FullHelpingSpider(scrapy.Spider):
     name = "full_helping"
     download_delay = 8
 
-    def __init__(self, page=1):
+    def __init__(self, page: int = 1):
         self.url = f"https://www.thefullhelping.com/recipe-index/?sf_paged={page}"
         self.start_urls = UrlExtractor(self.url).get_recipe_url()
         self.sid = get_source_id(domain="thefullhelping")
