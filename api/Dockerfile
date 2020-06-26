@@ -7,7 +7,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONPATH=/app
 
 ARG POETRY="https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py"
-ARG BUILD_DEPS="curl gcc libc-dev musl-dev python3-dev postgresql-dev make"
+ARG BUILD_DEPS="curl gcc g++ libc-dev musl-dev python3-dev postgresql-dev make"
 
 # Copy using poetry.lock* in case it doesn't exist yet
 COPY ./pyproject.toml ./poetry.lock* /app/
