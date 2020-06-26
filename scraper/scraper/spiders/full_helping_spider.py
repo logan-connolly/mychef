@@ -1,5 +1,4 @@
 import requests
-import spacy
 import scrapy
 
 from scrapy.extensions.closespider import CloseSpider
@@ -34,6 +33,3 @@ class FullHelpingSpider(scrapy.Spider):
     def get_image_url(self, response):
         img = response.css("p > img")
         return img.re_first(r'src="(http.*?)\"')
-
-    def get_ingredients(self, response):
-        pass
