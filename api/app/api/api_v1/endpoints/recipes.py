@@ -31,6 +31,7 @@ async def get_recipes(sid: int, limit: Optional[int] = None):
 async def add_recipe(sid: int, payload: schemas.RecipeCreate):
     try:
         source = await get_source(id=sid)
+        payload.ingredients = {"items": payload.ingredients.split()}
         return await models.Recipe.objects.create(source=source, **payload.dict())
     except UniqueViolationError:
         raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Recipe exists")
