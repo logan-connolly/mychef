@@ -9,7 +9,6 @@ python = "^3.8"
 bs4 = "^0.0.1"
 requests = "^2.23.0"
 scrapy = "^2.1.0"
-spacy = "^2.2.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
