@@ -22,7 +22,6 @@ RUN set -eux \
     && poetry config virtualenvs.create false \
     && cd /app \
     && poetry install --no-root \
-		&& python -m spacy download en_core_web_sm \
     && apk del .build-deps $BUILD_DEPS
 
 COPY . .
