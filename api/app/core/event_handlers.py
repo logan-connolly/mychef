@@ -11,10 +11,15 @@ from app.services.models import IngredientExtractor
 
 async def start_app_handler(app: FastAPI) -> Callable:
     model_dir = Path("/app/models")
-    model = IngredientExtractor(model_dir / settings.MODEL)
-    app.state.model = model
-    logger.info(f"{model} loaded and attached to app.")
-    await database.connect()
+    try:
+        model = IngredientExtractor(model_dir / settings.MODEL)
+    except OSError:
+        logger.warning("Could not find model.")
+        model = IngredientExtractor()
+    finally:
+        app.state.model = model
+        logger.info(f"{model} loaded and attached to app.")
+        await database.connect()
 
 
 async def stop_app_handler(app: FastAPI) -> Callable:

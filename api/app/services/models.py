@@ -7,7 +7,7 @@ from loguru import logger
 class IngredientExtractor:
     """Named entity recognizer trained to identify ingredients"""
 
-    def __init__(self, path):
+    def __init__(self, path: str = None):
         self.path = path
         self.nlp = self._load_nlp()
 
@@ -19,7 +19,7 @@ class IngredientExtractor:
         if self.path is None:
             logger.warning("Path is ingredient extractor is missing.")
             logger.warning("Loading blank spacy model.")
-            return spacy.blank()
+            return spacy.blank("en")
         logger.debug(f"Loading model from '{self.path}'")
         return spacy.load(self.path)
 
