@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     OPENAPI_URL: str = f"{API_V1_STR}/openapi.json"
 
-    MODEL_PATH: str = ""
+    MODEL: str = ""
 
     PG = PostgresSettings()
     URI: PostgresDsn = f"postgres://{PG.user}:{PG.password}@{PG.host}/{PG.db}"

@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Callable
 
 from fastapi import FastAPI
@@ -9,7 +10,8 @@ from app.services.models import IngredientExtractor
 
 
 async def start_app_handler(app: FastAPI) -> Callable:
-    model = IngredientExtractor(settings.MODEL_PATH)
+    model_dir = Path("/app/models")
+    model = IngredientExtractor(model_dir / settings.MODEL)
     app.state.model = model
     logger.info(f"{model} loaded and attached to app.")
     await database.connect()
