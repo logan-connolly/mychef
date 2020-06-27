@@ -33,7 +33,7 @@ class TestRecipe:
         ) as resp:
             response = await resp.json()
             recipe.update({
-                "id": response.get("id"), "ingredients": {"items": ["garlic", "tomato"]}
+                "id": response.get("id"), "ingredients": {"items": []}
             })
             assert resp.status == 201
             assert response == recipe
