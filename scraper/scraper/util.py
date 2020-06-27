@@ -2,6 +2,8 @@ import requests
 
 from bs4 import BeautifulSoup
 
+from .settings import API_URL
+
 
 class UrlExtractor:
     """Utility for extracting the start url for the spider"""
@@ -23,6 +25,6 @@ class UrlExtractor:
 
 
 def get_source_id(domain: str) -> int:
-    resp = requests.get(f"http://api:8000/sources/?domain={domain}")
+    resp = requests.get(f"{API_URL}/sources/?domain={domain}")
     if resp.ok:
         return resp.json()[0]["id"]

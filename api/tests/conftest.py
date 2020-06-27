@@ -1,6 +1,6 @@
 import asyncio
-
 from multiprocessing import Process
+from pathlib import Path
 
 import aiohttp
 import pytest
@@ -22,7 +22,7 @@ async def server():
     kwargs = dict(host="127.0.0.1", port=5000, log_level="info")
     proc = Process(target=uvicorn.run, args=(main.app,), kwargs=kwargs, daemon=True)
     proc.start()
-    await asyncio.sleep(0.2)
+    await asyncio.sleep(0.5)
     yield
     proc.kill()
 

@@ -26,7 +26,7 @@ class TestSourceInvalid:
 
     @pytest.mark.asyncio
     async def test_get_sources_invalid(self, event_loop, host, server, session):
-        async with session.get(f"{host}/sources/") as resp:
+        async with session.get(f"{host}/source/") as resp:
             assert resp.status == 404
 
     @pytest.mark.asyncio

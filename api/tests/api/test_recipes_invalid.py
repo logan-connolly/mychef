@@ -23,9 +23,18 @@ class TestRecipeInvalid:
     @pytest.mark.parametrize(
         "recipe, code",
         [
-            (dict(name="no url or image"), 422),
-            (dict(name="Bad url", url="url", image="http://image.com"), 422),
-            (dict(name="Bad image url", url="http://url.com", image="image"), 422),
+            (dict(name="Not enough params"), 422),
+            (dict(name="A", url="u", image="http://i.com", ingredients="egg"), 422),
+            (dict(name="A", url="http://u.com", image="i", ingredients="egg"), 422),
+            (
+                dict(
+                    name="A",
+                    url="http://u.com",
+                    image="http://i.com",
+                    ingredients=["egg"],
+                ),
+                422,
+            ),
         ],
     )
     async def test_add_recipe_invalid(

@@ -28,7 +28,8 @@ class TestSource:
         global source
         async with session.get(f"{host}/sources/") as resp:
             assert resp.status == 200
-            assert await resp.json() == [source]
+            sources = await resp.json()
+            assert source in sources
 
     @pytest.mark.asyncio
     async def test_update_source(self, event_loop, server, host, session):

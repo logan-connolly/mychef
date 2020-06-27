@@ -3,7 +3,12 @@ from json import dumps
 import pytest
 
 source = dict(name="Source", url="http://source.com")
-recipe = dict(name="Recipe", url="http://recipe.com", image="http://image.com")
+recipe = dict(
+    name="Recipe",
+    url="http://recipe.com",
+    image="http://image.com",
+    ingredients="garlic tomato",
+)
 sid: int = None
 
 
@@ -27,7 +32,9 @@ class TestRecipe:
             f"{host}/sources/{sid}/recipes/", data=dumps(recipe)
         ) as resp:
             response = await resp.json()
-            recipe.update({"id": response.get("id")})
+            recipe.update({
+                "id": response.get("id"), "ingredients": {"items": []}
+            })
             assert resp.status == 201
             assert response == recipe
 
