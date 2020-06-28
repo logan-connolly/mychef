@@ -16,12 +16,11 @@ class IngredientExtractor:
         return f"{class_name}(path='{self.path}')"
 
     def _load_nlp(self):
-        if self.path is None:
-            logger.warning("Path is ingredient extractor is missing.")
-            logger.warning("Loading blank spacy model.")
-            return spacy.blank("en")
-        logger.debug(f"Loading model from '{self.path}'")
-        return spacy.load(self.path)
+        if self.path:
+            logger.debug(f"Loading model from '{self.path}'")
+            return spacy.load(self.path)
+        logger.warning("Loading blank spacy model.")
+        return spacy.blank("en")
 
     def extract(self, text: str) -> List[str]:
         tokens = self.nlp(text)
