@@ -38,6 +38,16 @@ services:
     depends_on:
       - db
 
+  web:
+    build: ./web
+    image: mychef_web:dev
+    ports:
+      - ${WEB_PORT}:8080
+    volumes:
+      - ./app/:/app
+    links:
+      - "api:api"
+
 
 volumes:
   postgres_data:
