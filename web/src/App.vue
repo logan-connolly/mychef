@@ -1,24 +1,26 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App!"/>
+    <TheHeading/>
+    <RecipeList/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import TheHeading from './components/TheHeading.vue'
+import RecipeList from './components/RecipeList.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    TheHeading,
+    RecipeList
   }
 }
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Montserrat, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
