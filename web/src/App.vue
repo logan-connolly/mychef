@@ -1,30 +1,27 @@
 <template>
-  <div id="app">
-    <TheHeading/>
-    <RecipeList/>
-  </div>
+  <v-app>
+    <TheNavbar/>
+    <v-main>
+      <TheHeading/>
+      <RecipeList/>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import TheHeading from './components/TheHeading.vue'
-import RecipeList from './components/RecipeList.vue'
+import TheNavbar from './components/TheNavbar.vue';
+import TheHeading from './components/TheHeading.vue';
+import RecipeList from './components/RecipeList.vue';
 
 export default {
   name: 'App',
   components: {
+    TheNavbar,
     TheHeading,
-    RecipeList
-  }
-}
+    RecipeList,
+  },
+  data: () => ({
+    //
+  }),
+};
 </script>
-
-<style>
-#app {
-  font-family: Montserrat, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

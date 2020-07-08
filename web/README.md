@@ -1,4 +1,4 @@
-# web
+# mychef
 
 ## Project setup
 ```
