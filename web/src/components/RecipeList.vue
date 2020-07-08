@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="12" sm="6" offset-sm="3">
+    <v-col cols="12">
       <v-container fluid>
         <v-row>
           <v-col 
@@ -17,8 +17,9 @@
 </template>
 
 <script>
-import RecipeListCard from './RecipeListCard.vue';
-import mychef from '../api/mychef';
+import RecipeListCard from './RecipeListCard.vue'
+//import mychef from '../api/mychef';
+const axios = require('axios')
 
 export default {
   name: 'RecipeList', 
@@ -26,7 +27,19 @@ export default {
     RecipeListCard
   },
   data: () => ({
-    recipes: mychef.getRecipes(),
+    recipes: null,
+    loading: true,
+    erorred: false
   }),
+  mounted () {
+    axios
+      .get('http://localhost:8002/api/v1/sources/1/recipes/')
+      .then(response => (this.recipes = response.data))
+      .catch(error => {
+        console.log(error)
+        this.errored = true
+      })
+      .finally(() => this.loading = false)
+  }
 }
 </script>

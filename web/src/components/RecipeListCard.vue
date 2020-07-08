@@ -12,15 +12,16 @@
             <v-overlay
               v-if="hover"
               absolute
-              color="offwhite"
-              opacity="0.9">
+              color="secondary"
+              opacity="0.5">
               <v-layout row justify-center>
                 <h3
-                  class="secondary--text text-center ma-7">
+                  class="offwhite--text text-center ma-7">
                   {{ recipe.name }}
                 </h3>
                 <v-btn 
                   :href="recipe.url"
+                  target="_blank"
                   color="primary">
                   See More
                 </v-btn>

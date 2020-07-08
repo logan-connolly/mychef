@@ -1,15 +1,15 @@
 <template>
   <v-container>
     <v-row class="text-center">
-      <v-col class="mb-4">
+      <v-col class="mt-5">
         <h1 class="secondary--text font-weight-bold mb-3">
-          {{ msg }}
+          Welcome to 
           <span class="primary--text font-weight-bold mb-3">
-            {{ name }}
+            MyChef
           </span>
         </h1>
-        <p class="secondary--text subheading">
-          {{ subheading }} 
+        <p class="secondary--text subheading mt-5">
+          We help you decide what to cook based on what you have in the kitchen 
         </p>
       </v-col>
     </v-row>
@@ -20,9 +20,7 @@
 export default {
   name: 'TheHeading',
   data: () => ({
-    msg: 'Welcome to ',
-    name: 'MyChef',
-    subheading: 'We help you decide what to cook based on what you have in the kitchen',
+    //
   })
 }
 </script>
@@ -32,5 +30,8 @@ export default {
 h1 {
   font-family: Pacifico, sans-serif;
   font-size: 300%;
+}
+p {
+  font-size: 120%;
 }
 </style>
