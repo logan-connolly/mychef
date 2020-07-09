@@ -14,18 +14,23 @@
               absolute
               color="secondary"
               opacity="0.5">
-              <v-layout row justify-center>
-                <h3
-                  class="offwhite--text text-center ma-7">
-                  {{ recipe.name }}
-                </h3>
-                <v-btn 
-                  :href="recipe.url"
-                  target="_blank"
-                  color="primary">
-                  See More
-                </v-btn>
-              </v-layout>
+              <v-row align="center">
+                <v-col class="text-center">
+                  <div class="my-2">
+                    <h3 class="offwhite--text text-center ma-7">
+                      {{ recipe.name }}
+                    </h3>
+                  </div>
+                  <div class="my-2">
+                    <v-btn
+                      :href="recipe.url"
+                      target="_blank"
+                      color="primary">
+                      See More
+                    </v-btn>
+                  </div>
+                </v-col>
+              </v-row>
             </v-overlay>
           </v-fade-transition>
         </v-card>
