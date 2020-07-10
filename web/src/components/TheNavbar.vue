@@ -1,15 +1,11 @@
 <template>
   <v-app-bar
     app
-    color="rgba(240,239,235,0.4)">
-
-    <div class="d-flex align-center">
-      <h3 class="primary--text font-weight-bold">
-        MyChef
-      </h3>
-    </div>
-
-    <v-spacer></v-spacer>
+    flat
+    dense
+    color="white"
+  >
+    <TheNavbarAbout/>
 
     <v-btn
       href="https://github.com/logan-connolly/mychef"
@@ -17,15 +13,20 @@
       color="primary"
       text>
       <span class="secondary--text mr-2">GitHub</span>
-      <v-icon>mdi-open-in-new</v-icon>
+      <v-icon>mdi-github</v-icon>
     </v-btn>
 
   </v-app-bar>
 </template>
 
 <script>
+import TheNavbarAbout from './TheNavbarAbout.vue';
+
 export default {
   name: 'TheNavbar',
+  components: {
+    TheNavbarAbout
+  },
   data: () => ({
     //
   })
