@@ -1,8 +1,6 @@
-version: '3.7'
-
+version: "3.7"
 
 services:
-
   db:
     image: postgres:12.1-alpine
     volumes:
@@ -20,7 +18,7 @@ services:
       - ./scraper/:/app
     links:
       - "api:api"
-        
+
   api:
     build: ./api
     image: mychef_api:dev
@@ -38,6 +36,18 @@ services:
     depends_on:
       - db
 
+  web:
+    build:
+      context: web
+      target: develop-stage
+    image: mychef_web:dev
+    ports:
+      - ${WEB_PORT}:8080
+    volumes:
+      - ./web/:/app
+    command: /bin/sh -c "yarn serve"
+    links:
+      - "api:api"
 
 volumes:
   postgres_data:
