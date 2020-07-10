@@ -3,6 +3,7 @@
     <v-hover>
       <template v-slot:default="{ hover }">
         <v-card
+          id="recipe__card"
           class="mx-auto">
           <v-img 
             :src="recipe.image" 
@@ -12,12 +13,12 @@
             <v-overlay
               v-if="hover"
               absolute
-              color="secondary"
-              opacity="0.5">
+              color="offwhite"
+              opacity="0.8">
               <v-row align="center">
                 <v-col class="text-center">
                   <div class="my-2">
-                    <h3 class="offwhite--text text-center ma-7">
+                    <h3 class="secondary--text text-center ma-7">
                       {{ recipe.name }}
                     </h3>
                   </div>
@@ -48,3 +49,11 @@ export default {
   }),
 }
 </script>
+
+<style scoped>
+#recipe__card {
+  border: 3px solid;
+  border-color: rgba(193,200,215,0.3);
+  box-shadow: 3px 3px 8px 0px rgba(0,0,0,0.3);
+}
+</style>
