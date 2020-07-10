@@ -3,9 +3,7 @@
     <TheNavbar/>
     <v-main>
       <TheHeading/>
-      <v-container ma-auto>
-        <RecipeList/>
-      </v-container>
+      <RecipeList/>
     </v-main>
   </v-app>
 </template>
@@ -31,6 +29,6 @@ export default {
 <style scoped>
 .v-main {
   margin: auto;
-  max-width: 70%;
+  max-width: 60%;
 }
 </style>
