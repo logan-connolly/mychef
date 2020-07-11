@@ -1,17 +1,12 @@
 <template>
   <v-row>
-    <v-col cols="12">
-      <v-container fluid>
-        <v-row>
-          <v-col 
-            v-for="(recipe, n) in recipes"
-            :key="n"
-            class="d-flex child-flex"
-            cols="4">
-              <RecipeListCard :recipe="recipe"/>
-          </v-col>
-        </v-row>
-      </v-container>
+    <v-col
+      v-for="(recipe, n) in recipes"
+      :key="n"
+      class="d-flex child-flex"
+      cols="12" xl="3" lg="4" md="4" sm="6" xs="12"
+    >
+        <RecipeListCard :recipe="recipe"/>
     </v-col>
   </v-row>
 </template>
