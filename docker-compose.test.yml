@@ -27,9 +27,10 @@ services:
     volumes:
       - ./api:/app
     environment:
+      - MODEL=$MODEL
       - POSTGRES_USER=mychef
       - POSTGRES_PASSWORD=mychef
-      - POSTGRES_HOST=db
+      - POSTGRES_HOST=test_db
       - POSTGRES_DB=mychef_db
     command: uvicorn app.main:app --reload --host 0.0.0.0
     depends_on:
