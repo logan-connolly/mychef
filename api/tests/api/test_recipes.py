@@ -1,5 +1,4 @@
-from json import dumps
-
+import json
 import pytest
 
 source = dict(name="Source", url="http://source.com")
@@ -17,7 +16,7 @@ class TestRecipe:
     async def test_create_source(self, event_loop, server, host, session):
         global source
         global sid
-        async with session.post(f"{host}/sources/", data=dumps(source)) as resp:
+        async with session.post(f"{host}/sources/", data=json.dumps(source)) as resp:
             assert resp.status == 201
             response = await resp.json()
             sid = response.get("id")
@@ -29,12 +28,10 @@ class TestRecipe:
         global recipe
         global sid
         async with session.post(
-            f"{host}/sources/{sid}/recipes/", data=dumps(recipe)
+            f"{host}/sources/{sid}/recipes/", data=json.dumps(recipe)
         ) as resp:
             response = await resp.json()
-            recipe.update({
-                "id": response.get("id"), "ingredients": {"items": []}
-            })
+            recipe.update({"id": response.get("id"), "ingredients": {"items": []}})
             assert resp.status == 201
             assert response == recipe
 
@@ -59,9 +56,9 @@ class TestRecipe:
         global recipe
         global sid
         recipe["name"] = "Recipe 2.0"
+        data = json.dumps(dict(name="Recipe 2.0"))
         async with session.put(
-            f"{host}/sources/{sid}/recipes/{recipe['id']}/",
-            data=dumps(dict(name="Recipe 2.0")),
+            f"{host}/sources/{sid}/recipes/{recipe['id']}/", data=data,
         ) as resp:
             assert resp.status == 200
             assert await resp.json() == recipe

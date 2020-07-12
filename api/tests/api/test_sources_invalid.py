@@ -1,5 +1,4 @@
-from json import dumps
-
+import json
 import pytest
 
 
@@ -16,7 +15,7 @@ class TestSourceInvalid:
     async def test_add_source_invalid(
         self, event_loop, server, host, session, payload, code
     ):
-        async with session.post(f"{host}/sources/", data=dumps(payload)) as resp:
+        async with session.post(f"{host}/sources/", data=json.dumps(payload)) as resp:
             assert resp.status == code
 
     @pytest.mark.asyncio
@@ -31,7 +30,7 @@ class TestSourceInvalid:
 
     @pytest.mark.asyncio
     async def test_update_source_invalid(self, event_loop, server, host, session):
-        async with session.put(f"{host}/sources/0", data=dumps(dict())) as resp:
+        async with session.put(f"{host}/sources/0", data=json.dumps(dict())) as resp:
             assert resp.status == 404
 
     @pytest.mark.asyncio

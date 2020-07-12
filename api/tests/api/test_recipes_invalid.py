@@ -1,5 +1,4 @@
-from json import dumps
-
+import json
 import pytest
 
 
@@ -12,7 +11,7 @@ class TestRecipeInvalid:
     async def test_create_source(self, event_loop, server, host, session):
         global source
         global sid
-        async with session.post(f"{host}/sources/", data=dumps(source)) as resp:
+        async with session.post(f"{host}/sources/", data=json.dumps(source)) as resp:
             assert resp.status == 201
             response = await resp.json()
             sid = response["id"]
@@ -41,7 +40,7 @@ class TestRecipeInvalid:
         self, event_loop, server, host, session, recipe, code
     ):
         async with session.post(
-            f"{host}/sources/1/recipes/", data=dumps(recipe)
+            f"{host}/sources/1/recipes/", data=json.dumps(recipe)
         ) as resp:
             assert resp.status == code
 
@@ -60,7 +59,7 @@ class TestRecipeInvalid:
     async def test_update_recipe_invalid(self, event_loop, server, host, session):
         global sid
         async with session.put(
-            f"{host}/sources/{sid}/recipes/0", data=dumps(dict())
+            f"{host}/sources/{sid}/recipes/0", data=json.dumps(dict())
         ) as resp:
             assert resp.status == 404
 

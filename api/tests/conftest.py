@@ -1,6 +1,5 @@
 import asyncio
 from multiprocessing import Process
-from pathlib import Path
 
 import aiohttp
 import pytest

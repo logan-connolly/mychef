@@ -1,5 +1,4 @@
-from json import dumps
-
+import json
 import pytest
 
 
@@ -10,7 +9,7 @@ class TestSource:
     @pytest.mark.asyncio
     async def test_add_source(self, event_loop, server, host, session):
         global source
-        async with session.post(f"{host}/sources/", data=dumps(source)) as resp:
+        async with session.post(f"{host}/sources/", data=json.dumps(source)) as resp:
             assert resp.status == 201
             response = await resp.json()
             source.update({"id": response.get("id"), "url": "example.com"})
@@ -37,7 +36,7 @@ class TestSource:
         new_url = "http://newexample.com"
         source["url"] = new_url
         async with session.put(
-            f"{host}/sources/{source.get('id')}", data=dumps(dict(url=new_url))
+            f"{host}/sources/{source.get('id')}", data=json.dumps(dict(url=new_url))
         ) as resp:
             assert resp.status == 200
             assert await resp.json() == source
