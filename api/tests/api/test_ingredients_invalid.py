@@ -1,9 +1,10 @@
 import json
 import pytest
 
+from app.core.config import settings
+
 
 class TestIngredientInvalid:
-    @pytest.mark.asyncio
     @pytest.mark.parametrize(
         "payload, code",
         [
@@ -11,31 +12,25 @@ class TestIngredientInvalid:
             (dict(ingredient={"name": "tomato"}), 422),
         ],
     )
-    async def test_add_ingredient_invalid(
-        self, event_loop, server, host, session, payload, code
-    ):
+    def test_add_ingredient_invalid(self, client, payload, code):
         data = json.dumps(payload)
-        async with session.post(f"{host}/ingredients/", data=data) as resp:
-            assert resp.status == code
+        resp = client.post(f"{settings.API_V1_STR}/ingredients/", data=data)
+        assert resp.status_code == code
 
-    @pytest.mark.asyncio
-    async def test_get_ingredient_invalid(self, event_loop, host, server, session):
-        async with session.get(f"{host}/ingredients/0") as resp:
-            assert resp.status == 404
+    def test_get_ingredient_invalid(self, client):
+        resp = client.get(f"{settings.API_V1_STR}/ingredients/0/")
+        assert resp.status_code == 404
 
-    @pytest.mark.asyncio
-    async def test_get_ingredients_invalid(self, event_loop, host, server, session):
-        async with session.get(f"{host}/ingredient/") as resp:
-            assert resp.status == 404
+    def test_get_ingredients_invalid(self, client):
+        resp = client.get(f"{settings.API_V1_STR}/ingredient/")
+        assert resp.status_code == 404
 
-    @pytest.mark.asyncio
-    async def test_update_ingredient_invalid(self, event_loop, server, host, session):
-        async with session.put(
-            f"{host}/ingredients/0", data=json.dumps(dict())
-        ) as resp:
-            assert resp.status == 404
+    def test_update_ingredient_invalid(self, client):
+        resp = client.put(
+            f"{settings.API_V1_STR}/ingredients/0/", data=json.dumps(dict())
+        )
+        assert resp.status_code == 404
 
-    @pytest.mark.asyncio
-    async def test_remove_ingredient_invalid(self, event_loop, server, host, session):
-        async with session.delete(f"{host}/ingredients/0") as resp:
-            assert resp.status == 404
+    def test_remove_ingredient_invalid(self, client):
+        resp = client.delete(f"{settings.API_V1_STR}/ingredients/0/")
+        assert resp.status_code == 404
