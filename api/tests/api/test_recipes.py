@@ -31,7 +31,12 @@ class TestRecipe:
             f"{host}/sources/{sid}/recipes/", data=json.dumps(recipe)
         ) as resp:
             response = await resp.json()
-            recipe.update({"id": response.get("id"), "ingredients": {"items": []}})
+            recipe.update(
+                {
+                    "id": response.get("id"),
+                    "ingredients": {"items": ["garlic", "tomato"]},
+                }
+            )
             assert resp.status == 201
             assert response == recipe
 
