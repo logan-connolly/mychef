@@ -37,7 +37,10 @@ async def add_recipe(request: Request, sid: int, payload: schemas.RecipeCreate):
         model: IngredientExtractor = request.app.state.model
         ingredients = model.extract(payload.ingredients)
         for ingredient in ingredients:
-            await add_ingredient({"ingredient": ingredient})
+            try:
+                await models.Ingredient.objects.create(ingredient=ingredient)
+            except UniqueViolationError:
+                pass
         payload.ingredients = {"items": ingredients}
         return await models.Recipe.objects.create(source=source, **payload.dict())
     except UniqueViolationError:
