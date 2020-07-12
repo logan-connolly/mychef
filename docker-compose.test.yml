@@ -3,24 +3,24 @@ version: '3.7'
 
 services:
 
-  db:
+  test_db:
     image: postgres:12.1-alpine
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_test_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=mychef
       - POSTGRES_PASSWORD=mychef
       - POSTGRES_DB=mychef_db 
 
-  scraper:
+  test_scraper:
     image: lvconnolly/mychef_scraper:dev
     volumes:
       - ./scraper:/app
     tty: true
     links:
-      - "api:api" 
+      - "test_api:test_api" 
 
-  api:
+  test_api:
     image: lvconnolly/mychef_api:dev
     ports:
       - 8000:8000
@@ -33,8 +33,8 @@ services:
       - POSTGRES_DB=mychef_db
     command: uvicorn app.main:app --reload --host 0.0.0.0
     depends_on:
-      - db
+      - test_db
 
 
 volumes:
-    postgres_data:
+    postgres_test_data:
