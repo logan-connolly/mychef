@@ -14,6 +14,7 @@ from starlette.status import (
 from app import models, schemas
 from app.services.models import IngredientExtractor
 from .sources import get_source
+from .ingredients import add_ingredient
 
 
 router = APIRouter()
@@ -34,7 +35,10 @@ async def add_recipe(request: Request, sid: int, payload: schemas.RecipeCreate):
     try:
         source = await get_source(id=sid)
         model: IngredientExtractor = request.app.state.model
-        payload.ingredients = {"items": model.extract(payload.ingredients)}
+        ingredients = model.extract(payload.ingredients)
+        for ingredient in ingredients:
+            await add_ingredient({"ingredient": ingredient})
+        payload.ingredients = {"items": ingredients}
         return await models.Recipe.objects.create(source=source, **payload.dict())
     except UniqueViolationError:
         raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Recipe exists")
