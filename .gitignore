@@ -134,4 +134,4 @@ dmypy.json
 
 # data
 data/
-api/app/services/models/ingredients*
+api/app/services/models
