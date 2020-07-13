@@ -12,14 +12,6 @@ services:
       - POSTGRES_PASSWORD=mychef
       - POSTGRES_DB=mychef_db 
 
-  test_scraper:
-    image: lvconnolly/mychef_scraper:dev
-    volumes:
-      - ./scraper:/app
-    tty: true
-    links:
-      - "test_api:test_api" 
-
   test_api:
     image: lvconnolly/mychef_api:dev
     ports:
