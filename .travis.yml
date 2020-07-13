@@ -15,8 +15,5 @@ env:
   - FILE=docker-compose.test.yml
 
 script:
-  - find . -name "ingredients_v1"
   - docker-compose -f $FILE up -d
-  - docker-compose -f $FILE exec test_api find . -name "ingredients_v1"
   - docker-compose -f $FILE exec test_api pytest .
-  - docker-compose -f $FILE exec test_scraper pytest .
