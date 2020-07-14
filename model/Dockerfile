@@ -1,3 +1,3 @@
-from scratch
+from alpine
 
 COPY *.tar.gz / 
