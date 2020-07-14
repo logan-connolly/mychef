@@ -14,7 +14,6 @@ from starlette.status import (
 from app import models, schemas
 from app.services.models import IngredientExtractor
 from .sources import get_source
-from .ingredients import add_ingredient
 
 
 router = APIRouter()
