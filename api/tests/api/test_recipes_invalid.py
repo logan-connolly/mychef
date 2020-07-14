@@ -1,25 +1,22 @@
-from json import dumps
-
+import json
 import pytest
 
+from app.core.config import settings
 
 source = dict(name="Source", url="http://source.com")
 sid: int = None
 
 
 class TestRecipeInvalid:
-    @pytest.mark.asyncio
-    async def test_create_source(self, event_loop, server, host, session):
+    def test_create_source(self, client):
         global source
         global sid
-        async with session.post(f"{host}/sources/", data=dumps(source)) as resp:
-            assert resp.status == 201
-            response = await resp.json()
-            sid = response["id"]
-            source.update({"id": sid, "url": "source.com"})
-            assert response == source
+        resp = client.post(f"{settings.API_V1_STR}/sources/", data=json.dumps(source))
+        assert resp.status_code == 201
+        sid = resp.json()["id"]
+        source.update({"id": sid, "url": "source.com"})
+        assert resp.json() == source
 
-    @pytest.mark.asyncio
     @pytest.mark.parametrize(
         "recipe, code",
         [
@@ -37,41 +34,30 @@ class TestRecipeInvalid:
             ),
         ],
     )
-    async def test_add_recipe_invalid(
-        self, event_loop, server, host, session, recipe, code
-    ):
-        async with session.post(
-            f"{host}/sources/1/recipes/", data=dumps(recipe)
-        ) as resp:
-            assert resp.status == code
+    def test_add_recipe_invalid(self, client, recipe, code):
+        resp = client.post(
+            f"{settings.API_V1_STR}/sources/1/recipes/", data=json.dumps(recipe)
+        )
+        assert resp.status_code == code
 
-    @pytest.mark.asyncio
-    async def test_get_recipe_invalid(self, event_loop, server, host, session):
-        global sid
-        async with session.get(f"{host}/sources/{sid}/recipes/0") as resp:
-            assert resp.status == 404
+    def test_get_recipe_invalid(self, client):
+        resp = client.get(f"{settings.API_V1_STR}/sources/{sid}/recipes/0/")
+        assert resp.status_code == 404
 
-    @pytest.mark.asyncio
-    async def test_get_recipes_invalid(self, event_loop, server, host, session):
-        async with session.get(f"{host}/sources/0/recipes/") as resp:
-            assert resp.status == 404
+    def test_get_recipes_invalid(self, client):
+        resp = client.get(f"{settings.API_V1_STR}/sources/0/recipes/")
+        assert resp.status_code == 404
 
-    @pytest.mark.asyncio
-    async def test_update_recipe_invalid(self, event_loop, server, host, session):
-        global sid
-        async with session.put(
-            f"{host}/sources/{sid}/recipes/0", data=dumps(dict())
-        ) as resp:
-            assert resp.status == 404
+    def test_update_recipe_invalid(self, client):
+        resp = client.put(
+            f"{settings.API_V1_STR}/sources/{sid}/recipes/0/", data=json.dumps(dict())
+        )
+        assert resp.status_code == 404
 
-    @pytest.mark.asyncio
-    async def test_remove_recipe_invalid(self, event_loop, server, host, session):
-        global sid
-        async with session.delete(f"{host}/sources/{sid}/recipes/0") as resp:
-            assert resp.status == 404
+    def test_remove_recipe_invalid(self, client):
+        resp = client.delete(f"{settings.API_V1_STR}/sources/{sid}/recipes/0/")
+        assert resp.status_code == 404
 
-    @pytest.mark.asyncio
-    async def test_remove_source(self, event_loop, server, host, session):
-        global sid
-        async with session.delete(f"{host}/sources/{sid}") as resp:
-            assert resp.status == 200
+    def test_remove_source(self, client):
+        resp = client.delete(f"{settings.API_V1_STR}/sources/{sid}/")
+        assert resp.status_code == 200

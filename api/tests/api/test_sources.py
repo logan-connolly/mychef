@@ -1,50 +1,40 @@
-from json import dumps
+import json
 
-import pytest
-
+from app.core.config import settings
 
 source = dict(name="Example", url="http://example.com")
+sid = None
 
 
 class TestSource:
-    @pytest.mark.asyncio
-    async def test_add_source(self, event_loop, server, host, session):
+    def test_add_source(self, client):
         global source
-        async with session.post(f"{host}/sources/", data=dumps(source)) as resp:
-            assert resp.status == 201
-            response = await resp.json()
-            source.update({"id": response.get("id"), "url": "example.com"})
-            assert response == source
+        global sid
+        resp = client.post(f"{settings.API_V1_STR}/sources/", data=json.dumps(source))
+        assert resp.status_code == 201
+        sid = resp.json()["id"]
+        source.update({"id": sid, "url": "example.com"})
+        assert resp.json() == source
 
-    @pytest.mark.asyncio
-    async def test_get_source(self, event_loop, server, host, session):
-        global source
-        async with session.get(f"{host}/sources/{source.get('id')}") as resp:
-            assert resp.status == 200
-            assert await resp.json() == source
+    def test_get_source(self, client):
+        resp = client.get(f"{settings.API_V1_STR}/sources/{sid}/")
+        assert resp.status_code == 200
+        assert resp.json() == source
 
-    @pytest.mark.asyncio
-    async def test_get_sources(self, event_loop, server, host, session):
-        global source
-        async with session.get(f"{host}/sources/") as resp:
-            assert resp.status == 200
-            sources = await resp.json()
-            assert source in sources
+    def test_get_sources(self, client):
+        resp = client.get(f"{settings.API_V1_STR}/sources/")
+        assert resp.status_code == 200
+        assert source in resp.json()
 
-    @pytest.mark.asyncio
-    async def test_update_source(self, event_loop, server, host, session):
-        global source
+    def test_update_source(self, client):
         new_url = "http://newexample.com"
         source["url"] = new_url
-        async with session.put(
-            f"{host}/sources/{source.get('id')}", data=dumps(dict(url=new_url))
-        ) as resp:
-            assert resp.status == 200
-            assert await resp.json() == source
+        payload = json.dumps(dict(url=new_url))
+        resp = client.put(f"{settings.API_V1_STR}/sources/{sid}/", data=payload)
+        assert resp.status_code == 200
+        assert resp.json() == source
 
-    @pytest.mark.asyncio
-    async def test_remove_source(self, event_loop, server, host, session):
-        global source
-        async with session.delete(f"{host}/sources/{source.get('id')}") as resp:
-            assert resp.status == 200
-            assert await resp.json() == source
+    def test_remove_source(self, client):
+        resp = client.delete(f"{settings.API_V1_STR}/sources/{sid}/")
+        assert resp.status_code == 200
+        assert resp.json() == source

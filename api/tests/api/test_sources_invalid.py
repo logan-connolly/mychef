@@ -1,10 +1,10 @@
-from json import dumps
-
+import json
 import pytest
+
+from app.core.config import settings
 
 
 class TestSourceInvalid:
-    @pytest.mark.asyncio
     @pytest.mark.parametrize(
         "payload, code",
         [
@@ -13,28 +13,23 @@ class TestSourceInvalid:
             (dict(name="no http", url="url.com"), 422),
         ],
     )
-    async def test_add_source_invalid(
-        self, event_loop, server, host, session, payload, code
-    ):
-        async with session.post(f"{host}/sources/", data=dumps(payload)) as resp:
-            assert resp.status == code
+    def test_add_source_invalid(self, client, payload, code):
+        data = json.dumps(payload)
+        resp = client.post(f"{settings.API_V1_STR}/sources/", data=data)
+        assert resp.status_code == code
 
-    @pytest.mark.asyncio
-    async def test_get_source_invalid(self, event_loop, host, server, session):
-        async with session.get(f"{host}/sources/0") as resp:
-            assert resp.status == 404
+    def test_get_source_invalid(self, client):
+        resp = client.get(f"{settings.API_V1_STR}/sources/0/")
+        assert resp.status_code == 404
 
-    @pytest.mark.asyncio
-    async def test_get_sources_invalid(self, event_loop, host, server, session):
-        async with session.get(f"{host}/source/") as resp:
-            assert resp.status == 404
+    def test_get_sources_invalid(self, client):
+        resp = client.get(f"{settings.API_V1_STR}/source/")
+        assert resp.status_code == 404
 
-    @pytest.mark.asyncio
-    async def test_update_source_invalid(self, event_loop, server, host, session):
-        async with session.put(f"{host}/sources/0", data=dumps(dict())) as resp:
-            assert resp.status == 404
+    def test_update_source_invalid(self, client):
+        resp = client.put(f"{settings.API_V1_STR}/sources/0/", data=json.dumps(dict()))
+        assert resp.status_code == 404
 
-    @pytest.mark.asyncio
-    async def test_remove_source_invalid(self, event_loop, server, host, session):
-        async with session.delete(f"{host}/sources/0") as resp:
-            assert resp.status == 404
+    def test_remove_source_invalid(self, client):
+        resp = client.delete(f"{settings.API_V1_STR}/sources/0/")
+        assert resp.status_code == 404

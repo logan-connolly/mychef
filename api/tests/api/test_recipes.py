@@ -1,6 +1,7 @@
-from json import dumps
-
+import json
 import pytest
+
+from app.core.config import settings
 
 source = dict(name="Source", url="http://source.com")
 recipe = dict(
@@ -10,76 +11,56 @@ recipe = dict(
     ingredients="garlic tomato",
 )
 sid: int = None
+rid: int = None
 
 
 class TestRecipe:
-    @pytest.mark.asyncio
-    async def test_create_source(self, event_loop, server, host, session):
+    def test_create_source(self, client):
         global source
         global sid
-        async with session.post(f"{host}/sources/", data=dumps(source)) as resp:
-            assert resp.status == 201
-            response = await resp.json()
-            sid = response.get("id")
-            source.update({"id": sid, "url": "source.com"})
-            assert response == source
+        resp = client.post(f"{settings.API_V1_STR}/sources/", data=json.dumps(source))
+        assert resp.status_code == 201
+        sid = resp.json()["id"]
+        source.update({"id": sid, "url": "source.com"})
+        assert resp.json() == source
 
-    @pytest.mark.asyncio
-    async def test_add_recipe(self, event_loop, server, host, session):
+    def test_add_recipe(self, client):
         global recipe
-        global sid
-        async with session.post(
-            f"{host}/sources/{sid}/recipes/", data=dumps(recipe)
-        ) as resp:
-            response = await resp.json()
-            recipe.update({
-                "id": response.get("id"), "ingredients": {"items": []}
-            })
-            assert resp.status == 201
-            assert response == recipe
+        global rid
+        data = json.dumps(recipe)
+        resp = client.post(f"{settings.API_V1_STR}/sources/{sid}/recipes/", data=data)
+        assert resp.status_code == 201
+        rid = resp.json()["id"]
+        ingredients = resp.json()["ingredients"]
+        recipe.update({"id": rid, "ingredients": ingredients})
+        assert resp.json() == recipe
 
-    @pytest.mark.asyncio
-    async def test_get_recipe(self, event_loop, server, host, session):
-        global recipe
-        global sid
-        async with session.get(f"{host}/sources/{sid}/recipes/{recipe['id']}/") as resp:
-            assert resp.status == 200
-            assert await resp.json() == recipe
+    def test_get_recipe(self, client):
+        resp = client.get(f"{settings.API_V1_STR}/sources/{sid}/recipes/{rid}/")
+        assert resp.status_code == 200
+        assert resp.json() == recipe
 
-    @pytest.mark.asyncio
-    async def test_get_recipes(self, event_loop, server, host, session):
-        global recipe
-        global sid
-        async with session.get(f"{host}/sources/{sid}/recipes/") as resp:
-            assert resp.status == 200
-            assert await resp.json() == [recipe]
+    def test_get_recipes(self, client):
+        resp = client.get(f"{settings.API_V1_STR}/sources/{sid}/recipes/")
+        assert resp.status_code == 200
+        assert recipe in resp.json()
 
-    @pytest.mark.asyncio
-    async def test_update_recipe(self, event_loop, server, host, session):
+    def test_update_recipe(self, client):
         global recipe
-        global sid
         recipe["name"] = "Recipe 2.0"
-        async with session.put(
-            f"{host}/sources/{sid}/recipes/{recipe['id']}/",
-            data=dumps(dict(name="Recipe 2.0")),
-        ) as resp:
-            assert resp.status == 200
-            assert await resp.json() == recipe
+        data = json.dumps(dict(name="Recipe 2.0"))
+        resp = client.put(
+            f"{settings.API_V1_STR}/sources/{sid}/recipes/{rid}/", data=data,
+        )
+        assert resp.status_code == 200
+        assert resp.json() == recipe
 
-    @pytest.mark.asyncio
-    async def test_remove_recipe(self, event_loop, server, host, session):
-        global recipe
-        global sid
-        async with session.delete(
-            f"{host}/sources/{sid}/recipes/{recipe['id']}/"
-        ) as resp:
-            assert resp.status == 200
-            assert await resp.json() == recipe
+    def test_remove_recipe(self, client):
+        resp = client.delete(f"{settings.API_V1_STR}/sources/{sid}/recipes/{rid}/")
+        assert resp.status_code == 200
+        assert resp.json() == recipe
 
-    @pytest.mark.asyncio
-    async def test_remove_source(self, event_loop, server, host, session):
-        global source
-        global sid
-        async with session.delete(f"{host}/sources/{sid}") as resp:
-            assert resp.status == 200
-            assert await resp.json() == source
+    def test_remove_source(self, client):
+        resp = client.delete(f"{settings.API_V1_STR}/sources/{sid}/")
+        assert resp.status_code == 200
+        assert resp.json() == source

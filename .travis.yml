@@ -6,12 +6,14 @@ services:
   - docker
 
 before_script:
-  pip install docker-compose
+  - pip install docker docker-compose
+  - docker create -it --name tmp lvconnolly/mychef_model:v1 bash
+  - docker cp tmp:/ingredients_v1.tar.gz ./api/app/services/models
+  - docker rm -f tmp
 
 env:
   - FILE=docker-compose.test.yml
 
 script:
   - docker-compose -f $FILE up -d
-  - docker-compose -f $FILE exec api pytest .
-  - docker-compose -f $FILE exec scraper pytest .
+  - docker-compose -f $FILE exec test_api pytest -v .

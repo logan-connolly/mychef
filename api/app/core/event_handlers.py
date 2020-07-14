@@ -10,7 +10,7 @@ from app.services.models import IngredientExtractor
 
 
 async def start_app_handler(app: FastAPI) -> Callable:
-    model_dir = Path("/app/models")
+    model_dir = Path("/app/app/services/models")
     try:
         model = IngredientExtractor(model_dir / settings.MODEL)
     except OSError:

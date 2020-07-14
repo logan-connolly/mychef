@@ -34,7 +34,13 @@ async def add_recipe(request: Request, sid: int, payload: schemas.RecipeCreate):
     try:
         source = await get_source(id=sid)
         model: IngredientExtractor = request.app.state.model
-        payload.ingredients = {"items": model.extract(payload.ingredients)}
+        ingredients = model.extract(payload.ingredients)
+        for ingredient in ingredients:
+            try:
+                await models.Ingredient.objects.create(ingredient=ingredient)
+            except UniqueViolationError:
+                pass
+        payload.ingredients = {"items": ingredients}
         return await models.Recipe.objects.create(source=source, **payload.dict())
     except UniqueViolationError:
         raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Recipe exists")

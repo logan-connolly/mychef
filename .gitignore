@@ -134,4 +134,5 @@ dmypy.json
 
 # data
 data/
-api/models
+api/app/services/models/ingredients_v1*
+*.tar.gz
