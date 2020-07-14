@@ -1,3 +1,3 @@
 from scratch
 
-COPY . . 
+COPY *.tar.gz / 
