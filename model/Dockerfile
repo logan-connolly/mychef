@@ -1,0 +1,3 @@
+from scratch
+
+COPY . . 
