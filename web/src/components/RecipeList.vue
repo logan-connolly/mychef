@@ -1,5 +1,13 @@
 <template>
   <v-row>
+    <v-col class="text-center">
+      <v-alert type="error" v-if="erorred">
+        There was an issue retrieving recipes.
+      </v-alert>
+      <v-alert type="warning" v-if="!loading && recipes == null">
+        No recipes were found in the database.
+      </v-alert>
+    </v-col>
     <v-col
       v-for="(recipe, n) in recipes"
       :key="n"
