@@ -10,7 +10,7 @@ class IngredientExtractor:
     """Named entity recognizer trained to identify ingredients"""
 
     def __init__(self, path: str = None):
-        self.path = Path(path)
+        self.path = Path(path) if path else None
         self.nlp = self._load_nlp()
 
     def __repr__(self):
@@ -22,7 +22,7 @@ class IngredientExtractor:
             tar.extractall(path=self.path.parent)
 
     def _load_nlp(self):
-        if not self.path:
+        if self.path is None:
             logger.warning("Loading blank spacy model.")
             return spacy.blank("en")
         if not self.path.is_dir():
