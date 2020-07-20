@@ -24,7 +24,7 @@ async def get_sources(domain: Optional[str] = None):
         else models.Source.objects.all()
     )
     if not sources:
-        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="No sources found")
+        raise HTTPException(HTTP_404_NOT_FOUND, detail="No sources found")
     return sources
 
 
@@ -35,7 +35,7 @@ async def add_source(payload: schemas.SourceCreate):
             name=payload.name, url=payload.url.host
         )
     except UniqueViolationError:
-        raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Source exists")
+        raise HTTPException(HTTP_400_BAD_REQUEST, detail="Source exists")
 
 
 @router.get("/{id}/", response_model=schemas.SourceDB, status_code=HTTP_200_OK)
@@ -43,7 +43,7 @@ async def get_source(id: int):
     try:
         return await models.Source.objects.get(id=id)
     except NoMatch:
-        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="Source not found")
+        raise HTTPException(HTTP_404_NOT_FOUND, detail="Source not found")
 
 
 @router.put("/{id}/", response_model=schemas.SourceDB, status_code=HTTP_200_OK)
