@@ -32,7 +32,8 @@ async def get_recipes(sid: int, limit: Optional[int] = None):
 @router.post("/", response_model=schemas.RecipeDB, status_code=HTTP_201_CREATED)
 async def add_recipe(request: Request, sid: int, payload: schemas.RecipeCreate):
     source = await get_source(id=sid)
-    payload.ingredients = {"items": extract_ingredients(request, payload.ingredients)}
+    extracted_ingredients = await extract_ingredients(request, payload.ingredients)
+    payload.ingredients = {"items": extracted_ingredients}
     try:
         return await models.Recipe.objects.create(source=source, **payload.dict())
     except UniqueViolationError:
