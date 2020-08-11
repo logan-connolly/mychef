@@ -19,7 +19,7 @@ services:
     volumes:
       - ./api:/app
     environment:
-      - MODEL=$MODEL
+      - MODEL=ingredients_v1
       - POSTGRES_USER=mychef
       - POSTGRES_PASSWORD=mychef
       - POSTGRES_HOST=test_db
