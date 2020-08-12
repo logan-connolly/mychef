@@ -20,10 +20,12 @@
       max-width="500"
     >
       <v-card>
-        <v-card-title class="headline font-weight-bold">Why MyChef</v-card-title>
+        <v-card-title class="headline font-weight-bold">What is MyChef?</v-card-title>
 
         <v-card-text class="headline font-weight-light">
-          We put all your favorite plant-based recipes in one place. On top of that, we recommend what to make based on what you have at home. No Ads, no tracking, just helping you decide what to make.
+          MyChef takes a variety of plant-based recipes and ranks them based on the
+          ingredients you have in the kitchen. No Ads, no tracking, just helping you
+          decide what to eat.
         </v-card-text>
 
         <v-card-actions>

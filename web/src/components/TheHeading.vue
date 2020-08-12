@@ -5,12 +5,9 @@
         <h1 class="secondary--text font-weight-bold mb-3">
           Welcome to 
           <span class="primary--text font-weight-bold mb-3">
-            MyChef <v-icon color="primary" large>mdi-leaf</v-icon>
+            MyChef
           </span>
         </h1>
-        <p class="secondary--text subheading mt-5">
-          We help you decide what to cook based on what you have in the kitchen 
-        </p>
       </v-col>
     </v-row>
   </v-container>
@@ -29,9 +26,6 @@ export default {
 <style scoped>
 h1 {
   font-family: Pacifico, sans-serif;
-  font-size: 300%;
-}
-p {
-  font-size: 120%;
+  font-size: 350%
 }
 </style>
