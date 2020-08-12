@@ -20,6 +20,7 @@ services:
       - ./api:/app
     environment:
       - MODEL=ingredients_v1
+      - WEB_PORT=8000
       - POSTGRES_USER=mychef
       - POSTGRES_PASSWORD=mychef
       - POSTGRES_HOST=test_db
