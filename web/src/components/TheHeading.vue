@@ -5,7 +5,7 @@
         <h1 class="secondary--text font-weight-bold mb-3">
           Welcome to 
           <span class="primary--text font-weight-bold mb-3">
-            MyChef
+            MyChef <v-icon color="primary" large>mdi-leaf</v-icon>
           </span>
         </h1>
         <p class="secondary--text subheading mt-5">
