@@ -1,20 +1,20 @@
 <template>
-    <v-autocomplete
-      v-model="selected"
-      :items="ingredients"
-      item-text="ingredient"
-      item-value="id"
-      label="Ingredients"
-      clearable
-      chips
-      deletable-chips
-      full-width
-      hide-details
-      hide-no-data
-      hide-selected
-      multiple
-      single-line
-    ></v-autocomplete>
+  <v-autocomplete
+    v-model="selected"
+    :items="ingredients"
+    item-text="ingredient"
+    item-value="id"
+    label="Ingredients"
+    clearable
+    chips
+    deletable-chips
+    full-width
+    hide-details
+    hide-no-data
+    hide-selected
+    multiple
+    single-line
+  ></v-autocomplete>
 </template>
 
 <script>
@@ -40,3 +40,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.v-input {
+  margin: auto;
+  max-width: 70%;
+}
+.v-text-field {
+  padding-top: 0px;
+  padding-bottom: 24px;
+}
+</style>
