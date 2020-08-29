@@ -3,14 +3,16 @@
     <TheNavbar/>
     <v-main>
       <TheHeading/>
+      <IngredientForm/>
       <RecipeList/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import TheNavbar from './components/TheNavbar.vue'
+import TheNavbar from './components/TheNavbar.vue';
 import TheHeading from './components/TheHeading.vue';
+import IngredientForm from './components/IngredientForm.vue';
 import RecipeList from './components/RecipeList.vue';
 
 export default {
@@ -18,6 +20,7 @@ export default {
   components: {
     TheNavbar,
     TheHeading,
+    IngredientForm,
     RecipeList,
   },
   data: () => ({
