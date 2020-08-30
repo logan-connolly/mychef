@@ -34,7 +34,7 @@ class IngredientExtractor:
 
     def extract(self, text: str) -> List[str]:
         tokens = self.nlp(text)
-        ingredient_set = {token.text.lower() for token in tokens.ents}
+        ingredient_set = {token.lemma_.lower() for token in tokens.ents}
         return list(ingredient_set)
 
 
