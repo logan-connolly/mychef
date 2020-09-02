@@ -18,7 +18,8 @@
 </template>
 
 <script>
-const axios = require('axios')
+const axios = require('axios');
+const api_url = process.env.VUE_APP_API_URL;
 
 export default {
   name: 'IngredientForm', 
@@ -30,7 +31,7 @@ export default {
   }),
   mounted () {
     axios
-      .get('http://localhost:8002/api/v1/ingredients')
+      .get(`${api_url}/ingredients`)
       .then(response => (this.ingredients = response.data))
       .catch(error => {
         console.log(error)

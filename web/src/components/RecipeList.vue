@@ -20,9 +20,9 @@
 </template>
 
 <script>
-import RecipeListCard from './RecipeListCard.vue'
-//import mychef from '../api/mychef';
-const axios = require('axios')
+import RecipeListCard from './RecipeListCard.vue';
+const axios = require('axios');
+const api_url = process.env.VUE_APP_API_URL;
 
 export default {
   name: 'RecipeList', 
@@ -36,7 +36,7 @@ export default {
   }),
   mounted () {
     axios
-      .get('http://localhost:8002/api/v1/sources/1/recipes/')
+      .get(`${api_url}/sources/1/recipes`)
       .then(response => (this.recipes = response.data))
       .catch(error => {
         console.log(error)
