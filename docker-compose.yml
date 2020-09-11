@@ -37,16 +37,18 @@ services:
     depends_on:
       - db
 
-  web:
+  ui:
     build:
-      context: web
+      context: ui
       target: develop-stage
-    image: mychef_web:dev
+    image: mychef_ui:dev
     ports:
-      - ${WEB_PORT}:8080
+      - ${WEB_PORT}:3000
     volumes:
-      - ./web/:/app
-    command: /bin/sh -c "yarn serve"
+      - ./ui/:/srv/app
+    environment:
+      HOST: 0.0.0.0
+    command: /bin/sh -c "npm run docker"
     links:
       - "api:api"
 
