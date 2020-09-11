@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row align="center" class="text-center">
-      <v-col class="mt-5">
+      <v-col class="mt-14">
         <h1 class="secondary--text font-weight-bold mb-3">
           Welcome to 
           <span class="primary--text font-weight-bold mb-3">
@@ -16,15 +16,12 @@
 <script>
 export default {
   name: 'TheHeading',
-  data: () => ({
-    //
-  })
 }
 </script>
 
 <style scoped>
 h1 {
   font-family: Pacifico, sans-serif;
-  font-size: 350%
+  font-size: 310%
 }
 </style>

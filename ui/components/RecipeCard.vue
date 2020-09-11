@@ -42,11 +42,8 @@
 
 <script>
 export default {
-  name: 'RecipeListCard', 
+  name: 'RecipeCard', 
   props: ['recipe'],
-  data: () => ({
-    //
-  }),
 }
 </script>
 
