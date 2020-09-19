@@ -3,8 +3,6 @@
     <a href="https://github.com/logan-connolly/mychef">
       <img src="ui/static/mychef.png" alt="MyChef" />
     </a>
-    <br />
-    <h4>We tell you what to cook based on what you have</h4>
   </p>
   <p>
     <a href="https://travis-ci.com/logan-connolly/mychef">
