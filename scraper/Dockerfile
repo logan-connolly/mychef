@@ -26,3 +26,5 @@ RUN set -eux \
     && apk del .build-deps $BUILD_DEPS
 
 COPY . .
+
+ENTRYPOINT ["scrapy"]
