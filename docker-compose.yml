@@ -44,6 +44,8 @@ services:
       - ${SEARCH_PORT}:7700
     volumes:
       - ./search/data.ms:/data.ms
+    depends_on:
+      - api
 
   ui:
     build:
@@ -61,6 +63,7 @@ services:
       - "api:api"
     depends_on:
       - api
+      - search
 
 volumes:
   postgres_data:
