@@ -13,9 +13,9 @@ services:
   scraper:
     build: ./scraper
     image: mychef_scraper:dev
-    tty: true
     volumes:
       - ./scraper/:/app
+    command: crawl full_helping
     links:
       - "api:api"
 
@@ -51,6 +51,8 @@ services:
     command: /bin/sh -c "npm run docker"
     links:
       - "api:api"
+    depends_on:
+      - api
 
 volumes:
   postgres_data:
