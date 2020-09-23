@@ -28,6 +28,7 @@ POSTGRES_DB=mychef_db
 POSTGRES_HOST=db
 API_PORT=8002
 WEB_PORT=8000
+SEARCH_PORT=7700
 MODEL=ingredients_v1
 ```
 
@@ -58,3 +59,7 @@ $ docker-compose up -d
 
 - Developed using [Scrapy](https://scrapy.org/) a framework for extracting data from websites.
 - For each source, a `spider` needs to be defined that extracts the data and makes post request to api with recipe
+
+**Search**
+
+- Leverages [MeiliSearch](https://docs.meilisearch.com/) to filter recipes based on ingredient input
