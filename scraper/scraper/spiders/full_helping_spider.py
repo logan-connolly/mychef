@@ -1,8 +1,6 @@
 import requests
 import scrapy
 
-from scrapy.extensions.closespider import CloseSpider
-
 from ..util import UrlExtractor, get_source_id
 from ..settings import API_URL
 
@@ -18,8 +16,6 @@ class FullHelpingSpider(scrapy.Spider):
         self.sid = get_source_id(domain="thefullhelping")
 
     def parse(self, response):
-        if self.sid is None:
-            raise CloseSpider("No source id found in database.")
 
         if response.css(".wprm-recipe-ingredients-container"):
             data = {
