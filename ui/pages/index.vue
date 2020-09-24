@@ -31,7 +31,6 @@ export default {
   },
   created() {
     this.$store.dispatch('recipes/loadRecipes')
-    
   }
 }
 </script>
