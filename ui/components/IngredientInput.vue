@@ -3,7 +3,7 @@
     v-model="selected"
     :items="items"
     item-text="ingredient"
-    item-value="id"
+    item-value="ingredient"
     label="Select ingredients you have"
     class="pb-6 pa-0"
     clearable
@@ -29,8 +29,9 @@ export default {
       get() {
         return this.$store.state.ingredients.selected
       },
-      set(value) {
-        this.$store.dispatch('ingredients/updateSelected', value)
+      set(items) {
+        this.$store.dispatch('ingredients/updateSelected', items),
+        this.$store.dispatch('recipes/loadRecipes')
       }
     }
   },
