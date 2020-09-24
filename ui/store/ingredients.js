@@ -5,7 +5,8 @@ export const state = () => ({
 
 export const mutations = {
   SET_ITEMS(state, data) {
-    state.items = data;
+    const ingredients = data.map(item => item.ingredient);
+    state.items = ingredients.sort();
   },
   UPDATE_SELECTED(state, ingredients) {
     state.selected = ingredients;
