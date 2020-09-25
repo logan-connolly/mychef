@@ -16,7 +16,7 @@ export const actions = {
     const selected = rootState.ingredients.selected;
     if (selected.length == 0) {
       await this.$axios
-        .get("/sources/1/recipes/?limit=20")
+        .get("/sources/1/recipes/")
         .then(res => {
           commit("SET_ITEMS", res.data);
         })
