@@ -1,3 +1,4 @@
+import random
 from typing import List, Optional
 
 from asyncpg.exceptions import UniqueViolationError
@@ -24,9 +25,9 @@ async def get_recipes(sid: int, limit: Optional[int] = None):
     recipes = await models.Recipe.objects.filter(source=sid).all()
     if not recipes:
         raise HTTPException(HTTP_404_NOT_FOUND, detail="No recipes found")
-    if limit:
-        return recipes[:limit]
-    return recipes
+    n_recipes = len(recipes)
+    n_samples = limit if limit and limit < n_recipes else n_recipes
+    return random.sample(recipes, n_samples)
 
 
 @router.post("/", response_model=schemas.RecipeDB, status_code=HTTP_201_CREATED)

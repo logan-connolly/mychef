@@ -1,6 +1,7 @@
 version: "3.7"
 
 services:
+
   db:
     image: postgres:12.1-alpine
     volumes:
@@ -37,6 +38,15 @@ services:
     depends_on:
       - db
 
+  search:
+    image: getmeili/meilisearch
+    ports:
+      - ${SEARCH_PORT}:7700
+    volumes:
+      - ./search/data.ms:/data.ms
+    depends_on:
+      - api
+
   ui:
     build:
       context: ui
@@ -53,6 +63,7 @@ services:
       - "api:api"
     depends_on:
       - api
+      - search
 
 volumes:
   postgres_data:
