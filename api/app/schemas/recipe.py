@@ -1,31 +1,39 @@
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 from pydantic import BaseModel, AnyUrl
 
 
-# shared properties
 class RecipeBase(BaseModel):
+    "Shared properties of all recipe schemas"
     name: Optional[str]
-    url: Optional[Any]
-    image: Optional[Any]
-    ingredients: Optional[Any]
+    url: Optional[Union[str, AnyUrl]]
+    image: Optional[Union[str, AnyUrl]]
+    ingredients: Optional[Union[str, Dict[str, List[str]]]]
 
 
-# properties to receive on item creation
-class RecipeCreate(RecipeBase):
+class RecipeAdd(RecipeBase):
+    "Properties to receive on received post request"
     name: str
     url: AnyUrl
     image: AnyUrl
-    ingredients: Any
+    ingredients: str
 
 
-# properties to receive on item update
+class RecipeCreate(RecipeBase):
+    "Properties to receive on item creation"
+    name: str
+    url: AnyUrl
+    image: AnyUrl
+    ingredients: Dict[str, List[str]]
+
+
 class RecipeUpdate(RecipeBase):
-    ingredients: Optional[Dict[str, List[str]]]
+    "Properties to receive on item update"
+    pass
 
 
-# properties hared by models stored in DB
 class RecipeDBBase(RecipeBase):
+    "Properties hared by models stored in DB"
     id: int
     name: str
     url: str
@@ -36,6 +44,6 @@ class RecipeDBBase(RecipeBase):
         orm_mode = True
 
 
-# properties to return to client
 class RecipeDB(RecipeDBBase):
+    "Properties to return to client"
     pass
