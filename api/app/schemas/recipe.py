@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, AnyUrl
 
@@ -6,9 +6,9 @@ from pydantic import BaseModel, AnyUrl
 # shared properties
 class RecipeBase(BaseModel):
     name: Optional[str]
-    url: Optional[AnyUrl]
-    image: Optional[AnyUrl]
-    ingredients: Optional[str]
+    url: Optional[Any]
+    image: Optional[Any]
+    ingredients: Optional[Any]
 
 
 # properties to receive on item creation
@@ -16,7 +16,7 @@ class RecipeCreate(RecipeBase):
     name: str
     url: AnyUrl
     image: AnyUrl
-    ingredients: str
+    ingredients: Any
 
 
 # properties to receive on item update

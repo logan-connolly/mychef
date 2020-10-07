@@ -1,6 +1,6 @@
 from typing import List
 
-from pydantic import BaseSettings, PostgresDsn, AnyHttpUrl
+from pydantic import BaseSettings
 
 
 class PostgresSettings(BaseSettings):
@@ -29,13 +29,13 @@ class Settings(BaseSettings):
     OPENAPI_URL: str = f"{API_V1_STR}/openapi.json"
 
     WEB = WebSettings()
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = [
+    BACKEND_CORS_ORIGINS: List[str] = [
         "http://localhost",
         f"http://localhost:{WEB.port}",
     ]
 
     PG = PostgresSettings()
-    URI: PostgresDsn = f"postgres://{PG.user}:{PG.password}@{PG.host}/{PG.db}"
+    URI: str = f"postgres://{PG.user}:{PG.password}@{PG.host}/{PG.db}"
 
     class Config:
         case_sensitive = True
