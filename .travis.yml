@@ -15,7 +15,8 @@ env:
   - FILE=docker-compose.test.yml
 
 script:
-  - mypy --ignore-missing-imports ./api ./scraper
+  - mypy --ignore-missing-imports ./api
+  - mypy --ignore-missing-imports ./scraper
   - flake8 --max-line-length=88 ./api ./scraper
   - docker volume prune -f
   - docker-compose -f $FILE up -d
