@@ -15,7 +15,7 @@ env:
   - FILE=docker-compose.test.yml
 
 script:
-  - mypy --ignore-missing-imports app
+  - mypy --ignore-missing-imports ./api ./scraper
   - flake8 ./api ./scraper
   - docker volume prune -f
   - docker-compose -f $FILE up -d
