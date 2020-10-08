@@ -6,6 +6,7 @@ services:
   - docker
 
 before_script:
+  - pip install -U pip setuptools wheel
   - pip install docker docker-compose mypy flake8
   - docker create -it --name tmp lvconnolly/mychef_model:v1 bash
   - docker cp tmp:/ingredients_v1.tar.gz ./api/app/services/models
