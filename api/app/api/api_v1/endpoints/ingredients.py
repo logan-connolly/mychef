@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 from asyncpg.exceptions import UniqueViolationError
 from fastapi import APIRouter, HTTPException
@@ -47,8 +47,8 @@ async def get_ingredient(id: int):
 @router.put("/{id}/", response_model=schemas.IngredientDB, status_code=HTTP_200_OK)
 async def update_ingredient(id: int, payload: schemas.IngredientUpdate):
     ingredient = await get_ingredient(id)
-    payload = {k: v for k, v in payload.dict().items() if v is not None}
-    await ingredient.update(**payload)
+    updates: Dict[str, Any] = {k: v for k, v in payload.dict().items() if v is not None}
+    await ingredient.update(**updates)
     return ingredient
 
 

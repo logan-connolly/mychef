@@ -1,5 +1,5 @@
 from praw import Reddit
-from pydantic import BaseSettings, SecretStr
+from pydantic import BaseSettings
 
 
 class RedditConfig(BaseSettings):

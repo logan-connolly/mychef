@@ -1,3 +1,4 @@
+from typing import Any, Dict
 from fastapi import APIRouter
 
 from .endpoints import ingredients, recipes, sources
@@ -5,7 +6,7 @@ from .endpoints import ingredients, recipes, sources
 
 api_router = APIRouter()
 
-kwargs = {
+kwargs: Dict[str, Dict[str, Any]] = {
     "ingredients": dict(prefix="/ingredients", tags=["ingredients"]),
     "recipes": dict(prefix="/sources/{sid}/recipes", tags=["recipes"]),
     "sources": dict(prefix="/sources", tags=["sources"]),

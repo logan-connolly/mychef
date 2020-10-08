@@ -5,6 +5,8 @@ from app.core.config import settings
 
 source = dict(name="Source", url="http://source.com")
 sid: int = None
+url: str = "http://url.com"
+img: str = "http://img.com"
 
 
 class TestRecipeInvalid:
@@ -21,17 +23,9 @@ class TestRecipeInvalid:
         "recipe, code",
         [
             (dict(name="Not enough params"), 422),
-            (dict(name="A", url="u", image="http://i.com", ingredients="egg"), 422),
-            (dict(name="A", url="http://u.com", image="i", ingredients="egg"), 422),
-            (
-                dict(
-                    name="A",
-                    url="http://u.com",
-                    image="http://i.com",
-                    ingredients=["egg"],
-                ),
-                422,
-            ),
+            (dict(name="A", url="u", image=img, ingredients="egg"), 422),
+            (dict(name="A", url=url, image="i", ingredients="egg"), 422),
+            (dict(name="A", url=url, image=img, ingredients=["egg"]), 422),
         ],
     )
     def test_add_recipe_invalid(self, client, recipe, code):

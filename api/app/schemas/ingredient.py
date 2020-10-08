@@ -3,23 +3,23 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-# shared properties
 class IngredientBase(BaseModel):
-    ingredient: Optional[str] = None
+    "Shared properties across all schemas"
+    ingredient: Optional[str]
 
 
-# properties to receive on item creation
 class IngredientCreate(IngredientBase):
+    "Properties to receive on item creation"
     ingredient: str
 
 
-# properties hared by models stored in DB
 class IngredientUpdate(IngredientBase):
+    "Properties needed to update data in DB"
     pass
 
 
-# properties hared by models stored in DB
 class IngredientDBBase(IngredientBase):
+    "Properties shared by models stored in DB"
     id: int
     ingredient: str
 
@@ -27,6 +27,6 @@ class IngredientDBBase(IngredientBase):
         orm_mode = True
 
 
-# properties to return to client
 class IngredientDB(IngredientDBBase):
+    "Properties to return to client"
     pass

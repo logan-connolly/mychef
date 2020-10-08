@@ -17,7 +17,7 @@ class RedditComments:
         self.n_posts = n_posts
 
     def __repr__(self) -> str:
-        return f"TopComments(subreddit='{self.subreddit}', limit={self.limit})"
+        return f"TopComments(subreddit='{self.subreddit}', n_posts={self.n_posts})"
 
     def get_posts(self) -> ListingGenerator:
         return self.reddit.subreddit(self.subreddit).top(limit=self.n_posts)
@@ -30,7 +30,7 @@ class RedditComments:
         try:
             return comment.body.replace("\n", " ").replace("\t", " ")
         except AttributeError:
-            return None
+            return ""
 
     @staticmethod
     def save_comments(comments: Iterator[Dict["str", "str"]], filename: str):
