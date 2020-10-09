@@ -24,7 +24,7 @@ services:
     build: ./api
     image: mychef_api:dev
     ports:
-      - ${API_PORT}:8000
+      - "${API_PORT}:8000"
     volumes:
       - ./api/:/app
     environment:
@@ -41,7 +41,7 @@ services:
   search:
     image: getmeili/meilisearch
     ports:
-      - ${SEARCH_PORT}:7700
+      - "${SEARCH_PORT}:7700"
     volumes:
       - ./search/data.ms:/data.ms
     depends_on:
@@ -53,7 +53,7 @@ services:
       target: develop-stage
     image: mychef_ui:dev
     ports:
-      - ${WEB_PORT}:3000
+      - "${WEB_PORT}:3000"
     volumes:
       - ./ui/:/srv/app
     environment:
