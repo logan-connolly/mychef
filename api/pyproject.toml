@@ -13,6 +13,7 @@ uvicorn = "^0.11.5"
 psycopg2-binary = "^2.8.5"
 spacy = "^2.3.0"
 loguru = "^0.5.1"
+alembic = "^1.4.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
