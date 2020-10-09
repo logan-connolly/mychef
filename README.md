@@ -11,11 +11,13 @@
   </p>
 </div>
 
-## TL;DR
+## Overview
 
-**MyChef** is an application that helps you decide what meal to make based on what you have at home. Simply enter in your ingredients and get back tasty plant-based recipes from top recipe websites.
+**MyChef** is an application that helps you decide what meal to make based on what you have at home. Simply enter in ingredients you have at home and get back tasty plant-based recipes from top recipe websites.
 
 ## Setup
+
+_FYI: an installation of docker and docker-compose is required to run the application._
 
 Define `.env` configuration in root directory of project:
 
@@ -50,7 +52,7 @@ You should see a UI with no recipes loaded at `localhost:8000`. To add recipes s
 $ docker-compose run scraper
 ```
 
-When you refresh the UI, you should start seeing recipes populating the DB and the ingredients search bar should be showing which ingredients the application hast extracted thus far. To stop the scraper just `CTR-C` in the terminal with the running service.
+When you refresh the UI, you should start seeing recipes populating the DB and the ingredients search bar should be showing which ingredients the application has extracted thus far. To stop the scraper just `CTR-C` in the terminal with the running service.
 
 ## Project Structure
 
