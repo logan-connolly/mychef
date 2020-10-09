@@ -17,11 +17,9 @@
 
 ## Setup
 
-Define configuration in root directory of project:
+Define `.env` configuration in root directory of project:
 
 ```
-# .env with example values
-
 POSTGRES_USER=mychef
 POSTGRES_PASSWORD=mychef
 POSTGRES_DB=mychef_db
@@ -32,13 +30,27 @@ SEARCH_PORT=7700
 MODEL=ingredients_v1
 ```
 
+Copy trained `spacy` ingredient extraction model into repository (~650MB>):
+
+```
+$ docker create -it --name tmp lvconnolly/mychef_model:v1 bash
+$ docker cp tmp:/ingredients_v1.tar.gz ./api/app/services/models
+$ docker rm -f tmp
+```
+
 Start application locally with:
 
 ```
-# Warning: will build all images
-
-$ docker-compose up -d
+$ docker-compose up ui -d
 ```
+
+You should see a UI with no recipes loaded at `localhost:8000`. To add recipes start the web scraping service:
+
+```
+$ docker-compose run scraper
+```
+
+When you refresh the UI, you should start seeing recipes populating the DB and the ingredients search bar should be showing which ingredients the application hast extracted thus far. To stop the scraper just `CTR-C` in the terminal with the running service.
 
 ## Project Structure
 
@@ -46,9 +58,9 @@ $ docker-compose up -d
 
 - Developed with [FastAPI](https://fastapi.tiangolo.com/) - fast (async support), simple and very intuitive.
 - Endpoints:
-    - `/sources`: website source for recipes
-    - `/sources/<id>/recipes`: list of recipes from given source id
-    - `/ingredients`: unique ingredients extracted from recipes (extractor trained using [spaCy](https://spacy.io/))
+  - `/sources`: website source for recipes
+  - `/sources/<id>/recipes`: list of recipes from given source id
+  - `/ingredients`: unique ingredients extracted from recipes (extractor trained using [spaCy](https://spacy.io/))
 
 **UI**
 
