@@ -52,7 +52,6 @@ services:
     command: /bin/sh -c "npm run docker"
     depends_on:
       - api
-      - ofelia
       - search
 
   scraper:
