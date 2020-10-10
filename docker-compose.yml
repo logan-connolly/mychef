@@ -11,14 +11,6 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
 
-  scraper:
-    image: lvconnolly/mychef_scraper:dev
-    volumes:
-      - ./scraper/:/app
-    command: crawl full_helping
-    links:
-      - "api:api"
-
   api:
     build: ./api
     image: lvconnolly/mychef_api:dev
@@ -58,11 +50,18 @@ services:
     environment:
       HOST: 0.0.0.0
     command: /bin/sh -c "npm run docker"
-    links:
-      - "api:api"
     depends_on:
       - api
+      - ofelia
       - search
+
+  scraper:
+    image: lvconnolly/mychef_scraper:dev
+    volumes:
+      - ./scraper/:/app
+    command: crawl full_helping
+    depends_on:
+      - api
 
 volumes:
   postgres_data:
