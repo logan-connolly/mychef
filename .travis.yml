@@ -17,7 +17,7 @@ script:
   - mypy --ignore-missing-imports ./scraper
   - flake8 --max-line-length=88 ./api ./scraper
   - docker volume prune -f
+  - docker-compose pull
   - docker-compose up -d api
-  - docker-compose exec api alembic upgrade head
   - docker-compose exec api pytest -v tests
   - docker-compose down -v
