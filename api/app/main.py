@@ -4,10 +4,6 @@ from starlette.middleware.cors import CORSMiddleware
 from .api.api_v1.api import api_router
 from .core.config import api_settings, settings
 from .core.event_handlers import start_app_handler, stop_app_handler
-from .db.database import engine, metadata
-
-
-metadata.create_all(engine)
 
 
 def get_app():
