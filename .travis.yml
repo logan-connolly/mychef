@@ -19,5 +19,6 @@ script:
   - docker volume prune -f
   - docker-compose pull
   - docker-compose up -d api
+  - sleep 10
   - docker-compose exec api pytest -v tests
   - docker-compose down -v
