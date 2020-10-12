@@ -10,7 +10,7 @@
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 BOT_NAME = "scraper"
-API_URL = "http://api:8000/api/v1"
+API_URL = "http://api:80/api/v1"
 
 SPIDER_MODULES = ["scraper.spiders"]
 NEWSPIDER_MODULE = "scraper.spiders"
