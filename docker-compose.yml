@@ -55,6 +55,8 @@ services:
       - search
 
   scraper:
+    build:
+      context: scraper
     image: lvconnolly/mychef_scraper:dev
     volumes:
       - ./scraper/:/app
