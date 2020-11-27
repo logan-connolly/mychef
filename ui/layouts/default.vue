@@ -17,3 +17,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.v-application {
+  margin: 0 auto;
+}
+</style>

@@ -22,7 +22,7 @@
 import { mapState } from 'vuex';
 
 export default {
-  name: 'IngredientInput', 
+  name: 'IngredientInput',
   computed: {
     ...mapState('ingredients', ['items']),
     selected : {
@@ -40,3 +40,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.v-autocomplete {
+  margin: 0 auto;
+  width: 60%;
+}
+</style>

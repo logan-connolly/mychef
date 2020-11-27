@@ -6,7 +6,7 @@
         v-for="(recipe, n) in items"
         :key="n"
         class="d-flex child-flex"
-        cols="12" xl="3" lg="3" md="4" sm="4" xs="12"
+        cols="12" xl="2" lg="3" md="4" sm="4" xs="12"
       >
         <RecipeCard :recipe="recipe"/>
       </v-col>
@@ -34,10 +34,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.v-input {
-  width: 60%;  
-  margin: 0 auto;
-}
-</style>

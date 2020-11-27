@@ -5,10 +5,10 @@
         <v-card
           id="recipe__card"
           class="mx-auto">
-          <v-img 
-            :src="recipe.image" 
+          <v-img
+            :src="recipe.image"
             :alt="recipe.name"
-            contain></v-img>
+          ></v-img>
           <v-fade-transition>
             <v-overlay
               v-if="hover"
@@ -42,7 +42,7 @@
 
 <script>
 export default {
-  name: 'RecipeCard', 
+  name: 'RecipeCard',
   props: ['recipe'],
 }
 </script>
