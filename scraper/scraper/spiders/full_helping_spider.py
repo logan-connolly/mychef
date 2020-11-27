@@ -1,12 +1,16 @@
+from typing import Union
+
 import requests
 import scrapy
+from scrapy.http.response.html import HtmlResponse
 
-from ..util import UrlExtractor, get_source_id
 from ..settings import API_URL
+from ..util import UrlExtractor, get_source_id
 
 
 class FullHelpingSpider(scrapy.Spider):
     """Scrape the website thefullhelping.com and post results to mychef"""
+
     name = "full_helping"
     download_delay = 8
 
@@ -15,24 +19,35 @@ class FullHelpingSpider(scrapy.Spider):
         self.start_urls = UrlExtractor(self.url).get_recipe_url()
         self.sid = get_source_id(domain="thefullhelping")
 
-    def parse(self, response):
+    def parse(self, response: HtmlResponse):
+        """Parse webpage to extract important recipe information"""
 
         if response.css(".wprm-recipe-ingredients-container"):
             data = {
                 "name": response.css(".title::text").get(),
                 "url": response.url,
                 "image": self.get_image_url(response),
-                "ingredients": self.get_ingredients(response)
+                "ingredients": self.get_ingredients(response),
             }
-            requests.post(f"{API_URL}/sources/{self.sid}/recipes/", json=data)
+            if all(val is not None for val in data.values()):
+                requests.post(f"{API_URL}/sources/{self.sid}/recipes/", json=data)
 
-        for a in response.css(".nav-previous a"):
-            yield response.follow(a, callback=self.parse)
+        for anchor_tag in response.css(".nav-previous a"):
+            yield response.follow(anchor_tag, callback=self.parse)
 
-    def get_image_url(self, response):
-        img = response.css("p > img")
-        return img.re_first(r'src="(http.*?)\"')
+    @classmethod
+    def get_image_url(cls, response: HtmlResponse) -> Union[str, None]:
+        """Extract image url from html response"""
+        image_p = response.css("p > img")
+        image_figure = response.css("figure > img")
+        image_selectors = image_p if image_p else image_figure
+        images_re = image_selectors.re(r'src="(http.*?)\"')
+        images = [img for img in images_re if img.split(".")[-1] != "svg"]
+        sorted_by_length = sorted(images, key=len, reverse=True)
+        return sorted_by_length[0] if sorted_by_length else None
 
-    def get_ingredients(self, response):
+    @classmethod
+    def get_ingredients(cls, response: HtmlResponse) -> Union[str, None]:
+        """Get ingredients from specified html element"""
         ings = response.css(".wprm-recipe-ingredients ::text")
-        return " ".join(ing.get() for ing in ings)
+        return " ".join(ing.get() for ing in ings) if ings else None
