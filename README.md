@@ -1,21 +1,16 @@
 <div align="center">
   <p>
     <a href="https://github.com/logan-connolly/mychef">
-      <img src="ui/static/mychef.png" alt="MyChef" />
-    </a>
-  </p>
-  <p>
-    <a href="https://travis-ci.com/logan-connolly/mychef">
-      <img src="https://travis-ci.com/logan-connolly/mychef.svg?branch=master" alt="Travis"/>
+      <img src="ui/static/mychef_example.png.png" alt="MyChef" />
     </a>
   </p>
 </div>
 
 ## Overview
 
-**MyChef** is an application that helps you decide what meal to make based on what you have at home. Simply enter in ingredients you have at home and get back tasty plant-based recipes from top recipe websites.
+[![Build Status](https://travis-ci.com/logan-connolly/mychef.svg?branch=master)](https://travis-ci.com/logan-connolly/mychef)
 
-![Screenshot of MyChef](ui/static/mychef_example.png)
+**MyChef** is an application that helps you decide what meal to make based on what you have at home. Simply enter in ingredients you have at home and get back tasty plant-based recipes from top recipe websites.
 
 
 ## Setup
