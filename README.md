@@ -1,7 +1,7 @@
 <div align="center">
   <p>
     <a href="https://github.com/logan-connolly/mychef">
-      <img src="ui/static/mychef_example.png.png" alt="MyChef" />
+      <img src="ui/static/mychef_example.png" alt="MyChef" />
     </a>
   </p>
 </div>
