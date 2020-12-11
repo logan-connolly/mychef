@@ -15,6 +15,9 @@
 
 **MyChef** is an application that helps you decide what meal to make based on what you have at home. Simply enter in ingredients you have at home and get back tasty plant-based recipes from top recipe websites.
 
+![Screenshot of MyChef](ui/static/mychef_example.png)
+
+
 ## Setup
 
 _FYI: an installation of docker and docker-compose is required to run the application._
@@ -53,6 +56,15 @@ $ docker-compose run scraper
 ```
 
 When you refresh the UI, you should start seeing recipes populating the DB and the ingredients search bar should be showing which ingredients the application has extracted thus far. To stop the scraper just `CTR-C` in the terminal with the running service.
+
+To add recipes to the search engine run:
+
+```
+# Create recipe index
+$ ./search/create.sh
+# Add recipes to index from API
+$ ./search/update.sh 
+```
 
 ## Project Structure
 

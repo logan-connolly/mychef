@@ -10,6 +10,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST_AUTH_METHOD=trust
 
   api:
     build: ./api
@@ -30,7 +31,7 @@ services:
       - db
 
   search:
-    image: getmeili/meilisearch
+    image: getmeili/meilisearch:v0.16.0
     ports:
       - ${SEARCH_PORT}:7700
     volumes:
