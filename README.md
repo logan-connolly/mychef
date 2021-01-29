@@ -24,10 +24,15 @@ POSTGRES_USER=mychef
 POSTGRES_PASSWORD=mychef
 POSTGRES_DB=mychef_db
 POSTGRES_HOST=db
-API_PORT=8002
+
+WEB_HOST=ui
 WEB_PORT=8000
+
+SEARCH_HOST=search
 SEARCH_PORT=7700
-MODEL=ingredients_v1
+
+API_PORT=8002
+API_MODEL=ingredients_v1
 ```
 
 Copy trained `spacy` ingredient extraction model into repository (~650MB>):
@@ -58,7 +63,7 @@ To add recipes to the search engine run:
 # Create recipe index
 $ ./search/create.sh
 # Add recipes to index from API
-$ ./search/update.sh 
+$ ./search/update.sh
 ```
 
 ## Project Structure

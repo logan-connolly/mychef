@@ -20,30 +20,39 @@ class WebSettings(BaseSettings):
         env_prefix = "WEB_"
 
 
+class SearchSettings(BaseSettings):
+    host: str
+    port: int
+
+    class Config:
+        env_prefix = "SEARCH_"
+
+
 class Settings(BaseSettings):
     DEBUG: bool = True
-    MODEL: str = ""
+    API_MODEL: str = ""
 
     API_TITLE: str = "MyChef"
     API_V1_STR: str = "/api/v1"
     OPENAPI_URL: str = f"{API_V1_STR}/openapi.json"
 
     WEB = WebSettings()
+    SEARCH = SearchSettings()
+    PG = PostgresSettings()
+
+    SEARCH_URL: str = f"http://{SEARCH.host}:{SEARCH.port}"
+    URI: str = f"postgres://{PG.user}:{PG.password}@{PG.host}/{PG.db}"
+
     BACKEND_CORS_ORIGINS: List[str] = [
         "http://localhost",
         f"http://localhost:{WEB.port}",
     ]
-
-    PG = PostgresSettings()
-    URI: str = f"postgres://{PG.user}:{PG.password}@{PG.host}/{PG.db}"
 
     class Config:
         case_sensitive = True
 
 
 settings = Settings()
-
-
 api_settings = {
     "title": settings.API_TITLE,
     "openapi_url": settings.OPENAPI_URL,
