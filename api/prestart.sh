@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Let DB start
 sleep 5;
 
-# Run alembic migrations
+echo "Running alembic migrations ..."
 alembic upgrade head

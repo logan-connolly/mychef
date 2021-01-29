@@ -24,10 +24,15 @@ POSTGRES_USER=mychef
 POSTGRES_PASSWORD=mychef
 POSTGRES_DB=mychef_db
 POSTGRES_HOST=db
-API_PORT=8002
+
+WEB_HOST=ui
 WEB_PORT=8000
+
+SEARCH_HOST=search
 SEARCH_PORT=7700
-MODEL=ingredients_v1
+
+API_PORT=8002
+API_MODEL=ingredients_v1
 ```
 
 Copy trained `spacy` ingredient extraction model into repository (~650MB>):
@@ -52,14 +57,6 @@ $ docker-compose run scraper
 
 When you refresh the UI, you should start seeing recipes populating the DB and the ingredients search bar should be showing which ingredients the application has extracted thus far. To stop the scraper just `CTR-C` in the terminal with the running service.
 
-To add recipes to the search engine run:
-
-```
-# Create recipe index
-$ ./search/create.sh
-# Add recipes to index from API
-$ ./search/update.sh 
-```
 
 ## Project Structure
 

@@ -56,7 +56,7 @@ class TestRecipe:
         recipe["name"] = "Recipe 2.0"
         data = json.dumps(dict(name="Recipe 2.0"))
         resp = client.put(
-            f"{settings.API_V1_STR}/sources/{sid}/recipes/{rid}/", data=data,
+            f"{settings.API_V1_STR}/sources/{sid}/recipes/{rid}/", data=data
         )
         if resp.status_code in (404, 422):
             pytest.skip("Source cannot be found.")

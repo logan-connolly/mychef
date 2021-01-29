@@ -3,7 +3,7 @@
     <v-row align="center" class="text-center">
       <v-col class="mt-14">
         <h1 class="secondary--text font-weight-bold mb-3">
-          Welcome to 
+          Welcome to
           <span class="primary--text font-weight-bold mb-3">
             MyChef
           </span>

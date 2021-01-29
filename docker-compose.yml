@@ -1,7 +1,6 @@
 version: "3.7"
 
 services:
-
   db:
     image: postgres:12.1-alpine
     volumes:
@@ -12,6 +11,13 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_HOST_AUTH_METHOD=trust
 
+  search:
+    image: getmeili/meilisearch:v0.16.0
+    ports:
+      - ${SEARCH_PORT}:7700
+    volumes:
+      - ./search/data.ms:/data.ms
+
   api:
     build: ./api
     image: lvconnolly/mychef_api:dev
@@ -20,8 +26,11 @@ services:
     volumes:
       - ./api/:/app
     environment:
-      - MODEL=${MODEL}
+      - API_MODEL=${API_MODEL}
       - WEB_PORT=${WEB_PORT}
+      - WEB_HOST=${WEB_HOST}
+      - SEARCH_PORT=${SEARCH_PORT}
+      - SEARCH_HOST=${SEARCH_HOST}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_HOST=${POSTGRES_HOST}
@@ -29,15 +38,7 @@ services:
     command: /start-reload.sh
     depends_on:
       - db
-
-  search:
-    image: getmeili/meilisearch:v0.16.0
-    ports:
-      - ${SEARCH_PORT}:7700
-    volumes:
-      - ./search/data.ms:/data.ms
-    depends_on:
-      - api
+      - search
 
   ui:
     build:
