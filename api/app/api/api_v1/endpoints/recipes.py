@@ -88,14 +88,12 @@ async def update_recipe_data(
         except UniqueViolationError as err:
             raise HTTPException(HTTP_400_BAD_REQUEST, detail="Recipe exists") from err
 
-    async def update_meili_recipe_index(recipe: schemas.RecipeDB) -> None:
+    async def update_meili_recipe_index(recipe_id: int) -> None:
         endpoint = "/indexes/recipes/documents"
-        data = dict(
-            id=recipe.id, name=recipe.name, ingredients=recipe.ingredients["items"]
-        )
+        data = {**payload.dict(), "id": recipe_id}
         async with httpx.AsyncClient() as client:
-            await client.post(f"{settings.SEARCH_URL}{endpoint}", json=[data])
+            return await client.post(f"{settings.SEARCH_URL}{endpoint}", json=[data])
 
-    resp = await update_recipe_in_db()
-    await update_meili_recipe_index(resp)
-    return resp
+    recipe = await update_recipe_in_db()
+    await update_meili_recipe_index(recipe.id)
+    return recipe
