@@ -15,7 +15,6 @@ from starlette.status import (
 
 from app import models, schemas
 from app.core.config import settings
-from app.services.models import IngredientExtractor
 from .sources import get_source
 
 
@@ -92,9 +91,7 @@ async def update_recipe_data(
     async def update_meili_recipe_index(recipe: schemas.RecipeDB) -> None:
         endpoint = "/indexes/recipes/documents"
         data = dict(
-            id=recipe.id,
-            name=recipe.name,
-            ingredients=recipe.ingredients["items"],
+            id=recipe.id, name=recipe.name, ingredients=recipe.ingredients["items"]
         )
         async with httpx.AsyncClient() as client:
             await client.post(f"{settings.SEARCH_URL}{endpoint}", json=[data])

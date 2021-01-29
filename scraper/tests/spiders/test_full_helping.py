@@ -5,7 +5,6 @@ from scraper.spiders.full_helping_spider import UrlExtractor
 
 @pytest.mark.usefixtures("full_helping_recipe_index")
 def test_get_latest_recipe(full_helping_recipe_index, monkeypatch):
-
     def mock_get_start_page(url):
         return full_helping_recipe_index
 

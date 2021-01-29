@@ -34,7 +34,7 @@ class RedditComments:
 
     @staticmethod
     def save_comments(comments: Iterator[Dict["str", "str"]], filename: str):
-        assert filename.split('.')[-1] == 'jsonl'
+        assert filename.split(".")[-1] == "jsonl"
         with jsonlines.open(filename, mode="w") as writer:
             for _, comment in enumerate(tqdm(comments)):
                 reddit_comment = comment["text"]
