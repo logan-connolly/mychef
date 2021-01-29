@@ -11,7 +11,7 @@ before_script:
   - docker create -it --name tmp lvconnolly/mychef_model:v1 bash
   - docker cp tmp:/ingredients_v1.tar.gz ./api/app/services/models
   - docker rm -f tmp
-  - docker volumn prune -f
+  - docker volume prune -f
   - docker-compose pull api
 
 script:
