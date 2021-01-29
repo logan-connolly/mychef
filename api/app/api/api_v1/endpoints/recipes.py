@@ -1,6 +1,7 @@
 import random
 from typing import Any, Dict, List, Optional
 
+import httpx
 from asyncpg.exceptions import UniqueViolationError
 from fastapi import APIRouter, HTTPException
 from orm.exceptions import NoMatch
@@ -13,6 +14,7 @@ from starlette.status import (
 )
 
 from app import models, schemas
+from app.core.config import settings
 from app.services.models import IngredientExtractor
 from .sources import get_source
 
@@ -32,18 +34,9 @@ async def get_recipes(sid: int, limit: Optional[int] = None):
 
 @router.post("/", response_model=schemas.RecipeDB, status_code=HTTP_201_CREATED)
 async def add_recipe(request: Request, sid: int, payload: schemas.RecipeAdd):
-    ingredients = await extract(request, payload.ingredients)
-    name, url, image = payload.name, payload.url, payload.image
-    newload: schemas.RecipeCreate = schemas.RecipeCreate(
-        name=name, url=url, image=image, ingredients=ingredients
-    )
+    cleaned_payload = await clean_payload(request, payload)
     source = await get_source(id=sid)
-    try:
-        recipe = await models.Recipe.objects.create(source=source, **newload.dict())
-    except UniqueViolationError:
-        raise HTTPException(HTTP_400_BAD_REQUEST, detail="Recipe exists")
-
-    return recipe
+    return await update_recipe_data(source, cleaned_payload)
 
 
 @router.get("/{id}/", response_model=schemas.RecipeDB, status_code=HTTP_200_OK)
@@ -69,14 +62,43 @@ async def remove_recipe(sid: int, id: int):
     return recipe
 
 
-async def extract(request: Request, ingredients: str) -> Dict[str, List[str]]:
-    model: IngredientExtractor = request.app.state.model
-    if model is None:
-        raise HTTPException(HTTP_404_NOT_FOUND, detail="Ingredient extractor missing")
-    extracted_ingredients = model.extract(ingredients)
-    for ingredient in extracted_ingredients:
+async def clean_payload(req: Request, data: schemas.RecipeAdd) -> schemas.RecipeCreate:
+    try:
+        return schemas.RecipeCreate(
+            name=data.name,
+            url=data.url,
+            image=data.image,
+            ingredients={"items": req.app.state.model.extract(data.ingredients)},
+        )
+    except AttributeError as err:
+        raise HTTPException(HTTP_404_NOT_FOUND, detail="API model missing") from err
+
+
+async def update_recipe_data(
+    source: schemas.SourceDB, payload: schemas.RecipeCreate
+) -> schemas.RecipeDB:
+    async def update_recipe_in_db():
         try:
-            await models.Ingredient.objects.create(ingredient=ingredient)
-        except UniqueViolationError:
-            pass
-    return {"items": extracted_ingredients}
+            recipe = await models.Recipe.objects.create(source=source, **payload.dict())
+            for ingredient in recipe.ingredients["items"]:
+                try:
+                    await models.Ingredient.objects.create(ingredient=ingredient)
+                except UniqueViolationError:
+                    pass
+            return recipe
+        except UniqueViolationError as err:
+            raise HTTPException(HTTP_400_BAD_REQUEST, detail="Recipe exists") from err
+
+    async def update_meili_recipe_index(recipe: schemas.RecipeDB) -> None:
+        endpoint = "/indexes/recipes/documents"
+        data = dict(
+            id=recipe.id,
+            name=recipe.name,
+            ingredients=recipe.ingredients["items"],
+        )
+        async with httpx.AsyncClient() as client:
+            await client.post(f"{settings.SEARCH_URL}{endpoint}", json=[data])
+
+    resp = await update_recipe_in_db()
+    await update_meili_recipe_index(resp)
+    return resp

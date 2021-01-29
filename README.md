@@ -57,14 +57,6 @@ $ docker-compose run scraper
 
 When you refresh the UI, you should start seeing recipes populating the DB and the ingredients search bar should be showing which ingredients the application has extracted thus far. To stop the scraper just `CTR-C` in the terminal with the running service.
 
-To add recipes to the search engine run:
-
-```
-# Create recipe index
-$ ./search/create.sh
-# Add recipes to index from API
-$ ./search/update.sh
-```
 
 ## Project Structure
 

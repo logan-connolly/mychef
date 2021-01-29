@@ -7,17 +7,16 @@ services:
 
 before_script:
   - pip install -U pip setuptools wheel
-  - pip install docker docker-compose mypy flake8
+  - pip install mypy flake8
   - docker create -it --name tmp lvconnolly/mychef_model:v1 bash
   - docker cp tmp:/ingredients_v1.tar.gz ./api/app/services/models
   - docker rm -f tmp
   - docker volume prune -f
-  - docker-compose build
   - docker-compose up -d api
 
 script:
   - mypy --ignore-missing-imports ./api/app
   - mypy --ignore-missing-imports ./scraper
   - flake8 --max-line-length=88 ./api ./scraper
-  - docker-compose exec api pytest -v tests
+  - docker-compose exec api pytest tests
   - docker-compose down -v
