@@ -13,3 +13,14 @@ repos:
     rev: 3.8.3
     hooks:
       - id: flake8
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: ""
+    hooks:
+      - id: mypy
+        name: mypy-api
+        entry: mypy api/app
+        pass_filenames: false
+      - id: mypy
+        name: mypy-scraper
+        entry: mypy scraper
+        pass_filenames: false
