@@ -39,9 +39,11 @@ async def add_recipe(request: Request, sid: int, payload: schemas.RecipeAdd):
     )
     source = await get_source(id=sid)
     try:
-        return await models.Recipe.objects.create(source=source, **newload.dict())
+        recipe = await models.Recipe.objects.create(source=source, **newload.dict())
     except UniqueViolationError:
         raise HTTPException(HTTP_400_BAD_REQUEST, detail="Recipe exists")
+
+    return recipe
 
 
 @router.get("/{id}/", response_model=schemas.RecipeDB, status_code=HTTP_200_OK)

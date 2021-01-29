@@ -16,7 +16,7 @@ before_script:
   - docker-compose up -d api
 
 script:
-  - mypy --ignore-missing-imports ./api
+  - mypy --ignore-missing-imports ./api/app
   - mypy --ignore-missing-imports ./scraper
   - flake8 --max-line-length=88 ./api ./scraper
   - docker-compose exec api pytest -v tests
