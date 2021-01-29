@@ -13,8 +13,9 @@ before_script:
   - docker rm -f tmp
   - docker volume prune -f
   - docker-compose pull api
+  - docker-compose up -d api
 
 script:
   - pre-commit run --all-files
-  - docker-compose run api pytest tests
+  - docker-compose exec api pytest tests
   - docker-compose down -v
