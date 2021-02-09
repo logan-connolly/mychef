@@ -3,6 +3,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from .api.api_v1.api import api_router
 from .core.config import api_settings, settings
+from .core.debug import start_debugging_server
 from .core.event_handlers import start_app_handler, stop_app_handler
 
 
@@ -26,6 +27,9 @@ def get_app():
             allow_methods=["*"],
             allow_headers=["*"],
         )
+
+    if settings.DEBUG:
+        start_debugging_server()
 
     app.include_router(api_router, prefix=settings.API_V1_STR)
 
