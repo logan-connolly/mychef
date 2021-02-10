@@ -15,21 +15,21 @@ class TestSourceInvalid:
     )
     def test_add_source_invalid(self, client, payload, code):
         data = json.dumps(payload)
-        resp = client.post(f"{settings.API_V1_STR}/sources/", data=data)
+        resp = client.post(f"{settings.api.version}/sources/", data=data)
         assert resp.status_code == code
 
     def test_get_source_invalid(self, client):
-        resp = client.get(f"{settings.API_V1_STR}/sources/0/")
+        resp = client.get(f"{settings.api.version}/sources/0/")
         assert resp.status_code == 404
 
     def test_get_sources_invalid(self, client):
-        resp = client.get(f"{settings.API_V1_STR}/source/")
+        resp = client.get(f"{settings.api.version}/source/")
         assert resp.status_code == 404
 
     def test_update_source_invalid(self, client):
-        resp = client.put(f"{settings.API_V1_STR}/sources/0/", data=json.dumps(dict()))
+        resp = client.put(f"{settings.api.version}/sources/0/", data=json.dumps(dict()))
         assert resp.status_code == 404
 
     def test_remove_source_invalid(self, client):
-        resp = client.delete(f"{settings.API_V1_STR}/sources/0/")
+        resp = client.delete(f"{settings.api.version}/sources/0/")
         assert resp.status_code == 404

@@ -28,10 +28,10 @@ def get_app():
             allow_headers=["*"],
         )
 
-    if settings.DEBUG:
+    if settings.api.debug:
         start_debugging_server()
 
-    app.include_router(api_router, prefix=settings.API_V1_STR)
+    app.include_router(api_router, prefix=settings.api.version)
 
     return app
 

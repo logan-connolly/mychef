@@ -42,7 +42,7 @@ def load_model():
     model_dir = Path("/app/app/services/models")
     model = None
     try:
-        model = IngredientExtractor(model_dir / settings.API_MODEL)
+        model = IngredientExtractor(model_dir / settings.api.model)
         logger.info(f"{model} loaded")
     except TypeError:
         logger.warning("No model specified")

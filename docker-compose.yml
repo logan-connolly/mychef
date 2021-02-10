@@ -27,6 +27,7 @@ services:
     volumes:
       - ./api/:/app
     environment:
+      - API_DEBUG=${API_DEBUG}
       - API_MODEL=${API_MODEL}
       - WEB_PORT=${WEB_PORT}
       - WEB_HOST=${WEB_HOST}

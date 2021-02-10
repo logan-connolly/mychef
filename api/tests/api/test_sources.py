@@ -10,19 +10,19 @@ class TestSource:
     def test_add_source(self, client):
         global source
         global sid
-        resp = client.post(f"{settings.API_V1_STR}/sources/", data=json.dumps(source))
+        resp = client.post(f"{settings.api.version}/sources/", data=json.dumps(source))
         assert resp.status_code == 201
         sid = resp.json()["id"]
         source.update({"id": sid, "url": "example.com"})
         assert resp.json() == source
 
     def test_get_source(self, client):
-        resp = client.get(f"{settings.API_V1_STR}/sources/{sid}/")
+        resp = client.get(f"{settings.api.version}/sources/{sid}/")
         assert resp.status_code == 200
         assert resp.json() == source
 
     def test_get_sources(self, client):
-        resp = client.get(f"{settings.API_V1_STR}/sources/")
+        resp = client.get(f"{settings.api.version}/sources/")
         assert resp.status_code == 200
         assert source in resp.json()
 
@@ -30,11 +30,11 @@ class TestSource:
         new_url = "http://newexample.com"
         source["url"] = new_url
         payload = json.dumps(dict(url=new_url))
-        resp = client.put(f"{settings.API_V1_STR}/sources/{sid}/", data=payload)
+        resp = client.put(f"{settings.api.version}/sources/{sid}/", data=payload)
         assert resp.status_code == 200
         assert resp.json() == source
 
     def test_remove_source(self, client):
-        resp = client.delete(f"{settings.API_V1_STR}/sources/{sid}/")
+        resp = client.delete(f"{settings.api.version}/sources/{sid}/")
         assert resp.status_code == 200
         assert resp.json() == source

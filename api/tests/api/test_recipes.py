@@ -18,7 +18,7 @@ class TestRecipe:
     def test_create_source(self, client):
         global source
         global sid
-        resp = client.post(f"{settings.API_V1_STR}/sources/", data=json.dumps(source))
+        resp = client.post(f"{settings.api.version}/sources/", data=json.dumps(source))
         assert resp.status_code == 201
         sid = resp.json()["id"]
         source.update({"id": sid, "url": "source.com"})
@@ -28,7 +28,7 @@ class TestRecipe:
         global recipe
         global rid
         data = json.dumps(recipe)
-        resp = client.post(f"{settings.API_V1_STR}/sources/{sid}/recipes/", data=data)
+        resp = client.post(f"{settings.api.version}/sources/{sid}/recipes/", data=data)
         if resp.status_code in (404, 422):
             pytest.skip("Source cannot be found.")
         assert resp.status_code == 201
@@ -38,14 +38,14 @@ class TestRecipe:
         assert resp.json() == recipe
 
     def test_get_recipe(self, client):
-        resp = client.get(f"{settings.API_V1_STR}/sources/{sid}/recipes/{rid}/")
+        resp = client.get(f"{settings.api.version}/sources/{sid}/recipes/{rid}/")
         if resp.status_code in (404, 422):
             pytest.skip("Source cannot be found.")
         assert resp.status_code == 200
         assert resp.json() == recipe
 
     def test_get_recipes(self, client):
-        resp = client.get(f"{settings.API_V1_STR}/sources/{sid}/recipes/")
+        resp = client.get(f"{settings.api.version}/sources/{sid}/recipes/")
         if resp.status_code in (404, 422):
             pytest.skip("Source cannot be found.")
         assert resp.status_code == 200
@@ -56,7 +56,7 @@ class TestRecipe:
         recipe["name"] = "Recipe 2.0"
         data = json.dumps(dict(name="Recipe 2.0"))
         resp = client.put(
-            f"{settings.API_V1_STR}/sources/{sid}/recipes/{rid}/", data=data
+            f"{settings.api.version}/sources/{sid}/recipes/{rid}/", data=data
         )
         if resp.status_code in (404, 422):
             pytest.skip("Source cannot be found.")
@@ -64,13 +64,13 @@ class TestRecipe:
         assert resp.json() == recipe
 
     def test_remove_recipe(self, client):
-        resp = client.delete(f"{settings.API_V1_STR}/sources/{sid}/recipes/{rid}/")
+        resp = client.delete(f"{settings.api.version}/sources/{sid}/recipes/{rid}/")
         if resp.status_code in (404, 422):
             pytest.skip("Source cannot be found.")
         assert resp.status_code == 200
         assert resp.json() == recipe
 
     def test_remove_source(self, client):
-        resp = client.delete(f"{settings.API_V1_STR}/sources/{sid}/")
+        resp = client.delete(f"{settings.api.version}/sources/{sid}/")
         assert resp.status_code == 200
         assert resp.json() == source
