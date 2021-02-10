@@ -29,7 +29,7 @@ class SearchSettings(BaseSettings):
 
 
 class Settings(BaseSettings):
-    DEBUG: bool = True
+    DEBUG: int = 1
     API_MODEL: str = ""
 
     API_TITLE: str = "MyChef"
