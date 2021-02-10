@@ -4,8 +4,8 @@ from pydantic import BaseSettings
 
 
 class ApiSettings(BaseSettings):
-    debug: bool
     model: str
+    debug: bool = False
     title: str = "MyChef"
     version: str = "/api/v1"
 
