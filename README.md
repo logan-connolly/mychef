@@ -39,7 +39,7 @@ Copy trained `spacy` ingredient extraction model into repository (~650MB>):
 
 ```
 $ docker create -it --name tmp lvconnolly/mychef_model:v1 bash
-$ docker cp tmp:/ingredients_v1.tar.gz ./api/app/services/models
+$ docker cp tmp:/version ./api/app/services/models/ingredient
 $ docker rm -f tmp
 ```
 
