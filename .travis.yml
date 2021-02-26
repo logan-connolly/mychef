@@ -8,8 +8,8 @@ services:
 before_script:
   - pip install -U pip
   - pip install pre-commit
-  - docker create -it --name tmp lvconnolly/mychef_model:v1 bash
-  - docker cp tmp:/ingredients_v1.tar.gz ./api/app/services/models/ingredient/version
+  - docker create -it --name tmp lvconnolly/mychef_model:ingredient sh
+  - docker cp tmp:/version ./api/app/services/models/ingredient
   - docker rm -f tmp
   - docker volume prune -f
   - docker-compose pull api

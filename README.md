@@ -32,7 +32,7 @@ SEARCH_HOST=search
 SEARCH_PORT=7700
 
 API_PORT=8002
-API_INGREDIENT_MODEL=ingredients_v1
+API_INGREDIENT_MODEL=v1
 ```
 
 Copy trained `spacy` ingredient extraction model into repository (~650MB>):

@@ -4,7 +4,7 @@ from pydantic import BaseSettings
 
 
 class ApiSettings(BaseSettings):
-    ingredient_model: str = "ingredients_v1"
+    ingredient_model: str = "v1"
     debug: bool = False
     title: str = "MyChef"
     version: str = "/api/v1"
