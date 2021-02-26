@@ -28,7 +28,7 @@ services:
       - ./api/:/app
     environment:
       - API_DEBUG=${API_DEBUG}
-      - API_MODEL=${API_MODEL}
+      - API_INGREDIENT_MODEL=${API_INGREDIENT_MODEL}
       - WEB_PORT=${WEB_PORT}
       - WEB_HOST=${WEB_HOST}
       - SEARCH_PORT=${SEARCH_PORT}
