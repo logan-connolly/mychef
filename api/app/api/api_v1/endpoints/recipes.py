@@ -50,7 +50,8 @@ async def get_recipe(sid: int, recipe_id: int):
 async def update_recipe(sid: int, recipe_id: int, payload: RecipeUpdate):
     recipe = await get_recipe(sid=sid, recipe_id=recipe_id)
     updates: Dict[str, Any] = {k: v for k, v in payload.dict().items() if v is not None}
-    return await recipe.update(**updates)
+    await recipe.update(**updates)
+    return await get_recipe(sid=sid, recipe_id=recipe_id)
 
 
 @router.delete("/{recipe_id}/", response_model=RecipeDB, status_code=HTTP_200_OK)

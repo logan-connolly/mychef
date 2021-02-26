@@ -44,7 +44,8 @@ async def get_source(source_id: int):
 async def update_source(source_id: int, payload: SourceUpdate):
     source = await get_source(source_id)
     updates: Dict[str, Any] = {k: v for k, v in payload.dict().items() if v is not None}
-    return await source.update(**updates)
+    await source.update(**updates)
+    return await get_source(source_id)
 
 
 @router.delete("/{source_id}/", response_model=SourceDB, status_code=HTTP_200_OK)

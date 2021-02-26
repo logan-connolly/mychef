@@ -48,7 +48,8 @@ async def get_ingredient(ingred_id: int):
 async def update_ingredient(ingred_id: int, payload: IngredientUpdate):
     ingredient = await get_ingredient(ingred_id)
     updates: Dict[str, Any] = {k: v for k, v in payload.dict().items() if v is not None}
-    return await ingredient.update(**updates)
+    await ingredient.update(**updates)
+    return await get_ingredient(ingred_id)
 
 
 @router.delete("/{ingred_id}/", response_model=IngredientDB, status_code=HTTP_200_OK)
