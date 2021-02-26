@@ -36,23 +36,23 @@ async def add_ingredient(payload: IngredientCreate):
         raise HTTPException(HTTP_400_BAD_REQUEST, detail="Ingredient exists") from err
 
 
-@router.get("/{id}/", response_model=IngredientDB, status_code=HTTP_200_OK)
-async def get_ingredient(ingredient_id: int):
+@router.get("/{ingred_id}/", response_model=IngredientDB, status_code=HTTP_200_OK)
+async def get_ingredient(ingred_id: int):
     try:
-        return await Ingredient.objects.get(id=ingredient_id)
+        return await Ingredient.objects.get(id=ingred_id)
     except NoMatch as err:
         raise HTTPException(HTTP_404_NOT_FOUND, detail="Ingredient not found") from err
 
 
-@router.put("/{id}/", response_model=IngredientDB, status_code=HTTP_200_OK)
-async def update_ingredient(ingredient_id: int, payload: IngredientUpdate):
-    ingredient = await get_ingredient(ingredient_id)
+@router.put("/{ingred_id}/", response_model=IngredientDB, status_code=HTTP_200_OK)
+async def update_ingredient(ingred_id: int, payload: IngredientUpdate):
+    ingredient = await get_ingredient(ingred_id)
     updates: Dict[str, Any] = {k: v for k, v in payload.dict().items() if v is not None}
     return await ingredient.update(**updates)
 
 
-@router.delete("/{id}/", response_model=IngredientDB, status_code=HTTP_200_OK)
-async def remove_ingredient(ingredient_id: int):
-    ingredient = await get_ingredient(ingredient_id)
+@router.delete("/{ingred_id}/", response_model=IngredientDB, status_code=HTTP_200_OK)
+async def remove_ingredient(ingred_id: int):
+    ingredient = await get_ingredient(ingred_id)
     await ingredient.delete()
     return ingredient

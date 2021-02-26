@@ -34,11 +34,11 @@ async def get_recipes(sid: int, limit: Optional[int] = None):
 @router.post("/", response_model=RecipeDB, status_code=HTTP_201_CREATED)
 async def add_recipe(request: Request, sid: int, payload: RecipeAdd):
     cleaned_payload = await clean_payload(request, payload)
-    source = await get_source(id=sid)
+    source = await get_source(source_id=sid)
     return await update_recipe_data(source, cleaned_payload)
 
 
-@router.get("/{id}/", response_model=RecipeDB, status_code=HTTP_200_OK)
+@router.get("/{recipe_id}/", response_model=RecipeDB, status_code=HTTP_200_OK)
 async def get_recipe(sid: int, recipe_id: int):
     try:
         return await Recipe.objects.get(id=recipe_id, source=sid)
@@ -46,14 +46,14 @@ async def get_recipe(sid: int, recipe_id: int):
         raise HTTPException(HTTP_404_NOT_FOUND, detail="Recipe not found") from err
 
 
-@router.put("/{id}/", response_model=RecipeDB, status_code=HTTP_200_OK)
+@router.put("/{recipe_id}/", response_model=RecipeDB, status_code=HTTP_200_OK)
 async def update_recipe(sid: int, recipe_id: int, payload: RecipeUpdate):
     recipe = await get_recipe(sid=sid, recipe_id=recipe_id)
     updates: Dict[str, Any] = {k: v for k, v in payload.dict().items() if v is not None}
     return await recipe.update(**updates)
 
 
-@router.delete("/{id}/", response_model=RecipeDB, status_code=HTTP_200_OK)
+@router.delete("/{recipe_id}/", response_model=RecipeDB, status_code=HTTP_200_OK)
 async def remove_recipe(sid: int, recipe_id: int):
     recipe = await get_recipe(sid=sid, recipe_id=recipe_id)
     await recipe.delete()

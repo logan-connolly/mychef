@@ -32,23 +32,23 @@ async def add_source(payload: SourceCreate):
         raise HTTPException(HTTP_400_BAD_REQUEST, detail="Source exists") from err
 
 
-@router.get("/{id}/", response_model=SourceDB, status_code=HTTP_200_OK)
-async def get_source(id: int):
+@router.get("/{source_id}/", response_model=SourceDB, status_code=HTTP_200_OK)
+async def get_source(source_id: int):
     try:
-        return await Source.objects.get(id=id)
+        return await Source.objects.get(id=source_id)
     except NoMatch as err:
         raise HTTPException(HTTP_404_NOT_FOUND, detail="Source not found") from err
 
 
-@router.put("/{id}/", response_model=SourceDB, status_code=HTTP_200_OK)
-async def update_source(id: int, payload: SourceUpdate):
-    source = await get_source(id)
+@router.put("/{source_id}/", response_model=SourceDB, status_code=HTTP_200_OK)
+async def update_source(source_id: int, payload: SourceUpdate):
+    source = await get_source(source_id)
     updates: Dict[str, Any] = {k: v for k, v in payload.dict().items() if v is not None}
     return await source.update(**updates)
 
 
-@router.delete("/{id}/", response_model=SourceDB, status_code=HTTP_200_OK)
-async def remove_source(id: int):
-    source = await get_source(id)
+@router.delete("/{source_id}/", response_model=SourceDB, status_code=HTTP_200_OK)
+async def remove_source(source_id: int):
+    source = await get_source(source_id)
     await source.delete()
     return source
