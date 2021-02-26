@@ -9,7 +9,7 @@ class Model:
 
     directory = Path(__file__).parent
 
-    def __init__(self, model_path: str) -> None:
+    def __init__(self, model_path: Path) -> None:
         self.model_path = model_path
         if not self.model_path.is_dir():
             self.untar()

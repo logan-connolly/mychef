@@ -10,50 +10,49 @@ from starlette.status import (
     HTTP_404_NOT_FOUND,
 )
 
-from app import models, schemas
-
+from app.models import Ingredient
+from app.schemas import IngredientDB, IngredientCreate, IngredientUpdate
 
 router = APIRouter()
 
 
-@router.get("/", response_model=List[schemas.IngredientDB], status_code=HTTP_200_OK)
+@router.get("/", response_model=List[IngredientDB], status_code=HTTP_200_OK)
 async def get_ingredients(query: Optional[str] = None):
     ingredients = await (
-        models.Ingredient.objects.filter(ingredient__contains=query).all()
+        Ingredient.objects.filter(ingredient__contains=query).all()
         if query
-        else models.Ingredient.objects.all()
+        else Ingredient.objects.all()
     )
     if not ingredients:
         raise HTTPException(HTTP_404_NOT_FOUND, detail="No ingredients found")
     return ingredients
 
 
-@router.post("/", response_model=schemas.IngredientDB, status_code=HTTP_201_CREATED)
-async def add_ingredient(payload: schemas.IngredientCreate):
+@router.post("/", response_model=IngredientDB, status_code=HTTP_201_CREATED)
+async def add_ingredient(payload: IngredientCreate):
     try:
-        return await models.Ingredient.objects.create(ingredient=payload.ingredient)
-    except UniqueViolationError:
-        raise HTTPException(HTTP_400_BAD_REQUEST, detail="Ingredient exists")
+        return await Ingredient.objects.create(ingredient=payload.ingredient)
+    except UniqueViolationError as err:
+        raise HTTPException(HTTP_400_BAD_REQUEST, detail="Ingredient exists") from err
 
 
-@router.get("/{id}/", response_model=schemas.IngredientDB, status_code=HTTP_200_OK)
-async def get_ingredient(id: int):
+@router.get("/{id}/", response_model=IngredientDB, status_code=HTTP_200_OK)
+async def get_ingredient(ingredient_id: int):
     try:
-        return await models.Ingredient.objects.get(id=id)
-    except NoMatch:
-        raise HTTPException(HTTP_404_NOT_FOUND, detail="Ingredient not found")
+        return await Ingredient.objects.get(id=ingredient_id)
+    except NoMatch as err:
+        raise HTTPException(HTTP_404_NOT_FOUND, detail="Ingredient not found") from err
 
 
-@router.put("/{id}/", response_model=schemas.IngredientDB, status_code=HTTP_200_OK)
-async def update_ingredient(id: int, payload: schemas.IngredientUpdate):
-    ingredient = await get_ingredient(id)
+@router.put("/{id}/", response_model=IngredientDB, status_code=HTTP_200_OK)
+async def update_ingredient(ingredient_id: int, payload: IngredientUpdate):
+    ingredient = await get_ingredient(ingredient_id)
     updates: Dict[str, Any] = {k: v for k, v in payload.dict().items() if v is not None}
-    await ingredient.update(**updates)
-    return ingredient
+    return await ingredient.update(**updates)
 
 
-@router.delete("/{id}/", response_model=schemas.IngredientDB, status_code=HTTP_200_OK)
-async def remove_ingredient(id: int):
-    ingredient = await get_ingredient(id)
+@router.delete("/{id}/", response_model=IngredientDB, status_code=HTTP_200_OK)
+async def remove_ingredient(ingredient_id: int):
+    ingredient = await get_ingredient(ingredient_id)
     await ingredient.delete()
     return ingredient

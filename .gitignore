@@ -1,3 +1,8 @@
+# data
+data/
+api/app/services/models/ingredient/version/
+*.tar.gz
+
 # Vim
 .vimspector.json
 
@@ -134,8 +139,3 @@ dmypy.json
 
 # vim
 .vim/
-
-# data
-data/
-api/app/services/models/ingredients_v1*
-*.tar.gz
