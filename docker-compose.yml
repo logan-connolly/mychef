@@ -23,11 +23,9 @@ services:
     image: lvconnolly/mychef_api:dev
     ports:
       - ${API_PORT}:80
-      - 5678:5678
     volumes:
       - ./api/:/app
     environment:
-      - API_DEBUG=${API_DEBUG}
       - API_INGREDIENT_MODEL=${API_INGREDIENT_MODEL}
       - WEB_PORT=${WEB_PORT}
       - WEB_HOST=${WEB_HOST}
