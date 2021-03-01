@@ -15,7 +15,7 @@ repos:
       - id: flake8
         args: ["--max-line-length=89"]
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: ""
+    rev: v0.812
     hooks:
       - id: mypy
         name: mypy-api
