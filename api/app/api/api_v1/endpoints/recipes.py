@@ -25,7 +25,7 @@ router = APIRouter()
 async def get_recipes(sid: int, limit: Optional[int] = None):
     recipes = await Recipe.objects.filter(source=sid).all()
     if not recipes:
-        raise HTTPException(HTTP_404_NOT_FOUND, detail="No recipes found")
+        raise HTTPException(HTTP_404_NOT_FOUND, "No recipes found")
     n_recipes = len(recipes)
     n_samples = limit if limit and limit < n_recipes else n_recipes
     return random.sample(recipes, n_samples)
@@ -43,7 +43,7 @@ async def get_recipe(sid: int, recipe_id: int):
     try:
         return await Recipe.objects.get(id=recipe_id, source=sid)
     except NoMatch as err:
-        raise HTTPException(HTTP_404_NOT_FOUND, detail="Recipe not found") from err
+        raise HTTPException(HTTP_404_NOT_FOUND, "Recipe not found") from err
 
 
 @router.put("/{recipe_id}/", response_model=RecipeDB, status_code=HTTP_200_OK)
@@ -68,7 +68,7 @@ async def clean_payload(req: Request, data: RecipeAdd) -> RecipeCreate:
             name=data.name, url=data.url, image=data.image, ingredients=items
         )
     except AttributeError as err:
-        raise HTTPException(HTTP_404_NOT_FOUND, detail="API model missing") from err
+        raise HTTPException(HTTP_404_NOT_FOUND, "API model missing") from err
 
 
 async def update_recipe_data(source: SourceDB, payload: RecipeCreate) -> RecipeDB:
@@ -76,7 +76,7 @@ async def update_recipe_data(source: SourceDB, payload: RecipeCreate) -> RecipeD
         try:
             return await Recipe.objects.create(source=source, **payload.dict())
         except UniqueViolationError as err:
-            raise HTTPException(HTTP_400_BAD_REQUEST, detail="Recipe exists") from err
+            raise HTTPException(HTTP_400_BAD_REQUEST, "Recipe exists") from err
 
     async def update_ingredients(recipe):
         for ingredient in recipe.ingredients["items"]:

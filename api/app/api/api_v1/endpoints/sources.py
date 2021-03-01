@@ -20,7 +20,7 @@ router = APIRouter()
 async def get_sources():
     sources = await Source.objects.all()
     if not sources:
-        raise HTTPException(HTTP_404_NOT_FOUND, detail="No sources found")
+        raise HTTPException(HTTP_404_NOT_FOUND, "No sources found")
     return sources
 
 
@@ -29,7 +29,7 @@ async def add_source(payload: SourceCreate):
     try:
         return await Source.objects.create(name=payload.name, url=payload.url.host)
     except UniqueViolationError as err:
-        raise HTTPException(HTTP_400_BAD_REQUEST, detail="Source exists") from err
+        raise HTTPException(HTTP_400_BAD_REQUEST, "Source exists") from err
 
 
 @router.get("/{source_id}/", response_model=SourceDB, status_code=HTTP_200_OK)
@@ -37,7 +37,7 @@ async def get_source(source_id: int):
     try:
         return await Source.objects.get(id=source_id)
     except NoMatch as err:
-        raise HTTPException(HTTP_404_NOT_FOUND, detail="Source not found") from err
+        raise HTTPException(HTTP_404_NOT_FOUND, "Source not found") from err
 
 
 @router.put("/{source_id}/", response_model=SourceDB, status_code=HTTP_200_OK)

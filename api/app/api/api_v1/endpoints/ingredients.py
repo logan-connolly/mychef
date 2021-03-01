@@ -24,7 +24,7 @@ async def get_ingredients(query: Optional[str] = None):
         else Ingredient.objects.all()
     )
     if not ingredients:
-        raise HTTPException(HTTP_404_NOT_FOUND, detail="No ingredients found")
+        raise HTTPException(HTTP_404_NOT_FOUND, "No ingredients found")
     return ingredients
 
 
@@ -33,7 +33,7 @@ async def add_ingredient(payload: IngredientCreate):
     try:
         return await Ingredient.objects.create(ingredient=payload.ingredient)
     except UniqueViolationError as err:
-        raise HTTPException(HTTP_400_BAD_REQUEST, detail="Ingredient exists") from err
+        raise HTTPException(HTTP_400_BAD_REQUEST, "Ingredient exists") from err
 
 
 @router.get("/{ingred_id}/", response_model=IngredientDB, status_code=HTTP_200_OK)
@@ -41,7 +41,7 @@ async def get_ingredient(ingred_id: int):
     try:
         return await Ingredient.objects.get(id=ingred_id)
     except NoMatch as err:
-        raise HTTPException(HTTP_404_NOT_FOUND, detail="Ingredient not found") from err
+        raise HTTPException(HTTP_404_NOT_FOUND, "Ingredient not found") from err
 
 
 @router.put("/{ingred_id}/", response_model=IngredientDB, status_code=HTTP_200_OK)
