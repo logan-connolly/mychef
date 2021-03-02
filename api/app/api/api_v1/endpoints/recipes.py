@@ -13,9 +13,10 @@ from starlette.status import (
     HTTP_404_NOT_FOUND,
 )
 
-from app.models import Recipe, Ingredient
-from app.schemas import RecipeDB, RecipeAdd, RecipeUpdate, RecipeCreate, SourceDB
 from app.core.config import settings
+from app.models import Ingredient, Recipe
+from app.schemas import RecipeAdd, RecipeCreate, RecipeDB, RecipeUpdate, SourceDB
+
 from .sources import get_source
 
 router = APIRouter()

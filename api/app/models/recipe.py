@@ -2,6 +2,7 @@ import orm
 from sqlalchemy.sql import func
 
 from app.db.database import database, metadata
+
 from .source import Source
 
 

@@ -4,9 +4,10 @@ Revision ID: c8137c750b21
 Create Date: 2020-10-09 08:33:48.296041
 
 """
-from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
+
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = "c8137c750b21"

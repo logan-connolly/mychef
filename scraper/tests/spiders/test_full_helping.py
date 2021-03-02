@@ -1,5 +1,4 @@
 import pytest
-
 from scraper.spiders.full_helping_spider import UrlExtractor
 
 

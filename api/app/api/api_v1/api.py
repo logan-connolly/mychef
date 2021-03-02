@@ -1,8 +1,8 @@
 from typing import Any, Dict
+
 from fastapi import APIRouter
 
 from .endpoints import ingredients, recipes, sources
-
 
 api_router = APIRouter()
 

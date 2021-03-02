@@ -11,7 +11,7 @@ from starlette.status import (
 )
 
 from app.models import Ingredient
-from app.schemas import IngredientDB, IngredientCreate, IngredientUpdate
+from app.schemas import IngredientCreate, IngredientDB, IngredientUpdate
 
 router = APIRouter()
 

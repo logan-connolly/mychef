@@ -1,6 +1,6 @@
 from typing import Dict, List, Optional, Union
 
-from pydantic import BaseModel, AnyUrl
+from pydantic import AnyUrl, BaseModel
 
 
 class RecipeBase(BaseModel):

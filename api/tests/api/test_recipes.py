@@ -1,6 +1,6 @@
 import json
-import pytest
 
+import pytest
 from app.core.config import settings
 
 source = dict(name="Source", url="http://source.com")

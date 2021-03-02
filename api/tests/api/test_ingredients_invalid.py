@@ -1,4 +1,5 @@
 import json
+
 import pytest
 
 from app.core.config import settings

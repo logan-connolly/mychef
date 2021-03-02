@@ -1,11 +1,10 @@
-from typing import Iterator, Dict
+from typing import Dict, Iterator
 
 import jsonlines
-
-from tqdm import tqdm
 from praw import Reddit
-from praw.models.reddit.comment import Comment
 from praw.models.listing.generator import ListingGenerator
+from praw.models.reddit.comment import Comment
+from tqdm import tqdm
 
 
 class RedditComments:

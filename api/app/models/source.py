@@ -1,4 +1,4 @@
-from orm import Model, DateTime, Integer, String
+from orm import DateTime, Integer, Model, String
 from sqlalchemy.sql import func
 
 from app.db.database import database, metadata

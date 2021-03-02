@@ -11,7 +11,7 @@ from starlette.status import (
 )
 
 from app.models import Source
-from app.schemas import SourceDB, SourceCreate, SourceUpdate
+from app.schemas import SourceCreate, SourceDB, SourceUpdate
 
 router = APIRouter()
 

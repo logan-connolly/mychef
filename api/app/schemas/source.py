@@ -1,6 +1,6 @@
 from typing import Optional, Union
 
-from pydantic import BaseModel, AnyUrl
+from pydantic import AnyUrl, BaseModel
 
 
 class SourceBase(BaseModel):
