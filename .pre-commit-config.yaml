@@ -9,6 +9,13 @@ repos:
     rev: v5.7.0
     hooks:
       - id: isort
+        name: isort-api
+        entry: isort api
+        pass_filenames: false
+      - id: isort
+        name: isort-scraper
+        entry: isort scraper
+        pass_filenames: false
   - repo: https://github.com/psf/black
     rev: 19.3b0
     hooks:
