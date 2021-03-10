@@ -13,10 +13,10 @@ before_script:
   - docker cp tmp:/version ./api/app/services/models/ingredient
   - docker rm -f tmp
   - docker volume prune -f
-  - docker-compose pull api
-  - docker-compose up -d api
+  - docker-compose -f ./docker-compose.dev.yml pull api
+  - docker-compose -f ./docker-compose.dev.yml up -d api
 
 script:
   - pre-commit run --all-files
-  - docker-compose exec api pytest tests
-  - docker-compose down -v
+  - docker-compose -f ./docker-compose.dev.yml exec api pytest tests
+  - docker-compose -f ./docker-compose.dev.yml down -v
