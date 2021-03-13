@@ -7,11 +7,8 @@ RUN apk --update-cache add --virtual build-deps python make g++ \
     && apk del build-deps
 COPY . .
 
-# build stage
-FROM develop-stage as build-stage
-RUN npm run build
-
 # production stage
-FROM build-stage as production-stage
-RUN npm run start
-RUN npm run generate
+FROM develop-stage as production-stage
+RUN npm run build
+ENTRYPOINT ["npm"]
+CMD ["run", "start"]
