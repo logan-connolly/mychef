@@ -16,4 +16,4 @@ start_services() {
   docker-compose -f ${PARENTDIR}/docker-compose.dev.yml up -d ui
 }
 
-drop_services && drop_meilisearch && start_services
+drop_services && start_services
