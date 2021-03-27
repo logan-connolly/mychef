@@ -5,7 +5,7 @@ PARENTDIR="$(dirname "$DIR")"
 
 INGRED_IMAGE=lvconnolly/mychef_model:ingredient
 INGRED_CONTAINER=tmp_ingred
-INGRED_PATH=$PARENT_DIR/api/app/services/models/ingredient
+INGRED_PATH=$PARENTDIR/api/app/services/models/ingredient
 
 create_tmp_containers() {
   echo "Pulling images from registry and starting temp containers ..."
