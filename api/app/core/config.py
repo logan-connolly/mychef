@@ -47,7 +47,7 @@ class Settings(BaseSettings):
 
     OPENAPI_URL: str = f"{api.version}/openapi.json"
     SEARCH_URL: str = f"http://{search.host}:{search.port}{search.endpoint}"
-    URI: str = f"postgres://{pg.user}:{pg.password}@{pg.host}/{pg.db}"
+    URI: str = f"postgresql://{pg.user}:{pg.password}@{pg.host}/{pg.db}"
 
     BACKEND_CORS_ORIGINS: List[str] = [
         "http://localhost",

@@ -6,17 +6,12 @@ services:
   - docker
 
 before_script:
-  - pip install -U pip
-  - pip install pre-commit
+  - pip install -U pip && pip install pre-commit
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker create -it --name tmp lvconnolly/mychef_model:ingredient sh
-  - docker cp tmp:/version ./api/app/services/models/ingredient
-  - docker rm -f tmp
-  - docker volume prune -f
+  - ./scripts/download-models.sh
   - docker-compose -f ./docker-compose.dev.yml pull api
   - docker-compose -f ./docker-compose.dev.yml up -d api
 
 script:
   - pre-commit run --all-files
   - docker-compose -f ./docker-compose.dev.yml exec api pytest tests
-  - docker-compose -f ./docker-compose.dev.yml down -v
