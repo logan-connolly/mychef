@@ -41,16 +41,22 @@ Copy trained `spacy` ingredient extraction model into repository (~650MB>):
 ./scripts/download-models.sh
 ```
 
+Pull images locally:
+
+```
+docker-compose pull
+```
+
 Start application locally with:
 
 ```
-$ docker-compose up ui -d
+docker-compose up -d ui
 ```
 
 You should see a UI with no recipes loaded at `localhost:8000`. To add recipes start the web scraping service:
 
 ```
-$ docker-compose run scraper
+docker-compose run scraper
 ```
 
 When you refresh the UI, you should start seeing recipes populating the DB and the ingredients search bar should be showing which ingredients the application has extracted thus far. To stop the scraper just `CTR-C` in the terminal with the running service.
