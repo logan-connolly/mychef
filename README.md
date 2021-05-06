@@ -38,11 +38,10 @@ API_INGREDIENT_MODEL=v1
 # Download trained ingredient extraction model
 make download
 
-# Pull or build images
+# Pull application images
 make pull
-make build
 
-# Start application
+# Start application containers
 make run
 
 # Scrape recipes

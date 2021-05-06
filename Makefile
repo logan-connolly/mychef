@@ -1,4 +1,4 @@
-.PHONY: build pull download start scrape clean
+.PHONY: build pull download start scrape lint tests clean
 
 build:
 	docker-compose build
@@ -12,7 +12,7 @@ download:
 run: pull
 	docker-compose up -d ui
 
-scrape:
+scrape: run
 	docker-compose run scraper
 
 lint:
