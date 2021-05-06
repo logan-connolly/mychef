@@ -8,10 +8,8 @@ services:
 before_script:
   - pip install -U pip && pip install pre-commit
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - ./scripts/download-models.sh
-  - docker-compose pull api
-  - docker-compose up -d api
+  - make download
 
 script:
-  - pre-commit run --all-files
-  - docker-compose exec api pytest tests
+  - make lint
+  - make tests
