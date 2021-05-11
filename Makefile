@@ -13,7 +13,7 @@ run: pull
 	docker-compose up -d ui
 
 scrape: run
-	docker-compose run scraper
+	docker-compose run --rm scraper
 
 lint:
 	pre-commit run --all-files
