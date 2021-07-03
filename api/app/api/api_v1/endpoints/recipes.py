@@ -1,9 +1,9 @@
-import random
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict
 
 import httpx
 from asyncpg.exceptions import UniqueViolationError
 from fastapi import APIRouter, HTTPException
+from fastapi_pagination import Page, paginate
 from orm.exceptions import NoMatch
 from starlette.requests import Request
 from starlette.status import (
@@ -22,14 +22,12 @@ from .sources import get_source
 router = APIRouter()
 
 
-@router.get("/", response_model=List[RecipeDB], status_code=HTTP_200_OK)
-async def get_recipes(sid: int, limit: Optional[int] = None):
+@router.get("/", response_model=Page[RecipeDB], status_code=HTTP_200_OK)
+async def get_recipes(sid: int):
     recipes = await Recipe.objects.filter(source=sid).all()
     if not recipes:
         raise HTTPException(HTTP_404_NOT_FOUND, "No recipes found")
-    n_recipes = len(recipes)
-    n_samples = limit if limit and limit < n_recipes else n_recipes
-    return random.sample(recipes, n_samples)
+    return paginate(recipes)
 
 
 @router.post("/", response_model=RecipeDB, status_code=HTTP_201_CREATED)
