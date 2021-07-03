@@ -8,13 +8,14 @@ authors = ["Logan Connolly <logan.connolly@protonmail.com>"]
 python = "^3.8"
 alembic = "^1.4.3"
 asyncpg = "^0.20.1"
-fastapi = "^0.54.1"
+fastapi = "^0.61.2"
 loguru = "^0.5.1"
 orm = "^0.1.5"
 psycopg2-binary = "^2.8.5"
 spacy = "^2.3.0"
 uvicorn = "^0.11.5"
 httpx = "^0.16.1"
+fastapi-pagination = "^0.8.0"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.782"
