@@ -19,26 +19,26 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
-  name: 'IngredientInput',
+  name: "IngredientInput",
   computed: {
-    ...mapState('ingredients', ['items']),
-    selected : {
+    ...mapState("ingredients", ["items"]),
+    selected: {
       get() {
-        return this.$store.state.ingredients.selected
+        return this.$store.state.ingredients.selected;
       },
       set(items) {
-        this.$store.dispatch('ingredients/updateSelected', items),
-        this.$store.dispatch('recipes/loadRecipes')
+        this.$store.dispatch("ingredients/updateSelected", items);
+        this.$store.dispatch("recipes/updateRecipes");
       }
     }
   },
   created() {
-    this.$store.dispatch('ingredients/loadIngredients')
+    this.$store.dispatch("ingredients/loadIngredients");
   }
-}
+};
 </script>
 
 <style scoped>
