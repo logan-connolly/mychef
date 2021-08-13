@@ -1,12 +1,18 @@
 from fastapi import FastAPI
+from fastapi_pagination import add_pagination
 
+from app.api.api_v1.api import router
 from app.core.config import settings
+from app.core.middleware import add_cors_middleware
 from app.db.database import database
 from app.services.models.ingredient import IngredientExtractor
 
 
 async def start_app_handler(app: FastAPI) -> None:
+    app.include_router(router, prefix=settings.api.version)
     app.state.ingredient_model = IngredientExtractor(settings.api.ingredient_model)
+    add_pagination(app)
+    add_cors_middleware(app)
     await database.connect()
 
 
