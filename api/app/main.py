@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from .core.config import api_settings
-from .core.event_handlers import start_app_handler, stop_app_handler
+from app.core.config import api_settings
+from app.core.event_handlers import start_app_handler, stop_app_handler
 
 
 def get_app():
