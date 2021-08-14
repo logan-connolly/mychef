@@ -2,6 +2,7 @@ from typing import Union
 
 import requests
 import scrapy
+from scrapy.exceptions import CloseSpider
 from scrapy.http.response.html import HtmlResponse
 
 from ..settings import API_URL
@@ -18,10 +19,10 @@ class FullHelpingSpider(scrapy.Spider):
         self.url = f"https://www.thefullhelping.com/recipe-index/?sf_paged={page}"
         self.start_urls = UrlExtractor(self.url).get_recipe_url()
         self.sid = get_source_id(domain="thefullhelping")
+        self.endpoint = f"{API_URL}/sources/{self.sid}/recipes/"
 
     def parse(self, response: HtmlResponse):
         """Parse webpage to extract important recipe information"""
-
         if response.css(".wprm-recipe-ingredients-container"):
             data = {
                 "name": response.css(".title::text").get(),
@@ -30,7 +31,9 @@ class FullHelpingSpider(scrapy.Spider):
                 "ingredients": self.get_ingredients(response),
             }
             if all(val is not None for val in data.values()):
-                requests.post(f"{API_URL}/sources/{self.sid}/recipes/", json=data)
+                resp = requests.post(self.endpoint, json=data)
+                if resp.status_code == 400:
+                    raise CloseSpider("Recipe already exists")
 
         for anchor_tag in response.css(".nav-previous a"):
             yield response.follow(anchor_tag, callback=self.parse)
