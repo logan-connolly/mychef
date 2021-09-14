@@ -1,36 +1,47 @@
 <template>
   <v-main style="padding: 0px;">
-    <IngredientInput/>
+    <IngredientInput />
     <v-row>
       <v-col
         v-for="(recipe, n) in items"
         :key="n"
         class="d-flex child-flex"
-        cols="12" xl="2" lg="3" md="4" sm="4" xs="12"
+        cols="12"
+        xl="2"
+        lg="3"
+        md="4"
+        sm="4"
+        xs="12"
       >
-        <RecipeCard :recipe="recipe"/>
+        <RecipeCard :recipe="recipe" />
       </v-col>
     </v-row>
+    <v-btn @click="addMoreRecipes" elevation="2">Click Me</v-btn>
   </v-main>
 </template>
 
 <script>
-import IngredientInput from '@/components/IngredientInput.vue'
-import RecipeCard from '@/components/RecipeCard.vue'
-import { mapState } from 'vuex';
+import IngredientInput from "@/components/IngredientInput.vue";
+import RecipeCard from "@/components/RecipeCard.vue";
+import { mapState } from "vuex";
 
 export default {
-  layout: 'default',
+  layout: "default",
   head() {
     return {
-      title: 'Mychef - Recipes'
-    }
+      title: "Mychef - Recipes"
+    };
   },
   computed: {
-    ...mapState('recipes', ['items'])
+    ...mapState("recipes", ["items"])
   },
   created() {
-    this.$store.dispatch('recipes/loadRecipes')
+    this.$store.dispatch("recipes/loadRecipes");
+  },
+  methods: {
+    addMoreRecipes() {
+      this.$store.dispatch("recipes/addRecipes");
+    }
   }
-}
+};
 </script>

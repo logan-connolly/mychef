@@ -7,7 +7,7 @@ authors = ["Logan Connolly <logan.connolly@protonmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 alembic = "^1.4.3"
-asyncpg = "^0.20.1"
+asyncpg = "^0.21.0"
 fastapi = "^0.61.2"
 loguru = "^0.5.1"
 orm = "^0.1.5"
