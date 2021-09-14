@@ -1,24 +1,19 @@
-FROM tiangolo/uvicorn-gunicorn:python3.8-slim
-
-ARG POETRY="https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py"
-ARG DEPS="curl"
-WORKDIR /app
-COPY ./pyproject.toml ./poetry.lock* /app/
+FROM python:3.9-slim-buster
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app
+    PYTHONPATH=/app \
+    PATH="/opt/venv/bin:$PATH"
 
-RUN set -eux \
-    && apt-get update \
-    && apt-get install --no-install-recommends -y ${DEPS} \
-    && curl -sSL $POETRY | POETRY_HOME=/opt/poetry python \
-    && cd /usr/local/bin \
-    && ln -s /opt/poetry/bin/poetry \
-    && poetry config virtualenvs.create false \
-    && cd /app \
-    && poetry install --no-root \
+COPY requirements.txt /tmp/requirements.txt
+RUN apt-get update && apt-get install -y gcc curl \
+    && python -m venv /opt/venv \
+    && /opt/venv/bin/pip install --no-cache -U pip setuptools wheel \
+    && /opt/venv/bin/pip install --no-cache -r /tmp/requirements.txt \
+    && apt-get purge -y gcc \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/list/*
 
 COPY . .
+EXPOSE 80
+CMD ["/start.sh"]

@@ -5,7 +5,7 @@ description = "Fastapi app for storing and retrieving recipes"
 authors = ["Logan Connolly <logan.connolly@protonmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 alembic = "^1.4.3"
 asyncpg = "^0.20.1"
 fastapi = "^0.61.2"
