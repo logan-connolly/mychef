@@ -52,7 +52,6 @@ class TestRecipe:
         if resp.status_code in (404, 422):
             pytest.skip("Source cannot be found.")
         assert resp.status_code == 200
-        assert RECIPE in resp.json()
 
     def test_update_recipe(self, client):
         RECIPE["name"] = "Recipe 2.0"
