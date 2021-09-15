@@ -1,7 +1,8 @@
-Dockerfile
 app/services/models/ingredient/version
+Dockerfile
+Makefile
 poetry.lock
 tests
-.venv/
 .mypy_cache/
 .pytest_cache/
+.venv/

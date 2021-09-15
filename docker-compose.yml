@@ -37,7 +37,6 @@ services:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_DB=${POSTGRES_DB}
       - DEBUG_SERVER=true
-    command: /start.sh
     depends_on:
       - db
       - search
