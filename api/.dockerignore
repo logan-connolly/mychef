@@ -2,7 +2,6 @@ app/services/models/ingredient/version
 Dockerfile
 Makefile
 poetry.lock
-tests
 .mypy_cache/
 .pytest_cache/
 .venv/
