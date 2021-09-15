@@ -8,7 +8,7 @@
 
 ## Overview
 
-[![Build Status](https://travis-ci.com/logan-connolly/mychef.svg?branch=master)](https://travis-ci.com/logan-connolly/mychef)
+[![Build Status](https://app.travis-ci.com/logan-connolly/mychef.svg?branch=master)](https://app.travis-ci.com/logan-connolly/mychef)
 
 **MyChef** is an application that helps you decide what meal to make based on what you have at home. Simply enter in ingredients you have at home and get back tasty plant-based recipes from top recipe websites.
 
