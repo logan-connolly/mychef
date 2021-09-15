@@ -32,7 +32,7 @@ API_PORT=8002
 API_INGREDIENT_MODEL=v1
 ```
 
-# Commands
+## Commands
 
 ```shell
 # Download trained ingredient extraction model
