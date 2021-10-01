@@ -15,5 +15,5 @@ RUN apt-get update && apt-get install -y gcc curl \
     && rm -rf /var/lib/apt/list/*
 
 COPY . .
-EXPOSE 80
+EXPOSE 8000
 CMD ["/start.sh"]
