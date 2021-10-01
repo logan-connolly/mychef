@@ -61,6 +61,8 @@ services:
     build:
       context: scraper
     image: lvconnolly/mychef_scraper:dev
+    environment:
+      - INTERNAL_API_URL=${INTERNAL_API_URL}
     volumes:
       - ./scraper/:/app
     command: crawl full_helping

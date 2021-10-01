@@ -17,7 +17,7 @@
 
 _FYI: an installation of docker and docker-compose is required to run the application._
 
-Define `.env` configuration in root directory of project:
+Define `.env` configuration in root directory of project to develop locally:
 
 ```
 POSTGRES_USER=mychef
@@ -30,6 +30,7 @@ SEARCH_HOST=search
 SEARCH_PORT=7700
 API_PORT=8002
 API_INGREDIENT_MODEL=v1
+INTERNAL_API_URL=http://api:8000/api/v1
 ```
 
 ## Commands
