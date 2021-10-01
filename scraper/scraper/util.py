@@ -18,8 +18,8 @@ class UrlExtractor:
         """Get the start page for the spider"""
         try:
             return requests.get(self.url).content
-        except requests.exceptions.ConnectionError as err:
-            raise ConnectionError(f"Unable to retrieve {self.url!r}") from err
+        except requests.exceptions.ConnectionError:
+            raise ConnectionError(f"Unable to retrieve {self.url!r}") from None
 
     def get_recipe_url(self) -> List[str]:
         """From start page find the starting url"""
@@ -33,14 +33,37 @@ def get_source_id(domain: str) -> int:
     """Get the source id from API if exists, if not create it
     :param domain: Recipe url domain name (ie. 'thefullhelping')
     """
-    resp = requests.get(f"{API_URL}/sources/?domain={domain}")
+    url = f"{get_base_api_url()}/sources/?domain={domain}"
+    try:
+        resp = requests.get(url)
+    except requests.exceptions.ConnectionError:
+        raise ConnectionError(f"Unable to retrieve {url!r}")
+
     if resp.ok:
         return resp.json()[0]["id"]
-    payload = dict(name="TheFullHelping", url="http://thefullhelping.com")
-    return create_source_id(payload)
+    raise ValueError("Domain could not be found")
 
 
 def create_source_id(payload: Dict[str, str]) -> int:
     """Make post request to API to create TheFullHelping source"""
-    resp = requests.post(f"{API_URL}/sources/", data=json.dumps(payload))
-    return resp.json()["id"]
+    url = f"{get_base_api_url()}/sources/"
+    try:
+        resp = requests.post(url, data=json.dumps(payload))
+    except requests.exceptions.ConnectionError:
+        raise ConnectionError(f"Unable to retrieve {url!r}")
+
+    if resp.ok:
+        return resp.json()["id"]
+    raise RuntimeError("Unable to create new source id")
+
+
+def get_base_api_url() -> str:
+    """Checks if environment variable is set and returns value"""
+    if API_URL:
+        return API_URL
+    raise ValueError("Need to set INTERNAL_API_URL value")
+
+
+def get_source_api_url(sid: int) -> str:
+    """Formats url for fetching recipes from a given source id"""
+    return f"{get_base_api_url()}/sources/{sid}/recipes/"

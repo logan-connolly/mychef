@@ -5,21 +5,21 @@ import scrapy
 from scrapy.exceptions import CloseSpider
 from scrapy.http.response.html import HtmlResponse
 
-from ..settings import API_URL
-from ..util import UrlExtractor, get_source_id
+from ..util import UrlExtractor, create_source_id, get_source_api_url, get_source_id
 
 
 class FullHelpingSpider(scrapy.Spider):
     """Scrape the website thefullhelping.com and post results to mychef"""
 
+    keyword = "thefullhelping"
     name = "full_helping"
     download_delay = 8
 
     def __init__(self, page: int = 1):
         self.url = f"https://www.thefullhelping.com/recipe-index/?sf_paged={page}"
         self.start_urls = UrlExtractor(self.url).get_recipe_url()
-        self.sid = get_source_id(domain="thefullhelping")
-        self.endpoint = f"{API_URL}/sources/{self.sid}/recipes/"
+        self.sid = self.get_source_id()
+        self.endpoint = get_source_api_url(self.sid)
 
     def parse(self, response: HtmlResponse):
         """Parse webpage to extract important recipe information"""
@@ -37,6 +37,15 @@ class FullHelpingSpider(scrapy.Spider):
 
         for anchor_tag in response.css(".nav-previous a"):
             yield response.follow(anchor_tag, callback=self.parse)
+
+    @classmethod
+    def get_source_id(cls):
+        """Try and fetch source id, if does not exist, create it"""
+        try:
+            return get_source_id(domain=cls.keyword)
+        except ValueError:
+            payload = dict(name="TheFullHelping", url="http://thefullhelping.com")
+            return create_source_id(payload)
 
     @classmethod
     def get_image_url(cls, response: HtmlResponse) -> Union[str, None]:
