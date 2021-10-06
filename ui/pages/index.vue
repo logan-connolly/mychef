@@ -16,7 +16,7 @@
         <RecipeCard :recipe="recipe" />
       </v-col>
     </v-row>
-    <v-btn @click="addMoreRecipes" elevation="2">Click Me</v-btn>
+    <v-btn @click="addMoreRecipes" id="hide" />
   </v-main>
 </template>
 
@@ -35,13 +35,29 @@ export default {
   computed: {
     ...mapState("recipes", ["items"])
   },
+  methods: {
+    addMoreRecipes() {
+      window.onscroll = () => {
+        let bottomOfWindow =
+          document.documentElement.scrollTop + window.innerHeight ==
+          document.documentElement.offsetHeight;
+        if (bottomOfWindow) {
+          this.$store.dispatch("recipes/addRecipes");
+        }
+      };
+    }
+  },
   created() {
     this.$store.dispatch("recipes/loadRecipes");
   },
-  methods: {
-    addMoreRecipes() {
-      this.$store.dispatch("recipes/addRecipes");
-    }
+  mounted() {
+    this.addMoreRecipes();
   }
 };
 </script>
+
+<style scoped>
+#hide {
+  visibility: hidden !important;
+}
+</style>
