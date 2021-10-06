@@ -1,3 +1,7 @@
+## 🌱 MyChef
+
+[![Build Status](https://app.travis-ci.com/logan-connolly/mychef.svg?branch=master)](https://app.travis-ci.com/logan-connolly/mychef)
+
 <div align="center">
   <p>
     <a href="https://github.com/logan-connolly/mychef">
@@ -6,14 +10,11 @@
   </p>
 </div>
 
-## Overview
-
-[![Build Status](https://app.travis-ci.com/logan-connolly/mychef.svg?branch=master)](https://app.travis-ci.com/logan-connolly/mychef)
+## 📦 Overview
 
 **MyChef** is an application that helps you decide what meal to make based on what you have at home. Simply enter in ingredients you have at home and get back tasty plant-based recipes from top recipe websites.
 
-
-## Setup
+## ⚙️ Setup
 
 _FYI: an installation of docker and docker-compose is required to run the application._
 
@@ -33,7 +34,7 @@ API_INGREDIENT_MODEL=v1
 INTERNAL_API_URL=http://api:8000/api/v1
 ```
 
-## Commands
+## ⌨️ Commands
 
 ```shell
 # Download trained ingredient extraction model
@@ -52,7 +53,7 @@ make scrape
 When you refresh the UI, you should start seeing recipes populating the DB and the ingredients search bar should be showing which ingredients the application has extracted thus far. To stop the scraper just `CTR-C` in the terminal with the running service.
 
 
-## Project Structure
+## 🧭 Project Structure
 
 **Api**
 
