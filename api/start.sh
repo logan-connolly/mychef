@@ -17,7 +17,7 @@ curl -X POST "http://${SEARCH_HOST}:${SEARCH_PORT}/indexes" --data '{"uid": "rec
 
 # Start app server
 if [ $DEBUG_SERVER = true ]; then
-	exec uvicorn --reload --host 0.0.0.0 --port 8000 "$APP_MODULE"
+  exec uvicorn --reload --host 0.0.0.0 --port 8000 "$APP_MODULE"
 else
-	exec gunicorn -k "$WORKER_CLASS" -c "$GUNICORN_CONF" "$APP_MODULE"
+  exec gunicorn -k "$WORKER_CLASS" -c "$GUNICORN_CONF" "$APP_MODULE"
 fi

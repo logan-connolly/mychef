@@ -1,10 +1,5 @@
 FROM python:3.9-slim-buster
 
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app \
-    PATH="/opt/venv/bin:$PATH"
-
 COPY requirements.txt /tmp/requirements.txt
 RUN apt-get update && apt-get install -y gcc curl \
     && python -m venv /opt/venv \
@@ -13,6 +8,11 @@ RUN apt-get update && apt-get install -y gcc curl \
     && apt-get purge -y gcc \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/list/*
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app \
+    PATH="/opt/venv/bin:$PATH"
 
 COPY . .
 EXPOSE 8000

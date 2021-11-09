@@ -1,28 +1,31 @@
-.PHONY: build pull download start scrape lint tests clean
+.DEFAULT_GOAL=help
 
-build:
+build: # Build docker images locally
 	docker-compose build
 
-pull:
+pull: # Pull required docker images
 	docker-compose pull
 
-download:
+download: # Download pretrained models
 	./scripts/download-models.sh
 
-run: pull
+run: pull # Start application containers
 	docker-compose up -d ui
 
-scrape: run
+scrape: run # Instantiate web scraper
 	docker-compose run --rm scraper
 
-lint:
+lint: # Check and format via pre-commit
 	pre-commit run --all-files
 
-tests:
+tests: # Launch services and test
 	docker-compose pull api
 	docker-compose up -d api
 	docker-compose exec api pytest tests
 
-clean:
-	find . -type f -name "*.py[co]" -delete
-	find . -type d -name "__pycache__" -delete
+clean: # Clean up cache files
+	@find . -type f -name "*.py[co]" -delete
+	@find . -type d -name "__pycache__" -delete
+
+help: # Show this help
+	@egrep -h '\s#\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?# "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
