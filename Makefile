@@ -12,7 +12,7 @@ download: # Download pretrained models
 run: pull # Start application containers
 	docker-compose up -d ui
 
-scrape: run # Instantiate web scraper
+scrape: # Run web scraper
 	docker-compose run --rm scraper
 
 lint: # Check and format via pre-commit

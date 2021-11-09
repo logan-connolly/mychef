@@ -18,7 +18,7 @@ class FullHelpingSpider(scrapy.Spider):
     def __init__(self, page: int = 1):
         self.url = f"https://www.thefullhelping.com/recipe-index/?sf_paged={page}"
         self.start_urls = UrlExtractor(self.url).get_recipe_url()
-        self.sid = self.get_source_id()
+        self.sid = self.retrieve_source_id()
         self.endpoint = get_source_api_url(self.sid)
 
     def parse(self, response: HtmlResponse):
@@ -39,7 +39,7 @@ class FullHelpingSpider(scrapy.Spider):
             yield response.follow(anchor_tag, callback=self.parse)
 
     @classmethod
-    def get_source_id(cls):
+    def retrieve_source_id(cls):
         """Try and fetch source id, if does not exist, create it"""
         try:
             return get_source_id(domain=cls.keyword)
