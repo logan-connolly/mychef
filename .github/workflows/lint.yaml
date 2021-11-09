@@ -1,0 +1,19 @@
+name: Lint with pre-commit
+on: push
+
+jobs:
+  run-precommit:
+    name: Running pre-commit
+
+    strategy:
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: pre-commit/action@v2.0.3
+
+      - name: Lint with pre-commit
+        run: make lint
