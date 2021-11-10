@@ -1,7 +1,5 @@
 ## 🌱 MyChef
 
-[![Build Status](https://app.travis-ci.com/logan-connolly/mychef.svg?branch=master)](https://app.travis-ci.com/logan-connolly/mychef)
-
 <div align="center">
   <p>
     <a href="https://github.com/logan-connolly/mychef">
