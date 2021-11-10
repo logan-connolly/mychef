@@ -1,5 +1,17 @@
 name: Test application services
 on: push
+env:
+  POSTGRES_USER: mychef
+  POSTGRES_PASSWORD: mychef
+  POSTGRES_DB: mychef_db
+  POSTGRES_HOST: db
+  WEB_HOST: ui
+  WEB_PORT: 8000
+  SEARCH_HOST: search
+  SEARCH_PORT: 7700
+  INTERNAL_API_URL: http://api:8000/api/v1
+  API_PORT: 8002
+  API_INGREDIENT_MODEL: v1
 
 jobs:
   test:
