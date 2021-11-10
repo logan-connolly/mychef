@@ -1,5 +1,7 @@
 ## 🌱 MyChef
 
+![tests](https://github.com/logan-connolly/mychef/actions/workflows/test.yaml/badge.svg)
+
 <div align="center">
   <p>
     <a href="https://github.com/logan-connolly/mychef">
