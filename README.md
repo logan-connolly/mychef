@@ -1,6 +1,6 @@
 ## 🌱 MyChef
 
-![tests](https://github.com/logan-connolly/mychef/actions/workflows/test.yaml/badge.svg)
+[![tests](https://github.com/logan-connolly/mychef/actions/workflows/test.yaml/badge.svg)](https://github.com/logan-connolly/mychef/actions)
 
 <div align="center">
   <p>
