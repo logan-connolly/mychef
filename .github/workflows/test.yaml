@@ -1,0 +1,12 @@
+name: Test application services
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download pretrained model(s)
+        run: make download
+      - name: Run tests
+        run: make tests
