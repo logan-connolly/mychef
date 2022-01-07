@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3.7'
 
 services:
   db:
@@ -44,7 +44,7 @@ services:
   ui:
     build:
       context: ui
-      target: develop-stage
+      target: builder
     image: lvconnolly/mychef_ui:dev
     ports:
       - ${WEB_PORT}:3000
@@ -52,7 +52,7 @@ services:
       - ./ui/:/srv/app
     environment:
       HOST: 0.0.0.0
-    command: /bin/sh -c "npm run docker"
+    command: /bin/sh -c "yarn dev"
     depends_on:
       - api
       - search

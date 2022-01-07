@@ -1,14 +1,31 @@
-# develop stage
-FROM node:lts-alpine as develop-stage
-WORKDIR /srv/app
-COPY package.json ./
-RUN apk --update-cache add --virtual build-deps python make g++ \
-    && npm install \
-    && apk del build-deps
+FROM node:lts as builder
+
+WORKDIR /app
+
 COPY . .
 
-# production stage
-FROM develop-stage as production-stage
-RUN npm run build
-ENTRYPOINT ["npm"]
-CMD ["run", "start"]
+RUN yarn install \
+  --prefer-offline \
+  --frozen-lockfile \
+  --non-interactive \
+  --production=false
+
+RUN yarn build
+
+RUN rm -rf node_modules && \
+  NODE_ENV=production yarn install \
+  --prefer-offline \
+  --pure-lockfile \
+  --non-interactive \
+  --production=true
+
+FROM node:lts
+
+WORKDIR /app
+
+COPY --from=builder /app  .
+
+ENV HOST 0.0.0.0
+EXPOSE 80
+
+CMD [ "yarn", "start" ]
