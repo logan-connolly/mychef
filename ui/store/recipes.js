@@ -1,7 +1,7 @@
 export const state = () => ({
   source: 1,
   page: 1,
-  items: []
+  items: [],
 });
 
 export const mutations = {
@@ -16,7 +16,7 @@ export const mutations = {
   },
   SET_PAGE(state, pageNumber) {
     state.page = pageNumber;
-  }
+  },
 };
 
 export const actions = {
@@ -26,10 +26,10 @@ export const actions = {
       .get(
         `/sources/${rootState.recipes.source}/recipes/?page=${rootState.recipes.page}&size=8`
       )
-      .then(res => {
+      .then((res) => {
         commit("SET_ITEMS", res.data);
       })
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
   },
   async updateRecipes({ commit, rootState, dispatch }) {
     const selected = rootState.ingredients.selected;
@@ -39,13 +39,13 @@ export const actions = {
     await this.$axios
       .get("http://localhost:7700/indexes/recipes/search", {
         params: {
-          q: selected.join(" ")
-        }
+          q: selected.join(" "),
+        },
       })
-      .then(res => {
+      .then((res) => {
         commit("UPDATE_ITEMS", res.data);
       })
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
   },
   async addRecipes({ commit, rootState }) {
     commit("SET_PAGE", rootState.recipes.page + 1);
@@ -53,9 +53,9 @@ export const actions = {
       .get(
         `/sources/${rootState.recipes.source}/recipes/?page=${rootState.recipes.page}&size=8`
       )
-      .then(res => {
+      .then((res) => {
         commit("ADD_ITEMS", res.data);
       })
-      .catch(error => console.log(error));
-  }
+      .catch((error) => console.log(error));
+  },
 };

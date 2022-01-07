@@ -52,7 +52,6 @@ make scrape
 
 When you refresh the UI, you should start seeing recipes populating the DB and the ingredients search bar should be showing which ingredients the application has extracted thus far. To stop the scraper just `CTR-C` in the terminal with the running service.
 
-
 ## 🧭 Project Structure
 
 **Api**

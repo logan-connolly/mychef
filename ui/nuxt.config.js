@@ -24,27 +24,25 @@ export default {
       {
         hid: "description",
         name: "description",
-        content: process.env.npm_package_description || ""
-      }
+        content: process.env.npm_package_description || "",
+      },
     ],
     link: [
       { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Source+Sans+Pro"
+        href: "https://fonts.googleapis.com/css2?family=Source+Sans+Pro",
       },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css?family=Pacifico"
-      }
-    ]
+        href: "https://fonts.googleapis.com/css?family=Pacifico",
+      },
+    ],
   },
   /*
    ** Global CSS
    */
-  css: [
-    '~/css/main.css'
-  ],
+  css: ["~/css/main.css"],
   /*
    ** Plugins to load before mounting the App
    ** https://nuxtjs.org/guide/plugins
@@ -91,14 +89,14 @@ export default {
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
-          success: colors.green.accent3
-        }
-      }
-    }
+          success: colors.green.accent3,
+        },
+      },
+    },
   },
   /*
    ** Build configuration
    ** See https://nuxtjs.org/api/configuration-build/
    */
-  build: {}
+  build: {},
 };

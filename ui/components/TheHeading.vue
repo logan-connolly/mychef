@@ -15,13 +15,13 @@
 
 <script>
 export default {
-  name: 'TheHeading',
-}
+  name: "TheHeading",
+};
 </script>
 
 <style scoped>
 h1 {
   font-family: Pacifico, sans-serif;
-  font-size: 310%
+  font-size: 310%;
 }
 </style>

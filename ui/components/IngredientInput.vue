@@ -32,12 +32,12 @@ export default {
       set(items) {
         this.$store.dispatch("ingredients/updateSelected", items);
         this.$store.dispatch("recipes/updateRecipes");
-      }
-    }
+      },
+    },
   },
   created() {
     this.$store.dispatch("ingredients/loadIngredients");
-  }
+  },
 };
 </script>
 
