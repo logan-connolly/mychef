@@ -9,7 +9,7 @@ pull: # Pull required docker images
 download: # Download pretrained models
 	./scripts/download-models.sh
 
-run: pull # Start application containers
+run: # Start application containers
 	docker-compose up -d ui
 
 scrape: # Run web scraper
