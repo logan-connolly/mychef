@@ -32,8 +32,8 @@
 
 <script>
 export default {
-  name: "RecipeCard",
-  props: ["recipe"]
+  name: 'RecipeCard',
+  props: ['recipe'],
 };
 </script>
 

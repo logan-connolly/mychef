@@ -1,63 +1,28 @@
 <template>
-  <v-main style="padding: 0px;">
+  <v-main>
     <IngredientInput />
-    <v-row>
-      <v-col
-        v-for="(recipe, n) in items"
-        :key="n"
-        class="d-flex child-flex"
-        cols="12"
-        xl="2"
-        lg="3"
-        md="4"
-        sm="4"
-        xs="12"
-      >
-        <RecipeCard :recipe="recipe" />
-      </v-col>
-    </v-row>
-    <v-btn @click="addMoreRecipes" id="hide" />
+    <RecipeList :items="items" />
   </v-main>
 </template>
 
 <script>
-import IngredientInput from "@/components/IngredientInput.vue";
-import RecipeCard from "@/components/RecipeCard.vue";
-import { mapState } from "vuex";
+import IngredientInput from '@/components/IngredientInput.vue';
+import RecipeList from '@/components/RecipeList.vue';
+import { mapState } from 'vuex';
 
 export default {
-  layout: "default",
+  layout: 'default',
   head() {
     return {
-      title: "Mychef - Recipes"
+      title: 'Mychef - Recipes',
     };
   },
+  components: { IngredientInput, RecipeList },
   computed: {
-    ...mapState("recipes", ["items"])
-  },
-  methods: {
-    addMoreRecipes() {
-      window.onscroll = () => {
-        let bottomOfWindow =
-          document.documentElement.scrollTop + window.innerHeight ==
-          document.documentElement.offsetHeight;
-        if (bottomOfWindow) {
-          this.$store.dispatch("recipes/addRecipes");
-        }
-      };
-    }
+    ...mapState('recipes', ['items']),
   },
   created() {
-    this.$store.dispatch("recipes/loadRecipes");
+    this.$store.dispatch('recipes/loadRecipes');
   },
-  mounted() {
-    this.addMoreRecipes();
-  }
 };
 </script>
-
-<style scoped>
-#hide {
-  visibility: hidden !important;
-}
-</style>
