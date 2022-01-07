@@ -1,15 +1,17 @@
-from orm import DateTime, Integer, Model, String
+import orm
 from sqlalchemy.sql import func
 
-from app.db.database import database, metadata
+from app.db.database import models
 
 
-class Source(Model):
-    __tablename__ = "sources"
-    __database__ = database
-    __metadata__ = metadata
+class Source(orm.Model):
+    """Source orm mapping to database"""
 
-    id = Integer(primary_key=True)
-    name = String(max_length=255)
-    url = String(max_length=255, unique=True)
-    ts = DateTime(default=func.now())
+    tablename = "sources"
+    registry = models
+    fields = {
+        "id": orm.Integer(primary_key=True),
+        "name": orm.String(max_length=255),
+        "url": orm.String(max_length=255, unique=True),
+        "ts": orm.DateTime(default=func.now()),
+    }

@@ -1,14 +1,16 @@
 from orm import DateTime, Integer, Model, String
 from sqlalchemy.sql import func
 
-from app.db.database import database, metadata
+from app.db.database import models
 
 
 class Ingredient(Model):
-    __tablename__ = "ingredients"
-    __database__ = database
-    __metadata__ = metadata
+    """Ingredient orm mapping to database"""
 
-    id = Integer(primary_key=True)
-    ingredient = String(max_length=255, unique=True)
-    ts = DateTime(default=func.now())
+    tablename = "ingredients"
+    registry = models
+    fields = {
+        "id": Integer(primary_key=True),
+        "ingredient": String(max_length=255, unique=True),
+        "ts": DateTime(default=func.now()),
+    }
