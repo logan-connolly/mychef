@@ -15,11 +15,11 @@ repos:
     hooks:
       - id: isort
         name: isort-api
-        entry: isort api
+        entry: isort backend/api
         pass_filenames: false
       - id: isort
         name: isort-scraper
-        entry: isort scraper
+        entry: isort backend/scraper
         pass_filenames: false
   - repo: https://github.com/psf/black
     rev: 19.3b0
@@ -35,9 +35,9 @@ repos:
     hooks:
       - id: mypy
         name: mypy-api
-        entry: mypy api/app
+        entry: mypy backend/api/app
         pass_filenames: false
       - id: mypy
         name: mypy-scraper
-        entry: mypy scraper
+        entry: mypy backend/scraper
         pass_filenames: false

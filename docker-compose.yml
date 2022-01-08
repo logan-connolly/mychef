@@ -16,15 +16,15 @@ services:
     ports:
       - ${SEARCH_PORT}:7700
     volumes:
-      - ./search/data.ms:/data.ms
+      - ./backend/search/data.ms:/data.ms
 
   api:
-    build: ./api
+    build: backend/api
     image: lvconnolly/mychef_api:dev
     ports:
       - ${API_PORT}:8000
     volumes:
-      - ./api/:/app
+      - ./backend/api/:/app
       - venv:/app/.venv
     environment:
       - API_INGREDIENT_MODEL=${API_INGREDIENT_MODEL}
@@ -54,8 +54,7 @@ services:
       - search
 
   scraper:
-    build:
-      context: scraper
+    build: backend/scraper
     image: lvconnolly/mychef_scraper:dev
     environment:
       - INTERNAL_API_URL=${INTERNAL_API_URL}

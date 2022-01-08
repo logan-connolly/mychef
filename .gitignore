@@ -1,6 +1,6 @@
 # data
 data/
-api/app/services/models/ingredient/version/
+backend/api/app/services/models/ingredient/version/
 *.tar.gz
 
 # Vim
