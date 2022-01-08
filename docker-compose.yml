@@ -41,18 +41,14 @@ services:
       - db
       - search
 
-  ui:
-    build:
-      context: ui
-      target: builder
-    image: lvconnolly/mychef_ui:dev
-    ports:
-      - ${WEB_PORT}:3000
+  proxy:
+    build: proxy
+    image: lvconnolly/mychef_proxy:dev
+    restart: always
     volumes:
-      - ./ui/:/srv/app
-    environment:
-      HOST: 0.0.0.0
-    command: /bin/sh -c "yarn dev"
+      - ./frontend/dist:/usr/share/nginx/html
+    ports:
+      - 80:80
     depends_on:
       - api
       - search
@@ -63,8 +59,6 @@ services:
     image: lvconnolly/mychef_scraper:dev
     environment:
       - INTERNAL_API_URL=${INTERNAL_API_URL}
-    volumes:
-      - ./scraper/:/app
     command: crawl full_helping
     depends_on:
       - api
