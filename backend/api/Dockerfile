@@ -11,9 +11,10 @@ RUN apt-get update && apt-get install -y gcc curl \
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app \
+    PYTHONPATH=/opt/mychef \
     PATH="/opt/venv/bin:$PATH"
 
+WORKDIR /opt/mychef
 COPY . .
 EXPOSE 8000
-CMD ["/start.sh"]
+CMD ["./start.sh"]
