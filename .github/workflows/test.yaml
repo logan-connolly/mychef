@@ -20,8 +20,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - uses: pre-commit/action@v2.0.3
-      - name: Download pretrained model(s)
-        run: make download
       - name: Fetch images
         run: docker-compose pull api
       - name: Start Containers
