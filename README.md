@@ -62,7 +62,7 @@ When you refresh the UI, you should start seeing recipes populating the DB and t
   - `/sources/<id>/recipes`: list of recipes from given source id
   - `/ingredients`: unique ingredients extracted from recipes (extractor trained using [spaCy](https://spacy.io/))
 
-**UI**
+**Frontend**
 
 - Developed with [Nuxt.js](https://nuxtjs.org/) an intuitive framework built on top of [Vue](https://vuejs.org/) that supports server side rendering.
 - Also uses [Vuetify](https://vuetifyjs.com/en/) for component styling
