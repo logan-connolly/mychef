@@ -33,7 +33,7 @@ def get_source_id(domain: str) -> int:
     """Get the source id from API if exists, if not create it
     :param domain: Recipe url domain name (ie. 'thefullhelping')
     """
-    url = f"{get_base_api_url()}/sources/?domain={domain}"
+    url = f"{API_URL}/sources/?domain={domain}"
     try:
         resp = requests.get(url)
     except requests.exceptions.ConnectionError:
@@ -46,7 +46,7 @@ def get_source_id(domain: str) -> int:
 
 def create_source_id(payload: Dict[str, str]) -> int:
     """Make post request to API to create TheFullHelping source"""
-    url = f"{get_base_api_url()}/sources/"
+    url = f"{API_URL}/sources/"
     try:
         resp = requests.post(url, data=json.dumps(payload))
     except requests.exceptions.ConnectionError:
@@ -57,13 +57,6 @@ def create_source_id(payload: Dict[str, str]) -> int:
     raise RuntimeError("Unable to create new source id")
 
 
-def get_base_api_url() -> str:
-    """Checks if environment variable is set and returns value"""
-    if API_URL:
-        return API_URL
-    raise ValueError("Need to set INTERNAL_API_URL value")
-
-
 def get_source_api_url(sid: int) -> str:
     """Formats url for fetching recipes from a given source id"""
-    return f"{get_base_api_url()}/sources/{sid}/recipes/"
+    return f"{API_URL}/sources/{sid}/recipes/"
