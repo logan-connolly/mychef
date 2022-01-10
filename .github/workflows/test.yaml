@@ -23,9 +23,9 @@ jobs:
       - name: Download model
         run: make download
       - name: Build images
-        run: docker-compose build
+        run: make build
       - name: Push images
-        run: docker-compose push
+        run: make push
       - name: Start Containers
         run: docker-compose up -d api
       - name: Run tests
