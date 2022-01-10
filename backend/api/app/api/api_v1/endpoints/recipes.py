@@ -87,7 +87,7 @@ async def update_recipe_data(source: SourceDB, payload: RecipeCreate) -> RecipeD
     async def update_meili_recipe_index(recipe_id: int) -> None:
         data = {**payload.dict(), "id": recipe_id}
         async with httpx.AsyncClient() as client:
-            return await client.post(f"{settings.SEARCH_URL}", json=[data])
+            await client.post(f"{settings.SEARCH_URL}", json=[data])
 
     recipe = await add_recipe()
     await update_ingredients(recipe)
