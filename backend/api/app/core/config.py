@@ -23,36 +23,14 @@ class PostgresSettings(BaseSettings):
         env_prefix = "POSTGRES_"
 
 
-class WebSettings(BaseSettings):
-    port: int
-
-    class Config:
-        env_prefix = "WEB_"
-
-
-class SearchSettings(BaseSettings):
-    host: str
-    port: int
-    endpoint: str = "/indexes/recipes/documents"
-
-    class Config:
-        env_prefix = "SEARCH_"
-
-
 class Settings(BaseSettings):
     api = ApiSettings()
-    web = WebSettings()
-    search = SearchSettings()
     pg = PostgresSettings()
 
     OPENAPI_URL: str = f"{api.version}/openapi.json"
-    SEARCH_URL: str = f"http://{search.host}:{search.port}{search.endpoint}"
+    SEARCH_URL: str = "http://search:7700/indexes/recipes/documents"
     URI: str = f"postgresql://{pg.user}:{pg.password}@{pg.host}/{pg.db}"
-
-    BACKEND_CORS_ORIGINS: List[str] = [
-        "http://localhost",
-        f"http://localhost:{web.port}",
-    ]
+    BACKEND_CORS_ORIGINS: List[str] = ["http://localhost"]
 
     class Config:
         case_sensitive = True
