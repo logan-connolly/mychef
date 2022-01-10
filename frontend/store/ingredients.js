@@ -16,13 +16,13 @@ export const mutations = {
 export const actions = {
   async loadIngredients({ commit }) {
     await this.$axios
-      .get("/ingredients")
+      .get('/api/ingredients/')
       .then((res) => {
-        commit("SET_ITEMS", res.data);
+        commit('SET_ITEMS', res.data);
       })
       .catch((error) => console.log(error));
   },
   updateSelected({ commit }, ingredients) {
-    commit("UPDATE_SELECTED", ingredients);
+    commit('UPDATE_SELECTED', ingredients);
   },
 };

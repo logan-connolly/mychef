@@ -64,8 +64,7 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: 'http://api:8002/api/v1',
-    browserBaseURL: 'http://localhost:8002/api/v1',
+    baseURL: 'http://localhost',
   },
   /*
    ** vuetify module configuration

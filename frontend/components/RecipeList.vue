@@ -16,11 +16,11 @@
 </template>
 
 <script>
-import RecipeCard from "@/components/RecipeCard.vue";
+import RecipeCard from '@/components/RecipeCard.vue';
 
 export default {
-  name: "RecipeList",
-  props: ["items"],
+  name: 'RecipeList',
+  props: ['items'],
   components: { RecipeCard },
   methods: {
     addMoreRecipes() {
@@ -29,7 +29,7 @@ export default {
           document.documentElement.scrollTop + window.innerHeight ==
           document.documentElement.offsetHeight;
         if (bottomOfWindow) {
-          this.$store.dispatch("recipes/addRecipes");
+          this.$store.dispatch('recipes/addRecipes');
         }
       };
     },

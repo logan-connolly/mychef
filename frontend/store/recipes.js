@@ -21,40 +21,46 @@ export const mutations = {
 
 export const actions = {
   async loadRecipes({ commit, rootState }) {
-    commit("SET_PAGE", 1);
+    commit('SET_PAGE', 1);
     await this.$axios
       .get(
-        `/sources/${rootState.recipes.source}/recipes/?page=${rootState.recipes.page}&size=8`
+        `/api/sources/${rootState.recipes.source}/recipes/?page=${rootState.recipes.page}&size=8`
       )
       .then((res) => {
-        commit("SET_ITEMS", res.data);
+        commit('SET_ITEMS', res.data);
       })
       .catch((error) => console.log(error));
   },
+
   async updateRecipes({ commit, rootState, dispatch }) {
     const selected = rootState.ingredients.selected;
     if (selected.length === 0) {
-      return dispatch("loadRecipes");
+      return dispatch('loadRecipes');
     }
     await this.$axios
-      .get("http://localhost:7700/indexes/recipes/search", {
+      .get('/search', {
         params: {
-          q: selected.join(" "),
+          q: selected.join(' '),
         },
       })
       .then((res) => {
-        commit("UPDATE_ITEMS", res.data);
+        commit('UPDATE_ITEMS', res.data);
       })
       .catch((error) => console.log(error));
   },
+
   async addRecipes({ commit, rootState }) {
-    commit("SET_PAGE", rootState.recipes.page + 1);
+    commit('SET_PAGE', rootState.recipes.page + 1);
     await this.$axios
       .get(
-        `/sources/${rootState.recipes.source}/recipes/?page=${rootState.recipes.page}&size=8`
+        `/api/sources/${rootState.recipes.source}/recipes/?page=${rootState.recipes.page}&size=8`
       )
       .then((res) => {
-        commit("ADD_ITEMS", res.data);
+        if (res.data.items.length === 0) {
+          commit('SET_PAGE', rootState.recipes.page - 1);
+        } else {
+          commit('ADD_ITEMS', res.data);
+        }
       })
       .catch((error) => console.log(error));
   },

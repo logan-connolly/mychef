@@ -6,23 +6,23 @@
 </template>
 
 <script>
-import IngredientInput from "@/components/IngredientInput.vue";
-import RecipeList from "@/components/RecipeList.vue";
-import { mapState } from "vuex";
+import IngredientInput from '@/components/IngredientInput.vue';
+import RecipeList from '@/components/RecipeList.vue';
+import { mapState } from 'vuex';
 
 export default {
-  layout: "default",
-  head() {
-    return {
-      title: "Mychef - Recipes",
-    };
-  },
+  layout: 'default',
   components: { IngredientInput, RecipeList },
   computed: {
-    ...mapState("recipes", ["items"]),
+    ...mapState('recipes', ['items']),
+  },
+  head() {
+    return {
+      title: 'Mychef - Recipes',
+    };
   },
   created() {
-    this.$store.dispatch("recipes/loadRecipes");
+    this.$store.dispatch('recipes/loadRecipes');
   },
 };
 </script>
