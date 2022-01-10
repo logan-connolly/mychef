@@ -1,17 +1,12 @@
 name: tests
+
 on: push
+
 env:
   POSTGRES_USER: mychef
   POSTGRES_PASSWORD: mychef
   POSTGRES_DB: mychef_db
   POSTGRES_HOST: db
-  WEB_HOST: ui
-  WEB_PORT: 8000
-  SEARCH_HOST: search
-  SEARCH_PORT: 7700
-  INTERNAL_API_URL: http://api:8000/api/v1
-  API_PORT: 8002
-  API_INGREDIENT_MODEL: v1
 
 jobs:
   test:
@@ -20,8 +15,17 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - uses: pre-commit/action@v2.0.3
-      - name: Fetch images
-        run: docker-compose pull api
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Download model
+        run: make download
+      - name: Build images
+        run: docker-compose build
+      - name: Push images
+        run: docker-compose push
       - name: Start Containers
         run: docker-compose up -d api
       - name: Run tests

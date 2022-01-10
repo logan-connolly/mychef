@@ -13,7 +13,7 @@ download: # Download pretrained models
 	./scripts/download-models.sh
 
 run: # Start application containers
-	docker-compose up -d ui
+	docker-compose up -d proxy
 
 scrape: # Run web scraper
 	docker-compose run --rm scraper
