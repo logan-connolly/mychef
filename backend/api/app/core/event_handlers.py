@@ -10,7 +10,7 @@ from app.services.models.ingredient import IngredientExtractor
 
 async def start_app_handler(app: FastAPI) -> None:
     app.include_router(router, prefix=settings.api.version)
-    app.state.ingredient_model = IngredientExtractor(settings.api.ingredient_model)
+    app.state.ingredient_model = IngredientExtractor()
     add_pagination(app)
     add_cors_middleware(app)
     await database.connect()
