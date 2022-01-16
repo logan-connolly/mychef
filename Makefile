@@ -9,6 +9,9 @@ build: # Build docker images locally
 pull: # Pull required docker images
 	docker-compose pull
 
+push: # Push docker images to registry
+	docker-compose push
+
 download: # Download pretrained models
 	./scripts/download-models.sh
 
