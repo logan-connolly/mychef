@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi_pagination import add_pagination
 
-from app.api.api_v1.api import router
+from app.api.v1.router import router
 from app.core.config import settings
 from app.core.middleware import add_cors_middleware
 from app.db.database import database
