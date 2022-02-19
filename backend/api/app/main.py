@@ -1,12 +1,14 @@
 from fastapi import FastAPI
 
-from app.core.config import api_settings
+from app.core.config import settings
 from app.core.event_handlers import start_app_handler, stop_app_handler
 
 
 def get_app():
 
-    app = FastAPI(**api_settings)
+    app = FastAPI(
+        title="MyChef", description="Recipe recommender app", debug=settings.debug
+    )
 
     @app.on_event("startup")
     async def startup():
