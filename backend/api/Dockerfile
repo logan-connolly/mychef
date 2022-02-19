@@ -20,5 +20,5 @@ EXPOSE 8000
 CMD ["./start.sh"]
 
 FROM prod as dev
-COPY dev.requirements.txt /tmp/dev.requirements.txt
-RUN /opt/venv/bin/pip install --no-cache -r /tmp/dev.requirements.txt
+COPY requirements-dev.txt /tmp/requirements-dev.txt
+RUN /opt/venv/bin/pip install --no-cache -r /tmp/requirements-dev.txt
