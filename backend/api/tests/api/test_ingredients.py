@@ -10,19 +10,19 @@ class TestIngredient:
     def test_add_ingredient(self, client):
         global INGRED_ID
         data = json.dumps(INGRED)
-        resp = client.post(f"{settings.api.version}/ingredients/", data=data)
+        resp = client.post(f"{settings.api_version}/ingredients/", data=data)
         assert resp.status_code == 201
         INGRED_ID = resp.json()["id"]
         INGRED.update({"id": INGRED_ID})
         assert resp.json() == INGRED
 
     def test_get_ingredient(self, client):
-        resp = client.get(f"{settings.api.version}/ingredients/{INGRED_ID}/")
+        resp = client.get(f"{settings.api_version}/ingredients/{INGRED_ID}/")
         assert resp.status_code == 200
         assert resp.json() == INGRED
 
     def test_get_ingredients(self, client):
-        resp = client.get(f"{settings.api.version}/ingredients/")
+        resp = client.get(f"{settings.api_version}/ingredients/")
         assert resp.status_code == 200
         assert INGRED in resp.json()
 
@@ -30,12 +30,12 @@ class TestIngredient:
         new_ingredient = "red onion"
         INGRED["ingredient"] = new_ingredient
         data = json.dumps(dict(ingredient=new_ingredient))
-        url = f"{settings.api.version}/ingredients/{INGRED_ID}/"
+        url = f"{settings.api_version}/ingredients/{INGRED_ID}/"
         resp = client.put(url, data=data)
         assert resp.status_code == 200
         assert resp.json() == INGRED
 
     def test_remove_ingredient(self, client):
-        resp = client.delete(f"{settings.api.version}/ingredients/{INGRED_ID}/")
+        resp = client.delete(f"{settings.api_version}/ingredients/{INGRED_ID}/")
         assert resp.status_code == 200
         assert resp.json() == INGRED
