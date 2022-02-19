@@ -1,4 +1,4 @@
-FROM python:3.9-slim-buster
+FROM python:3.9-slim-buster as prod
 
 COPY requirements.txt /tmp/requirements.txt
 RUN apt-get update && apt-get install -y gcc curl \
@@ -18,3 +18,7 @@ WORKDIR /opt/mychef
 COPY . .
 EXPOSE 8000
 CMD ["./start.sh"]
+
+FROM prod as dev
+COPY dev.requirements.txt /tmp/dev.requirements.txt
+RUN /opt/venv/bin/pip install --no-cache -r /tmp/dev.requirements.txt
