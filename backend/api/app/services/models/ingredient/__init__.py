@@ -1,5 +1,3 @@
-from typing import List
-
 import spacy
 from loguru import logger
 
@@ -15,7 +13,7 @@ class IngredientExtractor(Model):
         self.nlp = spacy.load(self.model_path)
         logger.info("Model successfully loaded")
 
-    def extract(self, text: str) -> List[str]:
+    def extract(self, text: str) -> list[str]:
         """Extract ingredient entities from text"""
         tokens = self.nlp(text)
         ingredient_set = {token.lemma_.lower() for token in tokens.ents}
