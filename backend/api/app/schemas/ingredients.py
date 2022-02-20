@@ -16,4 +16,4 @@ class InIngredientSchema(IngredientSchemaBase):
 class IngredientSchema(IngredientSchemaBase):
     """Properties of ingredient in DB"""
 
-    ...
+    id: int
