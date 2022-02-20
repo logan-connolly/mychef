@@ -9,7 +9,7 @@ class RecipeSchemaBase(BaseSchema):
     name: str
 
 
-class InRecipeSchema(RecipeSchemaBase):
+class InRecipeSchemaRaw(RecipeSchemaBase):
     """Properties to receive on received post request"""
 
     url: AnyUrl
@@ -17,9 +17,15 @@ class InRecipeSchema(RecipeSchemaBase):
     ingredients: str
 
 
-class RecipeSchema(RecipeSchemaBase):
+class InRecipeSchema(RecipeSchemaBase):
     """Properties to receive on item creation"""
 
     url: str
     image: str
     ingredients: dict[str, list[str]]
+
+
+class RecipeSchema(InRecipeSchema):
+    """Properties to receive on item retrieval"""
+
+    ...
