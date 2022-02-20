@@ -1,95 +1,71 @@
-from typing import Any, Dict
+from app.db.repositories.recipes import RecipesRepository
+from app.schemas.recipes import InRecipeSchema, RecipeSchema
 
 import httpx
-from asyncpg.exceptions import UniqueViolationError
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi_pagination import Page, paginate
-from orm.exceptions import NoMatch
+from sqlalchemy.ext.asyncio.session import AsyncSession
 from starlette.requests import Request
 from starlette.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
-    HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
 )
 
 from app.core.config import settings
-from app.models import Ingredient, Recipe
-from app.schemas import RecipeAdd, RecipeCreate, RecipeDB, RecipeUpdate, SourceDB
 
-from .sources import get_source
+from app.db.repositories.recipes import RecipesRepository
+from app.db.session import get_db
+from app.schemas.recipes import InRecipeSchema, InRecipeSchemaRaw, RecipeSchema
+
+from .ingredients import InIngredientSchema, add_ingredient
 
 router = APIRouter()
 
+Ingredients = dict[str, list[str]]
 
-@router.get("/", response_model=Page[RecipeDB], status_code=HTTP_200_OK)
-async def get_recipes(sid: int):
-    recipes = await Recipe.objects.filter(source=sid).all()
-    if not recipes:
-        raise HTTPException(HTTP_404_NOT_FOUND, "No recipes found")
+
+def extract_ingredients(req: Request, p: InRecipeSchemaRaw) -> InRecipeSchema:
+    try:
+        d = {"items": req.app.state.ingredient_model.extract(p.ingredients)}
+        return RecipeSchema(name=p.name, url=p.url, image=p.image, ingredients=d)
+    except AttributeError as err:
+        raise HTTPException(HTTP_404_NOT_FOUND, "Ingredient model missing") from err
+
+
+@router.post("/", response_model=RecipeSchema, status_code=HTTP_201_CREATED)
+async def add_recipe(
+    request: Request, payload: InRecipeSchemaRaw, db: AsyncSession = Depends(get_db)
+):
+    repo = RecipesRepository(db)
+    _payload = extract_ingredients(request, payload)
+    recipe = await repo.create(_payload)
+    await send_off_recipe(recipe)
+    return recipe
+
+
+@router.get("/{recipe_id}/", response_model=RecipeSchema, status_code=HTTP_200_OK)
+async def get_recipe(recipe_id: int, db: AsyncSession = Depends(get_db)):
+    repo = RecipesRepository(db)
+    return await repo.get_by_id(recipe_id)
+
+
+@router.get("/", response_model=Page[RecipeSchema], status_code=HTTP_200_OK)
+async def get_recipes(db: AsyncSession = Depends(get_db)):
+    repo = RecipesRepository(db)
+    recipes = await repo.get_all()
     return paginate(recipes)
 
 
-@router.post("/", response_model=RecipeDB, status_code=HTTP_201_CREATED)
-async def add_recipe(request: Request, sid: int, payload: RecipeAdd):
-    cleaned_payload = await clean_payload(request, payload)
-    source = await get_source(source_id=sid)
-    return await update_recipe_data(source, cleaned_payload)
-
-
-@router.get("/{recipe_id}/", response_model=RecipeDB, status_code=HTTP_200_OK)
-async def get_recipe(sid: int, recipe_id: int):
-    try:
-        return await Recipe.objects.get(id=recipe_id, source=sid)
-    except NoMatch as err:
-        raise HTTPException(HTTP_404_NOT_FOUND, "Recipe not found") from err
-
-
-@router.put("/{recipe_id}/", response_model=RecipeDB, status_code=HTTP_200_OK)
-async def update_recipe(sid: int, recipe_id: int, payload: RecipeUpdate):
-    recipe = await get_recipe(sid=sid, recipe_id=recipe_id)
-    updates: Dict[str, Any] = {k: v for k, v in payload.dict().items() if v is not None}
-    await recipe.update(**updates)
-    return await get_recipe(sid=sid, recipe_id=recipe_id)
-
-
-@router.delete("/{recipe_id}/", response_model=RecipeDB, status_code=HTTP_200_OK)
-async def remove_recipe(sid: int, recipe_id: int):
-    recipe = await get_recipe(sid=sid, recipe_id=recipe_id)
-    await recipe.delete()
-    return recipe
-
-
-async def clean_payload(req: Request, data: RecipeAdd) -> RecipeCreate:
-    try:
-        items = {"items": req.app.state.ingredient_model.extract(data.ingredients)}
-        return RecipeCreate(
-            name=data.name, url=data.url, image=data.image, ingredients=items
-        )
-    except AttributeError as err:
-        raise HTTPException(HTTP_404_NOT_FOUND, "API model missing") from err
-
-
-async def update_recipe_data(source: SourceDB, payload: RecipeCreate) -> RecipeDB:
-    async def add_recipe():
-        try:
-            return await Recipe.objects.create(source=source, **payload.dict())
-        except UniqueViolationError as err:
-            raise HTTPException(HTTP_400_BAD_REQUEST, "Recipe exists") from err
-
-    async def update_ingredients(recipe):
+# TODO: move this out of module and trigger on event
+async def send_off_recipe(recipe: RecipeSchema) -> None:
+    async def update_ingredients():
         for ingredient in recipe.ingredients["items"]:
-            try:
-                await Ingredient.objects.create(ingredient=ingredient)
-            except UniqueViolationError:
-                pass
+            await add_ingredient(InIngredientSchema(ingredient=ingredient))
 
-    async def update_meili_recipe_index(recipe_id: int) -> None:
-        data = {**payload.dict(), "id": recipe_id}
+    async def update_meili_recipe_index() -> None:
         async with httpx.AsyncClient() as client:
-            await client.post(f"{settings.search_url}", json=[data])
+            await client.post(f"{settings.search_url}", json=recipe.dict())
 
-    recipe = await add_recipe()
-    await update_ingredients(recipe)
-    await update_meili_recipe_index(recipe.id)
-    return recipe
+    await update_ingredients()
+    await update_meili_recipe_index()

@@ -1,55 +1,27 @@
-from typing import Any, Dict, List
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio.session import AsyncSession
+from starlette.status import HTTP_200_OK, HTTP_201_CREATED
 
-from asyncpg.exceptions import UniqueViolationError
-from fastapi import APIRouter, HTTPException
-from orm.exceptions import NoMatch
-from starlette.status import (
-    HTTP_200_OK,
-    HTTP_201_CREATED,
-    HTTP_400_BAD_REQUEST,
-    HTTP_404_NOT_FOUND,
-)
-
-from app.models import Source
-from app.schemas import SourceCreate, SourceDB, SourceUpdate
+from app.db.repositories.sources import SourcesRepository
+from app.db.session import get_db
+from app.schemas.sources import InSourceSchema, SourceSchema
 
 router = APIRouter()
 
 
-@router.get("/", response_model=List[SourceDB], status_code=HTTP_200_OK)
-async def get_sources():
-    sources = await Source.objects.all()
-    if not sources:
-        raise HTTPException(HTTP_404_NOT_FOUND, "No sources found")
-    return sources
+@router.post("/", response_model=SourceSchema, status_code=HTTP_201_CREATED)
+async def add_source(payload: InSourceSchema, db: AsyncSession = Depends(get_db)):
+    repo = SourcesRepository(db)
+    return await repo.create(payload)
 
 
-@router.post("/", response_model=SourceDB, status_code=HTTP_201_CREATED)
-async def add_source(payload: SourceCreate):
-    try:
-        return await Source.objects.create(name=payload.name, url=payload.url.host)
-    except UniqueViolationError as err:
-        raise HTTPException(HTTP_400_BAD_REQUEST, "Source exists") from err
+@router.get("/{source_id}/", response_model=SourceSchema, status_code=HTTP_200_OK)
+async def get_source(source_id: int, db: AsyncSession = Depends(get_db)):
+    repo = SourcesRepository(db)
+    return await repo.get_by_id(source_id)
 
 
-@router.get("/{source_id}/", response_model=SourceDB, status_code=HTTP_200_OK)
-async def get_source(source_id: int):
-    try:
-        return await Source.objects.get(id=source_id)
-    except NoMatch as err:
-        raise HTTPException(HTTP_404_NOT_FOUND, "Source not found") from err
-
-
-@router.put("/{source_id}/", response_model=SourceDB, status_code=HTTP_200_OK)
-async def update_source(source_id: int, payload: SourceUpdate):
-    source = await get_source(source_id)
-    updates: Dict[str, Any] = {k: v for k, v in payload.dict().items() if v is not None}
-    await source.update(**updates)
-    return await get_source(source_id)
-
-
-@router.delete("/{source_id}/", response_model=SourceDB, status_code=HTTP_200_OK)
-async def remove_source(source_id: int):
-    source = await get_source(source_id)
-    await source.delete()
-    return source
+@router.get("/", response_model=list[SourceSchema], status_code=HTTP_200_OK)
+async def get_sources(db: AsyncSession = Depends(get_db)):
+    repo = SourcesRepository(db)
+    return await repo.get_all()
