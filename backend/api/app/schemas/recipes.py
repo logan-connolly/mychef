@@ -28,4 +28,4 @@ class InRecipeSchema(RecipeSchemaBase):
 class RecipeSchema(InRecipeSchema):
     """Properties to receive on item retrieval"""
 
-    ...
+    id: int

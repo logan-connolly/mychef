@@ -14,7 +14,7 @@ Filter = tuple[str, str]
 
 
 class BaseRepository(Generic[InSchema, Schema, Table], metaclass=abc.ABCMeta):
-    """Define single point of entry for maninpulating data in the database"""
+    """Define single point of entry for handling data in the database"""
 
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
