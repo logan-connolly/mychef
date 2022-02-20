@@ -26,19 +26,21 @@ Ingredients = dict[str, list[str]]
 
 
 def extract_ingredients(req: Request, p: InRecipeSchemaRaw) -> InRecipeSchema:
+    """Accept a recipe text and extract ingredients detected through NER model"""
     try:
         d = {"items": req.app.state.ingredient_model.extract(p.ingredients)}
-        return RecipeSchema(name=p.name, url=p.url, image=p.image, ingredients=d)
     except AttributeError as err:
         raise HTTPException(HTTP_404_NOT_FOUND, "Ingredient model missing") from err
+
+    return RecipeSchema(name=p.name, url=p.url, image=p.image, ingredients=d)
 
 
 @router.post("/", response_model=RecipeSchema, status_code=HTTP_201_CREATED)
 async def add_recipe(
-    request: Request, payload: InRecipeSchemaRaw, db: AsyncSession = Depends(get_db)
+    req: Request, payload: InRecipeSchemaRaw, db: AsyncSession = Depends(get_db)
 ):
     repo = RecipesRepository(db)
-    _payload = extract_ingredients(request, payload)
+    _payload = extract_ingredients(req, payload)
     recipe = await repo.create(_payload)
     await send_off_recipe(recipe)
     return recipe
@@ -59,6 +61,8 @@ async def get_recipes(db: AsyncSession = Depends(get_db)):
 
 # TODO: move this out of module and trigger on event
 async def send_off_recipe(recipe: RecipeSchema) -> None:
+    """Asynchronously send off recipe to ingredients and meilisearch endpoints"""
+
     async def update_ingredients():
         for ingredient in recipe.ingredients["items"]:
             await add_ingredient(InIngredientSchema(ingredient=ingredient))
