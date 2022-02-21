@@ -10,5 +10,5 @@ class Ingredient(Base):
 
     __tablename__ = "ingredients"
     id = Column(Integer, primary_key=True)
-    ingredient = Column(String, nullable=False, unique=True, max_length=255)
+    ingredient = Column(String(255), nullable=False, unique=True)
     ts = Column(DateTime, default=func.now())

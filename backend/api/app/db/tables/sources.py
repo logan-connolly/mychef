@@ -10,6 +10,6 @@ class Source(Base):
 
     __tablename__ = "sources"
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False, max_length=255)
-    url = Column(String, nullable=False, max_length=255)
+    name = Column(String(255), nullable=False)
+    url = Column(String(255), nullable=False, unique=True)
     ts = Column(DateTime, default=func.now())
