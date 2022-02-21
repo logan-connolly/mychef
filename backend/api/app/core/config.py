@@ -12,12 +12,15 @@ class PostgresSettings(BaseSettings):
 
 
 class Settings(BaseSettings):
-    ingredient_model: str = "v1"
+    title: str = "MyChef"
+    description: str = "Recipe recommender app"
     debug: bool = False
     api_version: str = "/api/v1"
+    ingredient_model: str = "v1"
     search_url: str = "http://search:7700/indexes/recipes/documents"
     pg = PostgresSettings()
     uri: str = f"postgresql://{pg.user}:{pg.password}@{pg.host}/{pg.db}"
+    async_uri: str = f"postgresql+asyncpg://{pg.user}:{pg.password}@{pg.host}/{pg.db}"
 
 
 settings = Settings()
