@@ -7,6 +7,7 @@ class RecipeSchemaBase(BaseSchema):
     """Shared properties of all recipe schemas"""
 
     name: str
+    source_id: int
 
 
 class InRecipeSchemaRaw(RecipeSchemaBase):

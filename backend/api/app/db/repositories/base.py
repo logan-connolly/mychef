@@ -2,6 +2,7 @@ import abc
 from typing import Generic, Type, TypeVar
 
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 
 from app.core.exceptions import DoesNotExist
 from app.db.base import Base
@@ -45,4 +46,5 @@ class BaseRepository(Generic[InSchema, Schema, Table], metaclass=abc.ABCMeta):
 
     async def get_all(self) -> list[Schema]:
         """Fetch all entries from ORM"""
-        return await self._session.query(self._table).all()
+        results = await self._session.execute(select(self._table))
+        return [result for result in results.scalars()]
