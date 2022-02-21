@@ -1,41 +1,22 @@
-import json
+from httpx import AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession
+from starlette import status
 
 from app.core.config import settings
-
-INGRED = dict(ingredient="onion")
-INGRED_ID = None
+from app.db.repositories.ingredients import IngredientsRepository
 
 
-class TestIngredient:
-    def test_add_ingredient(self, client):
-        global INGRED_ID
-        data = json.dumps(INGRED)
-        resp = client.post(f"{settings.api_version}/ingredients/", data=data)
-        assert resp.status_code == 201
-        INGRED_ID = resp.json()["id"]
-        INGRED.update({"id": INGRED_ID})
-        assert resp.json() == INGRED
+async def test_ingredient_create(async_client: AsyncClient, db_session: AsyncSession):
+    """Test that ingredient can be created"""
+    ingredients_repository = IngredientsRepository(db_session)
+    url = f"{settings.api_version}/ingredients/"
+    payload = {"ingredient": "tomato"}
 
-    def test_get_ingredient(self, client):
-        resp = client.get(f"{settings.api_version}/ingredients/{INGRED_ID}/")
-        assert resp.status_code == 200
-        assert resp.json() == INGRED
+    response = await async_client.post(url, json=payload)
+    ingredient = await ingredients_repository.get_by_id(response.json()["id"])
 
-    def test_get_ingredients(self, client):
-        resp = client.get(f"{settings.api_version}/ingredients/")
-        assert resp.status_code == 200
-        assert INGRED in resp.json()
-
-    def test_update_ingredient(self, client):
-        new_ingredient = "red onion"
-        INGRED["ingredient"] = new_ingredient
-        data = json.dumps(dict(ingredient=new_ingredient))
-        url = f"{settings.api_version}/ingredients/{INGRED_ID}/"
-        resp = client.put(url, data=data)
-        assert resp.status_code == 200
-        assert resp.json() == INGRED
-
-    def test_remove_ingredient(self, client):
-        resp = client.delete(f"{settings.api_version}/ingredients/{INGRED_ID}/")
-        assert resp.status_code == 200
-        assert resp.json() == INGRED
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.json() == {
+        "id": ingredient.id,
+        "ingredient": payload["ingredient"],
+    }
