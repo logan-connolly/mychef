@@ -28,15 +28,19 @@ router = APIRouter()
 Ingredients = dict[str, list[str]]
 
 
-def extract_ingredients(req: Request, p: InRecipeSchemaRaw) -> InRecipeSchema:
+def extract_ingredients(req: Request, payload: InRecipeSchemaRaw) -> InRecipeSchema:
     """Accept a recipe text and extract ingredients detected through NER model"""
     try:
-        d = {"items": req.app.state.ingredient_model.extract(p.ingredients)}
+        found_ingreds = {"items": req.app.state.extractor.extract(payload.ingredients)}
     except AttributeError as err:
         raise HTTPException(HTTP_404_NOT_FOUND, "Ingredient model missing") from err
 
     return InRecipeSchema(
-        name=p.name, source_id=p.source_id, url=p.url, image=p.image, ingredients=d
+        name=payload.name,
+        source_id=payload.source_id,
+        url=payload.url,
+        image=payload.image,
+        ingredients=found_ingreds,
     )
 
 

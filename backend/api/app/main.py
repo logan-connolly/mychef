@@ -19,7 +19,7 @@ def get_app():
     )
 
     app.include_router(router, prefix=settings.api_version)
-    app.state.ingredient_model = IngredientExtractor()
+    app.state.extractor = IngredientExtractor()
     add_pagination(app)
 
     return app
