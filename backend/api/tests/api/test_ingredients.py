@@ -16,7 +16,4 @@ async def test_ingredient_create(async_client: AsyncClient, db_session: AsyncSes
     ingredient = await ingredients_repository.get_by_id(response.json()["id"])
 
     assert response.status_code == status.HTTP_201_CREATED
-    assert response.json() == {
-        "id": ingredient.id,
-        "ingredient": payload["ingredient"],
-    }
+    assert response.json() == {"id": ingredient.id, "ingredient": payload["ingredient"]}

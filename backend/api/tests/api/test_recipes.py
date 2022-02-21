@@ -11,10 +11,7 @@ async def test_recipe_create(async_client: AsyncClient, db_session: AsyncSession
     recipes_repository = RecipesRepository(db_session)
     source_url = f"{settings.api_version}/sources/"
     recipe_url = f"{settings.api_version}/recipes/"
-    source_payload = {
-        "name": "The Full Helping",
-        "url": "https://fullhelping.com",
-    }
+    source_payload = {"name": "The Full Helping", "url": "https://fullhelping.com"}
     payload = {
         "name": "Fancy recipe",
         "source_id": 1,

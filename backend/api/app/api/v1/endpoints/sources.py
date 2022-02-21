@@ -1,4 +1,3 @@
-from app.core.exceptions import DoesNotExist
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio.session import AsyncSession
@@ -9,6 +8,7 @@ from starlette.status import (
     HTTP_404_NOT_FOUND,
 )
 
+from app.core.exceptions import DoesNotExist
 from app.db.repositories.sources import SourcesRepository
 from app.db.session import get_db
 from app.schemas.sources import InSourceSchema, SourceSchema
