@@ -11,3 +11,4 @@ async def get_db() -> AsyncSession:
     """Async session to inject into API endpoints"""
     async with async_session() as session:
         yield session
+        session.commit()
