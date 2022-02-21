@@ -1,5 +1,3 @@
-from fastapi.applications import FastAPI
-from app.db.base import Base
 import asyncio
 from typing import AsyncGenerator, Callable, Generator
 
@@ -7,6 +5,7 @@ import pytest
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
+from app.db.base import Base
 from app.db.session import async_session, engine
 
 

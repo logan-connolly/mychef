@@ -1,10 +1,11 @@
-from scraper.settings import API_URL
 from typing import Union
 
 import requests
 import scrapy
 from scrapy.exceptions import CloseSpider
 from scrapy.http.response.html import HtmlResponse
+
+from scraper.settings import API_URL
 
 from ..util import UrlExtractor, create_source_id, get_source_id
 

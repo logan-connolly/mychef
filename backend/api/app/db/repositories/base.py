@@ -11,7 +11,6 @@ from app.schemas.base import BaseSchema
 InSchema = TypeVar("InSchema", bound=BaseSchema)
 Schema = TypeVar("Schema", bound=BaseSchema)
 Table = TypeVar("Table", bound=Base)
-Filter = tuple[str, str]
 
 
 class BaseRepository(Generic[InSchema, Schema, Table], metaclass=abc.ABCMeta):
