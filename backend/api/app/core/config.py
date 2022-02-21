@@ -16,7 +16,6 @@ class Settings(BaseSettings):
     description: str = "Recipe recommender app"
     debug: bool = False
     api_version: str = "/api/v1"
-    ingredient_model: str = "v1"
     search_url: str = "http://search:7700/indexes/recipes/documents"
     pg = PostgresSettings()
     uri: str = f"postgresql://{pg.user}:{pg.password}@{pg.host}/{pg.db}"
