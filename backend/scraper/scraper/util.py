@@ -29,19 +29,22 @@ class UrlExtractor:
         return [start_url]
 
 
-def get_source_id(domain: str) -> int:
+def get_source_id() -> int:
     """Get the source id from API if exists, if not create it
     :param domain: Recipe url domain name (ie. 'thefullhelping')
     """
-    url = f"{API_URL}/sources/?domain={domain}"
+    url = f"{API_URL}/sources/"
     try:
         resp = requests.get(url)
     except requests.exceptions.ConnectionError:
         raise ConnectionError(f"Unable to retrieve {url!r}")
 
     if resp.ok:
-        return resp.json()[0]["id"]
-    raise ValueError("Domain could not be found")
+        full_helping = [s for s in resp.json() if "thefullhelping" in s["url"]]
+        if full_helping:
+            return full_helping[0]["id"]
+
+    raise ValueError("Source id for full helping could not be found")
 
 
 def create_source_id(payload: Dict[str, str]) -> int:
@@ -55,8 +58,3 @@ def create_source_id(payload: Dict[str, str]) -> int:
     if resp.ok:
         return resp.json()["id"]
     raise RuntimeError("Unable to create new source id")
-
-
-def get_source_api_url(sid: int) -> str:
-    """Formats url for fetching recipes from a given source id"""
-    return f"{API_URL}/sources/{sid}/recipes/"

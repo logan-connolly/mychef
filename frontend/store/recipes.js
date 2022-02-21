@@ -1,5 +1,4 @@
 export const state = () => ({
-  source: 1,
   page: 1,
   items: [],
 });
@@ -23,9 +22,7 @@ export const actions = {
   async loadRecipes({ commit, rootState }) {
     commit('SET_PAGE', 1);
     await this.$axios
-      .get(
-        `/api/sources/${rootState.recipes.source}/recipes/?page=${rootState.recipes.page}&size=8`
-      )
+      .get(`/api/recipes/?page=${rootState.recipes.page}&size=8`)
       .then((res) => {
         commit('SET_ITEMS', res.data);
       })
@@ -52,9 +49,7 @@ export const actions = {
   async addRecipes({ commit, rootState }) {
     commit('SET_PAGE', rootState.recipes.page + 1);
     await this.$axios
-      .get(
-        `/api/sources/${rootState.recipes.source}/recipes/?page=${rootState.recipes.page}&size=8`
-      )
+      .get(`/api/recipes/?page=${rootState.recipes.page}&size=8`)
       .then((res) => {
         if (res.data.items.length === 0) {
           commit('SET_PAGE', rootState.recipes.page - 1);

@@ -1,3 +1,4 @@
+from scraper.settings import API_URL
 from typing import Union
 
 import requests
@@ -5,7 +6,7 @@ import scrapy
 from scrapy.exceptions import CloseSpider
 from scrapy.http.response.html import HtmlResponse
 
-from ..util import UrlExtractor, create_source_id, get_source_api_url, get_source_id
+from ..util import UrlExtractor, create_source_id, get_source_id
 
 
 class FullHelpingSpider(scrapy.Spider):
@@ -19,13 +20,14 @@ class FullHelpingSpider(scrapy.Spider):
         self.url = f"https://www.thefullhelping.com/recipe-index/?sf_paged={page}"
         self.start_urls = UrlExtractor(self.url).get_recipe_url()
         self.sid = self.retrieve_source_id()
-        self.endpoint = get_source_api_url(self.sid)
+        self.endpoint = f"{API_URL}/recipes/"
 
     def parse(self, response: HtmlResponse):
         """Parse webpage to extract important recipe information"""
         if response.css(".wprm-recipe-ingredients-container"):
             data = {
                 "name": response.css(".title::text").get(),
+                "source_id": self.sid,
                 "url": response.url,
                 "image": self.get_image_url(response),
                 "ingredients": self.get_ingredients(response),
@@ -42,7 +44,7 @@ class FullHelpingSpider(scrapy.Spider):
     def retrieve_source_id(cls):
         """Try and fetch source id, if does not exist, create it"""
         try:
-            return get_source_id(domain=cls.keyword)
+            return get_source_id()
         except ValueError:
             payload = dict(name="TheFullHelping", url="http://thefullhelping.com")
             return create_source_id(payload)
