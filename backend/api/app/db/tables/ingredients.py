@@ -2,7 +2,7 @@ from sqlalchemy.sql import func
 from sqlalchemy.sql.schema import Column
 from sqlalchemy.sql.sqltypes import DateTime, Integer, String
 
-from app.db.base import Base
+from app.db.tables.base import Base
 
 
 class Ingredient(Base):

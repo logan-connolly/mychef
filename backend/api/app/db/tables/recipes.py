@@ -2,7 +2,7 @@ from sqlalchemy.sql import func
 from sqlalchemy.sql.schema import Column, ForeignKey
 from sqlalchemy.sql.sqltypes import JSON, DateTime, Integer, String
 
-from app.db.base import Base
+from app.db.tables.base import Base
 
 
 class Recipe(Base):
