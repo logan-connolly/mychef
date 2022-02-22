@@ -37,3 +37,12 @@ multi_line_output = 3
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+
+[tool.mypy]
+ignore_missing_imports = true
+exclude = ['^app/db/migrations/env.py$']
+
+[[tool.mypy.overrides]]
+module = "app"
+disallow_untyped_defs = true
+disallow_incomplete_defs = true

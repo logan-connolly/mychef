@@ -2,5 +2,7 @@ from pydantic import BaseModel
 
 
 class BaseSchema(BaseModel):
-    class Config(BaseModel.Config):
+    """All pydantic schemas should use ORM"""
+
+    class Config:
         orm_mode = True
