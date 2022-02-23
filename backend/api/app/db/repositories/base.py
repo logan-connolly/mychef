@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from app.core.exceptions import DoesNotExist
-from app.db.base import Base
+from app.db.tables.base import Base
 from app.schemas.base import BaseSchema
 
 InSchema = TypeVar("InSchema", bound=BaseSchema)

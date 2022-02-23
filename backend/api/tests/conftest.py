@@ -5,12 +5,12 @@ import pytest
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
-from app.db.base import Base
 from app.db.session import async_session, engine
+from app.db.tables.base import Base
 
 
 @pytest.fixture(scope="session")
-def event_loop(request) -> Generator:
+def event_loop() -> Generator:
     """Create an instance of the default event loop for each test case."""
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
