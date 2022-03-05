@@ -3,7 +3,7 @@ from fastapi_pagination import add_pagination
 
 from app.api.v1.router import router
 from app.core.config import settings
-from app.services.models.ingredient import IngredientExtractor
+from app.services.ingredient.extractor import IngredientExtractor
 
 
 def get_app():
