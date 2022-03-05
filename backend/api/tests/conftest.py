@@ -18,7 +18,7 @@ def event_loop() -> Generator:
 
 
 @pytest.fixture
-async def db_session() -> AsyncSession:
+async def db_session() -> AsyncGenerator[AsyncSession, None]:
     """Create test database session that will then be reverted after test run"""
     async with engine.begin() as connection:
         await connection.run_sync(Base.metadata.drop_all)
@@ -33,7 +33,7 @@ async def db_session() -> AsyncSession:
 def override_get_db(db_session: AsyncSession) -> Callable:
     """Make database session an async callable to pass to get_db dependency"""
 
-    async def _override_get_db():
+    async def _override_get_db() -> AsyncGenerator[AsyncSession, None]:
         yield db_session
 
     return _override_get_db

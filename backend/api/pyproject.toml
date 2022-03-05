@@ -40,9 +40,4 @@ asyncio_mode = "auto"
 
 [tool.mypy]
 plugins = 'sqlalchemy.ext.mypy.plugin'
-exclude = ['^app/db/migrations/env.py$']
-
-[[tool.mypy.overrides]]
-module = "app"
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
+exclude = ['app/db/migrations/', 'tests/']

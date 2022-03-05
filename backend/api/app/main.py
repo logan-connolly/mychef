@@ -6,7 +6,7 @@ from app.core.config import settings
 from app.services.ingredient.extractor import IngredientExtractor
 
 
-def get_app():
+def get_app() -> FastAPI:
     """Generate instance of FastAPI app"""
 
     app = FastAPI(
