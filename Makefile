@@ -1,7 +1,7 @@
 .DEFAULT_GOAL=help
 
 assets: # Build frontend assets
-	cd frontend && yarn build && yarn generate
+	cd frontend && yarn install && yarn build && yarn generate
 
 build: # Build docker images locally
 	docker-compose build
