@@ -33,6 +33,9 @@ POSTGRES_HOST=db
 # Download trained ingredient extraction model
 make download
 
+# Build frontend assets
+make assets
+
 # Pull application images
 make pull
 
