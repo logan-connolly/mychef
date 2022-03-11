@@ -23,10 +23,10 @@ jobs:
       - name: Download model
         run: make download
       - name: Build images
-        run: make build
+        run: docker-compose build
       - name: Push images
-        run: make push
-      - name: Start containers
+        run: docker-compose push
+      - name: Start Containers
         run: docker-compose up -d api
       - name: Run tests
         run: docker-compose exec -T api pytest tests
