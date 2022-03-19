@@ -13,7 +13,7 @@ Schema = TypeVar("Schema", bound=BaseSchema)
 Table = TypeVar("Table", bound=Base)
 
 
-class BaseRepository(Generic[InSchema, Schema, Table], metaclass=abc.ABCMeta):
+class BaseDAL(Generic[InSchema, Schema, Table], metaclass=abc.ABCMeta):
     """Define single point of entry for handling data in the database"""
 
     def __init__(self, session: AsyncSession) -> None:
