@@ -13,7 +13,7 @@ from starlette.status import (
 
 from app.core.config import settings
 from app.core.exceptions import DoesNotExist
-from app.db.repositories.recipes import RecipesRepository
+from app.db.dal.recipes import RecipesDAL
 from app.db.session import get_db
 from app.schemas.recipes import InRecipeSchema, InRecipeSchemaRaw, RecipeSchema
 
@@ -44,11 +44,10 @@ def extract_ingredients(req: Request, payload: InRecipeSchemaRaw) -> InRecipeSch
 async def add_recipe(
     req: Request, payload: InRecipeSchemaRaw, db: AsyncSession = Depends(get_db)
 ):
-    repo = RecipesRepository(db)
     _payload = extract_ingredients(req, payload)
 
     try:
-        recipe = await repo.create(_payload)
+        recipe = await RecipesDAL(db).create(_payload)
     except IntegrityError:
         raise HTTPException(HTTP_400_BAD_REQUEST, "Recipe exists")
 
@@ -58,17 +57,15 @@ async def add_recipe(
 
 @router.get("/{recipe_id}/", response_model=RecipeSchema, status_code=HTTP_200_OK)
 async def get_recipe(recipe_id: int, db: AsyncSession = Depends(get_db)):
-    repo = RecipesRepository(db)
     try:
-        return await repo.get_by_id(recipe_id)
+        return await RecipesDAL(db).get_by_id(recipe_id)
     except DoesNotExist:
         raise HTTPException(HTTP_404_NOT_FOUND, "Recipe not found")
 
 
 @router.get("/", response_model=Page[RecipeSchema], status_code=HTTP_200_OK)
 async def get_recipes(db: AsyncSession = Depends(get_db)):
-    repo = RecipesRepository(db)
-    recipes = await repo.get_all()
+    recipes = await RecipesDAL(db).get_all()
     return paginate(recipes)
 
 
