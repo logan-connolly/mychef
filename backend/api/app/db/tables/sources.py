@@ -9,6 +9,7 @@ class Source(Base):
     """Source information for recipe provider"""
 
     __tablename__ = "sources"
+
     id = Column(Integer, primary_key=True)
     name = Column(String(255), nullable=False)
     url = Column(String(255), nullable=False, unique=True)

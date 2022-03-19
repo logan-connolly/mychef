@@ -9,6 +9,7 @@ class Recipe(Base):
     """Recipe orm mapping to database"""
 
     __tablename__ = "recipes"
+
     id = Column(Integer, primary_key=True)
     source_id = Column(Integer, ForeignKey("sources.id"))
     name = Column(String(255), nullable=False)
