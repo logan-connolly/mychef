@@ -10,9 +10,9 @@ def get_app() -> FastAPI:
     """Generate instance of FastAPI app"""
 
     app = FastAPI(
-        title=settings.title,
-        description=settings.description,
         debug=settings.debug,
+        title="MyChef",
+        description="Recipe recommender app",
         docs_url=None,
         redoc_url=None,
         openapi_url=None,
