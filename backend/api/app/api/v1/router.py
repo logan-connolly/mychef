@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from .endpoints import ingredients, recipes, sources
+from app.api.v1.resources import ingredients, recipes, sources
 
 router = APIRouter()
 

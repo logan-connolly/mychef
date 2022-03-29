@@ -1,6 +1,6 @@
 from typing import Type
 
-from app.db.repositories.base import BaseDAL
+from app.db.dal.base import BaseDAL
 from app.db.tables.recipes import Recipe
 from app.schemas.recipes import InRecipeSchema, RecipeSchema
 
