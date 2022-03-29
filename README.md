@@ -36,8 +36,8 @@ make download
 # Build frontend assets
 make assets
 
-# Pull application images
-make pull
+# Pull or build locally application
+make pull|build
 
 # Start application containers
 make run
@@ -53,10 +53,6 @@ When you refresh the UI, you should start seeing recipes populating the DB and t
 **Api**
 
 - Developed with [FastAPI](https://fastapi.tiangolo.com/) - fast (async support), simple and very intuitive.
-- Endpoints:
-  - `/sources`: website source for recipes
-  - `/sources/<id>/recipes`: list of recipes from given source id
-  - `/ingredients`: unique ingredients extracted from recipes (extractor trained using [spaCy](https://spacy.io/))
 
 **Frontend**
 
