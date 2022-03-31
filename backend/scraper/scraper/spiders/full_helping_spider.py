@@ -36,7 +36,7 @@ class FullHelpingSpider(scrapy.Spider):
             if all(val is not None for val in data.values()):
                 resp = requests.post(self.endpoint, json=data)
                 if resp.status_code == 400:
-                    raise CloseSpider("Recipe already exists")
+                    print("Recipe already exists")
 
         for anchor_tag in response.css(".nav-previous a"):
             yield response.follow(anchor_tag, callback=self.parse)
