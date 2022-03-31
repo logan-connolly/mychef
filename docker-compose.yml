@@ -53,6 +53,8 @@ services:
     build: backend/scraper
     image: lvconnolly/mychef_scraper:dev
     command: crawl full_helping
+    volumes:
+      - ./backend/scraper:/app
     depends_on:
       - api
 
