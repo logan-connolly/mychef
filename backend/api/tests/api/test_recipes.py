@@ -36,3 +36,21 @@ async def test_recipe_create(async_client: AsyncClient, example_source_id: str):
         "image": payload["image"],
         "ingredients": {"items": ["onion powder"]},
     }
+
+
+async def test_recipe_duplicate(async_client: AsyncClient, example_source_id: str):
+    """Test that recipe can be created"""
+    recipe_url = f"{settings.api_version}/recipes/"
+    payload = {
+        "name": "Fancy recipe",
+        "source_id": example_source_id,
+        "url": "https://fullhelping.com/fancy-recipe",
+        "image": "https://fullhelping.com/fancy-recipe.png",
+        "ingredients": "Add 1 tablespoon of onion powder",
+    }
+
+    response = await async_client.post(recipe_url, json=payload)
+    assert response.status_code == status.HTTP_201_CREATED
+
+    response = await async_client.post(recipe_url, json=payload)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST

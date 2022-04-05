@@ -16,3 +16,15 @@ async def test_ingredient_create(async_client: AsyncClient):
         "id": response.json()["id"],
         "ingredient": payload["ingredient"],
     }
+
+
+async def test_ingredient_duplicate(async_client: AsyncClient):
+    """Test that ingredient can be created"""
+    url = f"{settings.api_version}/ingredients/"
+    payload = {"ingredient": "tomato"}
+
+    response = await async_client.post(url, json=payload)
+    assert response.status_code == status.HTTP_201_CREATED
+
+    response = await async_client.post(url, json=payload)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST

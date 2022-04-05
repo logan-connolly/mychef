@@ -17,3 +17,15 @@ async def test_source_create(async_client: AsyncClient):
         "name": payload["name"],
         "url": payload["url"],
     }
+
+
+async def test_source_duplicate(async_client: AsyncClient):
+    """Test that source can be created"""
+    url = f"{settings.api_version}/sources/"
+    payload = {"name": "The Full Helping", "url": "https://fullhelping.com"}
+
+    response = await async_client.post(url, json=payload)
+    assert response.status_code == status.HTTP_201_CREATED
+
+    response = await async_client.post(url, json=payload)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
