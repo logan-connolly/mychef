@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from starlette.status import (
     HTTP_200_OK,
@@ -8,7 +7,7 @@ from starlette.status import (
     HTTP_404_NOT_FOUND,
 )
 
-from app.core.exceptions import DoesNotExist
+from app.core.exceptions import AlreadyExists, DoesNotExist
 from app.db.dal.sources import SourcesDAL
 from app.db.session import get_db
 from app.schemas.sources import InSourceSchema, SourceSchema
@@ -20,7 +19,7 @@ router = APIRouter()
 async def add_source(payload: InSourceSchema, db: AsyncSession = Depends(get_db)):
     try:
         return await SourcesDAL(db).create(payload)
-    except IntegrityError:
+    except AlreadyExists:
         raise HTTPException(HTTP_400_BAD_REQUEST, "Source exists")
 
 

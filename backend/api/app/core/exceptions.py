@@ -1,2 +1,6 @@
 class DoesNotExist(Exception):
-    """Raised when entity was not found in database."""
+    """Raise when entity was not found in database."""
+
+
+class AlreadyExists(Exception):
+    """Raise when an object passed to application already exists"""

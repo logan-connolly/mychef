@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from starlette.status import (
     HTTP_200_OK,
@@ -8,7 +7,7 @@ from starlette.status import (
     HTTP_404_NOT_FOUND,
 )
 
-from app.core.exceptions import DoesNotExist
+from app.core.exceptions import AlreadyExists, DoesNotExist
 from app.db.dal.ingredients import IngredientsDAL
 from app.db.session import get_db
 from app.schemas.ingredients import IngredientSchema, InIngredientSchema
@@ -22,7 +21,7 @@ async def add_ingredient(
 ):
     try:
         return await IngredientsDAL(db).create(payload)
-    except IntegrityError:
+    except AlreadyExists:
         raise HTTPException(HTTP_400_BAD_REQUEST, "Ingredient exists")
 
 

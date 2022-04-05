@@ -1,10 +1,11 @@
 import abc
 from typing import Generic, Type, TypeVar
 
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from app.core.exceptions import DoesNotExist
+from app.core.exceptions import AlreadyExists, DoesNotExist
 from app.db.tables.base import Base
 from app.schemas.base import BaseSchema
 
@@ -33,8 +34,12 @@ class BaseDAL(Generic[InSchema, Schema, Table], metaclass=abc.ABCMeta):
         """Create entry into DB after validating input schema"""
         entry = self._table(**in_schema.dict())
         self._session.add(entry)
-        await self._session.commit()
-        return self._schema.from_orm(entry)
+        try:
+            await self._session.commit()
+            return self._schema.from_orm(entry)
+        except IntegrityError as err:
+            await self._session.rollback()
+            raise AlreadyExists(err) from err
 
     async def get_by_id(self, id: int) -> Schema:
         """Fetch ORM entry by id, raising exception if not found"""

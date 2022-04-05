@@ -2,7 +2,6 @@ import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi_pagination import Page, paginate
 from loguru import logger
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from starlette.requests import Request
 from starlette.status import (
@@ -13,7 +12,7 @@ from starlette.status import (
 )
 
 from app.core.config import settings
-from app.core.exceptions import DoesNotExist
+from app.core.exceptions import AlreadyExists, DoesNotExist
 from app.db.dal.ingredients import IngredientsDAL
 from app.db.dal.recipes import RecipesDAL
 from app.db.session import get_db
@@ -49,7 +48,7 @@ async def add_recipe(
 
     try:
         recipe = await RecipesDAL(db).create(_payload)
-    except IntegrityError:
+    except AlreadyExists:
         raise HTTPException(HTTP_400_BAD_REQUEST, "Recipe exists")
 
     await send_off_recipe(db, recipe)
@@ -79,8 +78,8 @@ async def send_off_recipe(db: AsyncSession, recipe: RecipeSchema) -> None:
             payload = InIngredientSchema(ingredient=ingredient)
             try:
                 await IngredientsDAL(db).create(payload)
-            except IntegrityError:
-                logger.info("{ingredient!r} already exists in DB")
+            except AlreadyExists:
+                logger.info(f"{ingredient!r} already exists in DB")
 
     async def update_meili_recipe_index() -> None:
         async with httpx.AsyncClient() as client:
