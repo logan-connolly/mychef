@@ -26,7 +26,5 @@ jobs:
         run: docker-compose build
       - name: Push images
         run: docker-compose push
-      - name: Start Containers
-        run: docker-compose up -d api
       - name: Run tests
-        run: docker-compose exec -T api pytest tests
+        run: docker-compose run -T api pytest tests
