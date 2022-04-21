@@ -1,6 +1,6 @@
 FROM python:3.9-slim-buster as prod
 
-COPY requirements.txt /tmp/requirements.txt
+COPY requirements/production.txt /tmp/requirements.txt
 RUN apt-get update && apt-get install -y gcc curl \
     && python -m venv /opt/venv \
     && /opt/venv/bin/pip install --no-cache -U pip setuptools wheel \
@@ -20,5 +20,5 @@ EXPOSE 8000
 CMD ["./start.sh"]
 
 FROM prod as dev
-COPY requirements-dev.txt /tmp/requirements-dev.txt
+COPY requirements/development.txt /tmp/requirements-dev.txt
 RUN /opt/venv/bin/pip install --no-cache -r /tmp/requirements-dev.txt
