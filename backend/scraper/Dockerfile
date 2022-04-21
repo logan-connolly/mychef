@@ -2,7 +2,7 @@ FROM python:3.9-slim-buster
 
 ARG BUILD_DEPS="curl gcc musl-dev python3-dev"
 WORKDIR /app
-COPY requirements.txt /tmp/requirements.txt
+COPY requirements/production.txt /tmp/requirements.txt
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
