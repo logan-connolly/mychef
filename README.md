@@ -14,20 +14,9 @@
 
 **MyChef** is an application that helps you decide what meal to make based on what you have at home. Simply enter in ingredients you have at home and get back tasty plant-based recipes from top recipe websites.
 
-## ⚙️ Setup
+## ⌨️ Commands
 
 _FYI: an installation of docker and docker-compose is required to run the application._
-
-Define `.env` configuration in root directory of project to develop locally:
-
-```
-POSTGRES_USER=mychef
-POSTGRES_PASSWORD=mychef
-POSTGRES_DB=mychef_db
-POSTGRES_HOST=db
-```
-
-## ⌨️ Commands
 
 ```shell
 # Download trained ingredient extraction model

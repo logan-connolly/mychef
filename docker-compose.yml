@@ -1,12 +1,12 @@
-version: '3.7'
+version: "3.7"
 
 services:
   db:
     image: postgres:12.1-alpine
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER:-mychef}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-mychef}
+      - POSTGRES_DB=${POSTGRES_DB:-mychef_db}
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
       - 5432:5432
@@ -24,10 +24,10 @@ services:
     build: backend/api
     image: lvconnolly/mychef_api:dev
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_HOST=${POSTGRES_HOST}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER:-mychef}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-mychef}
+      - POSTGRES_HOST=${POSTGRES_HOST:-db}
+      - POSTGRES_DB=${POSTGRES_DB:-mychef_db}
     ports:
       - 8000:8000
     volumes:
