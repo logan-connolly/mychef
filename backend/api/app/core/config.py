@@ -11,12 +11,23 @@ class PostgresSettings(BaseSettings):
         env_prefix = "POSTGRES_"
 
 
+class MeiliSettings(BaseSettings):
+    host: str = "search"
+    port: str = "7700"
+
+    class Config:
+        env_prefix = "MEILI_"
+
+
 class Settings(BaseSettings):
     title: str = "MyChef"
     description: str = "Recipe recommender app"
     debug: bool = False
     api_version: str = "/api/v1"
-    search_url: str = "http://search:7700/indexes/recipes/documents"
+
+    meili = MeiliSettings()
+    search_url: str = f"http://{meili.host}:{meili.port}/indexes/recipes/documents"
+
     pg = PostgresSettings()
     uri: str = f"postgresql://{pg.user}:{pg.password}@{pg.host}/{pg.db}"
     async_uri: str = f"postgresql+asyncpg://{pg.user}:{pg.password}@{pg.host}/{pg.db}"
