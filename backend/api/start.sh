@@ -3,10 +3,9 @@
 set -e
 
 # Export variables
-MODULE_NAME=${MODULE_NAME:-app.main}
-VARIABLE_NAME=${VARIABLE_NAME:-app}
-export APP_MODULE=${APP_MODULE:-"$MODULE_NAME:$VARIABLE_NAME"}
-export GUNICORN_CONF=${GUNICORN_CONF:-./gunicorn_conf.py}
+export APP_MODULE=${MODULE_NAME:-app.main:app}
+export GUNICORN_CONF=${GUNICORN_CONF:-gunicorn_conf.py}
+export WORKER_CLASS=${WORKER_CLASS:-"uvicorn.workers.UvicornWorker"}
 
 # Prestart script
 sleep 5
@@ -16,7 +15,9 @@ echo "Instantiating meilisearch index ..."
 curl -X POST "http://search:7700/indexes" --data '{"uid": "recipes"}'
 
 # Start app server
-if [[ $DEBUG_SERVER = true ]]; then
+if [[ $ENV = "debug" ]]; then
+  exec python -u -m debugpy --listen localhost:5678 -m uvicorn --host 0.0.0.0 --port 8000 "$APP_MODULE"
+elif [[ $ENV = "dev" ]]; then
   exec uvicorn --reload --host 0.0.0.0 --port 8000 "$APP_MODULE"
 else
   exec gunicorn -c "$GUNICORN_CONF" "$APP_MODULE"
