@@ -1,0 +1,4 @@
+debugpy
+mypy
+pytest
+pytest-asyncio
