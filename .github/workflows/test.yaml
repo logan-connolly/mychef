@@ -7,7 +7,6 @@ env:
   POSTGRES_PASSWORD: mychef
   POSTGRES_DB: mychef_db
   POSTGRES_HOST: db
-  MEILI_HOST: search
 
 jobs:
   test:
