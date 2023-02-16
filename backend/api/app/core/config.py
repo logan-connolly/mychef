@@ -2,17 +2,17 @@ from pydantic import BaseSettings
 
 
 class PostgresSettings(BaseSettings):
-    user: str = ""
-    password: str = ""
-    host: str = ""
-    db: str = ""
+    user: str = "mychef"
+    password: str = "mychef"
+    host: str = "localhost"
+    db: str = "mychef_db"
 
     class Config:
         env_prefix = "POSTGRES_"
 
 
 class MeiliSettings(BaseSettings):
-    host: str = "search"
+    host: str = "localhost"
     port: str = "7700"
 
     class Config:
