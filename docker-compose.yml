@@ -28,6 +28,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-mychef}
       - POSTGRES_HOST=${POSTGRES_HOST:-db}
       - POSTGRES_DB=${POSTGRES_DB:-mychef_db}
+      - MEILI_HOST=search
     ports:
       - 8000:8000
     volumes:
