@@ -1,4 +1,5 @@
 debugpy
+httpx
 mypy
 pytest
 pytest-asyncio

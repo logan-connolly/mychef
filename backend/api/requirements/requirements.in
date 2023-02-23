@@ -4,7 +4,6 @@ fastapi
 loguru
 psycopg2-binary
 uvicorn
-httpx
 fastapi-pagination
 gunicorn
 SQLAlchemy[mypy]
