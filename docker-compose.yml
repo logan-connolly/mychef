@@ -14,11 +14,14 @@ services:
       - postgres_data:/var/lib/postgresql/data/
 
   search:
-    image: getmeili/meilisearch:v0.16.0
+    image: getmeili/meilisearch:v1.0.2
+    environment:
+      - MEILI_ENV=development
+      - MEILI_NO_ANALYTICS=true
     ports:
       - 7700:7700
     volumes:
-      - ./backend/search/data.ms:/data.ms
+      - ./backend/search/meili_data:/meili_data
 
   api:
     build: backend/api
