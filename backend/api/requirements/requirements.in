@@ -9,3 +9,4 @@ fastapi-pagination
 gunicorn
 SQLAlchemy[mypy]
 spacy<3
+meilisearch
