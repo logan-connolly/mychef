@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     api_version: str = "/api/v1"
 
     meili = MeiliSettings()
-    search_url: str = f"http://{meili.host}:{meili.port}/indexes/recipes/documents"
+    meili_url: str = f"http://{meili.host}:{meili.port}"
 
     pg = PostgresSettings()
     uri: str = f"postgresql://{pg.user}:{pg.password}@{pg.host}/{pg.db}"

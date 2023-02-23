@@ -6,15 +6,11 @@ set -e
 export APP_MODULE=${MODULE_NAME:-app.main:app}
 export GUNICORN_CONF=${GUNICORN_CONF:-gunicorn_conf.py}
 export WORKER_CLASS=${WORKER_CLASS:-"uvicorn.workers.UvicornWorker"}
-export MEILI_HOST=${MEILI_HOST:-localhost}
-export MEILI_PORT=${MEILI_PORT:-7700}
 
 # Prestart script
 sleep 5
 echo "Running alembic migrations ..."
 alembic upgrade head
-echo "Instantiating meilisearch index ..."
-curl -X POST "http://${MEILI_HOST}:${MEILI_PORT}/indexes" --data '{"uid": "recipes"}'
 
 # Start app server
 if [[ $ENV = "debug" ]]; then

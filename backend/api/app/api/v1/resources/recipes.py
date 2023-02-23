@@ -1,4 +1,4 @@
-import httpx
+import meilisearch
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi_pagination import Page, paginate
 from loguru import logger
@@ -11,11 +11,10 @@ from starlette.status import (
     HTTP_404_NOT_FOUND,
 )
 
-from app.core.config import settings
 from app.core.exceptions import AlreadyExists, DoesNotExist
 from app.db.dal.ingredients import IngredientsDAL
 from app.db.dal.recipes import RecipesDAL
-from app.db.session import get_db
+from app.db.session import get_db, get_mc
 from app.schemas.ingredients import InIngredientSchema
 from app.schemas.recipes import InRecipeSchema, InRecipeSchemaRaw, RecipeSchema
 
@@ -42,7 +41,10 @@ def extract_ingredients(req: Request, payload: InRecipeSchemaRaw) -> InRecipeSch
 
 @router.post("/", response_model=RecipeSchema, status_code=HTTP_201_CREATED)
 async def add_recipe(
-    req: Request, payload: InRecipeSchemaRaw, db: AsyncSession = Depends(get_db)
+    req: Request,
+    payload: InRecipeSchemaRaw,
+    db: AsyncSession = Depends(get_db),
+    mc: meilisearch.Client = Depends(get_mc),
 ):
     _payload = extract_ingredients(req, payload)
 
@@ -51,7 +53,9 @@ async def add_recipe(
     except AlreadyExists:
         raise HTTPException(HTTP_400_BAD_REQUEST, "Recipe exists")
 
-    await send_off_recipe(db, recipe)
+    await register_recipe_ingredients(db, recipe)
+    mc.index("recipes").add_documents(documents=[recipe.dict()], primary_key="id")
+
     return recipe
 
 
@@ -69,21 +73,10 @@ async def get_recipes(db: AsyncSession = Depends(get_db)):
     return paginate(recipes)
 
 
-# TODO: move this out of module and trigger on event
-async def send_off_recipe(db: AsyncSession, recipe: RecipeSchema) -> None:
-    """Asynchronously send off recipe to ingredients and meilisearch endpoints"""
-
-    async def update_ingredients():
-        for ingredient in recipe.ingredients["items"]:
-            payload = InIngredientSchema(ingredient=ingredient)
-            try:
-                await IngredientsDAL(db).create(payload)
-            except AlreadyExists:
-                logger.info(f"{ingredient!r} already exists in DB")
-
-    async def update_meili_recipe_index() -> None:
-        async with httpx.AsyncClient() as client:
-            await client.post(settings.search_url, json=[recipe.dict()])
-
-    await update_ingredients()
-    await update_meili_recipe_index()
+async def register_recipe_ingredients(db: AsyncSession, recipe: RecipeSchema) -> None:
+    for ingredient in recipe.ingredients["items"]:
+        payload = InIngredientSchema(ingredient=ingredient)
+        try:
+            await IngredientsDAL(db).create(payload)
+        except AlreadyExists:
+            logger.info(f"{ingredient!r} already exists in DB")
