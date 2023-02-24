@@ -8,12 +8,22 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-BOT_NAME = "scraper"
-API_URL = "http://proxy/api"
+import os
 
+# Urls that point to the MyChef API
+API_URL = os.getenv("API_URL", "http://proxy/api")
+API_SOURCES_URL = f"{API_URL}/sources/"
+API_RECIPES_URL = f"{API_URL}/recipes/"
+
+# Stop crawling after the spider has hits a recipe that it has already
+# processed. This should be set to true on production when the spider
+# is on a scheduled job.
+STOP_ON_DUPLICATE = os.getenv("STOP_ON_DUPLICATE", False)
+
+# Base scrapy settings
+BOT_NAME = "scraper"
 SPIDER_MODULES = ["scraper.spiders"]
 NEWSPIDER_MODULE = "scraper.spiders"
-
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = 'scraper (+http://www.yourdomain.com)'
