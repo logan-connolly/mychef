@@ -3,10 +3,7 @@ import functools
 import requests
 import scrapy
 from bs4 import BeautifulSoup
-from scrapy.exceptions import CloseSpider
 from scrapy.http.response.html import HtmlResponse
-
-from scraper.settings import API_RECIPES_URL, STOP_ON_DUPLICATE
 
 from ..util import create_source_id, get_source_id
 
@@ -25,23 +22,13 @@ class FullHelpingSpider(scrapy.Spider):
     def parse(self, response: HtmlResponse):
         """Parse webpage to extract important recipe information"""
         if response.css(".wprm-recipe-ingredients-container"):
-            payload = {
+            yield {
                 "url": response.url,
                 "source_id": self.source_id,
                 "image": self.get_image_url(response),
                 "ingredients": self.get_ingredients(response),
                 "name": response.css(".title::text").get(),
             }
-
-            resp = requests.post(API_RECIPES_URL, json=payload)
-
-            if resp.status_code == 400:
-                self.log("Recipe already exists")
-                if STOP_ON_DUPLICATE:
-                    raise CloseSpider("Stopping on duplicated recipe …")
-
-        for anchor_tag in response.css(".nav-previous a"):
-            yield response.follow(anchor_tag, callback=self.parse)
 
     @functools.cached_property
     def source_id(self):
