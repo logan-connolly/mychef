@@ -34,12 +34,10 @@ export const actions = {
     if (selected.length === 0) {
       return dispatch("loadRecipes");
     }
+
+    const query = '"' + selected.join('" "') + '"';
     await this.$axios
-      .get("/search", {
-        params: {
-          q: selected.join(" "),
-        },
-      })
+      .get("/search", { params: { q: query } })
       .then((res) => {
         commit("UPDATE_ITEMS", res.data);
       })
