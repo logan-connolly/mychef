@@ -1,60 +1,34 @@
 import json
-from typing import Dict, List
 
 import requests
-from bs4 import BeautifulSoup
 
-from .settings import API_URL
-
-
-class UrlExtractor:
-    """Utility for extracting the start url for the TheFullHelping spider"""
-
-    def __init__(self, url: str):
-        self.url = url
-        self.content = self.get_start_page()
-
-    def get_start_page(self) -> bytes:
-        """Get the start page for the spider"""
-        try:
-            return requests.get(self.url).content
-        except requests.exceptions.ConnectionError:
-            raise ConnectionError(f"Unable to retrieve {self.url!r}") from None
-
-    def get_recipe_url(self) -> List[str]:
-        """From start page find the starting url"""
-        soup = BeautifulSoup(self.content, "html.parser")
-        latest_post = soup.find("div", {"class": "single-posty"})
-        start_url = latest_post.find("a")["href"]
-        return [start_url]
+from .settings import API_SOURCES_URL
 
 
-def get_source_id() -> int:
-    """Get the source id from API if exists, if not create it
-    :param domain: Recipe url domain name (ie. 'thefullhelping')
-    """
-    url = f"{API_URL}/sources/"
+def get_source_id(query: str) -> int:
+    """Get the source id from API if exists"""
     try:
-        resp = requests.get(url)
+        resp = requests.get(API_SOURCES_URL)
     except requests.exceptions.ConnectionError:
-        raise ConnectionError(f"Unable to retrieve {url!r}")
+        raise ConnectionError(f"Unable to retrieve {API_SOURCES_URL!r}")
 
-    if resp.ok:
-        full_helping = [s for s in resp.json() if "thefullhelping" in s["url"]]
-        if full_helping:
-            return full_helping[0]["id"]
+    if not resp.ok:
+        raise ValueError("Response received, but with a bad status")
 
-    raise ValueError("Source id for full helping could not be found")
+    try:
+        return next(s["id"] for s in resp.json() if query in s["url"])
+    except StopIteration as err:
+        raise ValueError(f"Source id could not be found with {query!r}") from err
 
 
-def create_source_id(payload: Dict[str, str]) -> int:
+def create_source_id(payload: dict[str, str]) -> int:
     """Make post request to API to create TheFullHelping source"""
-    url = f"{API_URL}/sources/"
     try:
-        resp = requests.post(url, data=json.dumps(payload))
+        resp = requests.post(API_SOURCES_URL, data=json.dumps(payload))
     except requests.exceptions.ConnectionError:
-        raise ConnectionError(f"Unable to retrieve {url!r}")
+        raise ConnectionError(f"Unable to retrieve {API_SOURCES_URL!r}")
 
     if resp.ok:
         return resp.json()["id"]
+
     raise RuntimeError("Unable to create new source id")
