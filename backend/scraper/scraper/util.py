@@ -2,15 +2,15 @@ import json
 
 import requests
 
-from .settings import API_SOURCES_URL
+from . import settings, types
 
 
 def get_source_id(query: str) -> int:
     """Get the source id from API if exists"""
     try:
-        resp = requests.get(API_SOURCES_URL)
+        resp = requests.get(settings.API_SOURCES_URL)
     except requests.exceptions.ConnectionError:
-        raise ConnectionError(f"Unable to retrieve {API_SOURCES_URL!r}")
+        raise ConnectionError(f"Unable to retrieve {settings.API_SOURCES_URL!r}")
 
     if not resp.ok:
         raise ValueError("Response received, but with a bad status")
@@ -21,12 +21,12 @@ def get_source_id(query: str) -> int:
         raise ValueError(f"Source id could not be found with {query!r}") from err
 
 
-def create_source_id(payload: dict[str, str]) -> int:
+def create_source_id(payload: types.Source) -> int:
     """Make post request to API to create TheFullHelping source"""
     try:
-        resp = requests.post(API_SOURCES_URL, data=json.dumps(payload))
+        resp = requests.post(settings.API_SOURCES_URL, data=json.dumps(payload))
     except requests.exceptions.ConnectionError:
-        raise ConnectionError(f"Unable to retrieve {API_SOURCES_URL!r}")
+        raise ConnectionError(f"Unable to retrieve {settings.API_SOURCES_URL!r}")
 
     if resp.ok:
         return resp.json()["id"]

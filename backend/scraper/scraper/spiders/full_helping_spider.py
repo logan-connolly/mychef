@@ -1,11 +1,12 @@
 import functools
+from typing import Iterable
 
 import requests
 import scrapy
 from bs4 import BeautifulSoup
 from scrapy.http.response.html import HtmlResponse
 
-from ..util import create_source_id, get_source_id
+from .. import types, util
 
 
 class FullHelpingSpider(scrapy.Spider):
@@ -19,26 +20,29 @@ class FullHelpingSpider(scrapy.Spider):
         self.url = f"https://www.thefullhelping.com/recipe-index/?sf_paged={page}"
         self.start_urls = [UrlExtractor(self.url).get_start_url()]
 
-    def parse(self, response: HtmlResponse):
+    def parse(self, response: HtmlResponse) -> Iterable[types.Recipe]:
         """Parse webpage to extract important recipe information"""
         if response.css(".wprm-recipe-ingredients-container"):
-            yield {
+            payload: types.Recipe = {
                 "url": response.url,
                 "source_id": self.source_id,
                 "image": self.get_image_url(response),
                 "ingredients": self.get_ingredients(response),
-                "name": response.css(".title::text").get(),
+                "name": response.css(".title::text").get("Unknown"),
             }
+            yield payload
 
     @functools.cached_property
-    def source_id(self):
+    def source_id(self) -> int:
         """Try and fetch source id from API, create it if it does not exist"""
         try:
-            return get_source_id(query="thefullhelping")
+            return util.get_source_id(query="thefullhelping")
         except ValueError:
-            return create_source_id(
-                payload=dict(name="TheFullHelping", url="http://thefullhelping.com")
-            )
+            payload: types.Source = {
+                "name": "TheFullHelping",
+                "url": "http://thefullhelping.com",
+            }
+            return util.create_source_id(payload)
 
     @classmethod
     def get_image_url(cls, response: HtmlResponse) -> str:

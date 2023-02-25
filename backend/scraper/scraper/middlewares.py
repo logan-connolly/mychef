@@ -5,14 +5,14 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-from typing import Any, Iterator
+from typing import Iterator
 
 import requests
 from scrapy import Spider, signals
 from scrapy.exceptions import CloseSpider
 from scrapy.http import HtmlResponse
 
-from scraper.settings import API_RECIPES_URL, STOP_ON_DUPLICATE
+from . import settings, types
 
 
 class ScraperSpiderMiddleware(object):
@@ -35,18 +35,18 @@ class ScraperSpiderMiddleware(object):
         return None
 
     def process_spider_output(
-        self, response: HtmlResponse, result: Iterator[dict[str, Any]], spider: Spider
+        self, response: HtmlResponse, result: Iterator[types.Recipe], spider: Spider
     ):
         # Called with the results returned from the Spider, after
         # it has processed the response.
 
         # Must return an iterable of Request, dict or Item objects.
         for recipe in result:
-            resp = requests.post(API_RECIPES_URL, json=recipe)
+            resp = requests.post(settings.API_RECIPES_URL, json=recipe)
 
             if resp.status_code == 400:
                 spider.log("Recipe already exists")
-                if STOP_ON_DUPLICATE:
+                if settings.STOP_ON_DUPLICATE:
                     raise CloseSpider("Stopping on duplicated recipe …")
 
             for anchor_tag in response.css(".nav-previous a"):
