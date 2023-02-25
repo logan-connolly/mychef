@@ -6,7 +6,7 @@ import scrapy
 from bs4 import BeautifulSoup
 from scrapy.http.response.html import HtmlResponse
 
-from .. import types, util
+from .. import api, types
 
 
 class FullHelpingSpider(scrapy.Spider):
@@ -36,13 +36,13 @@ class FullHelpingSpider(scrapy.Spider):
     def source_id(self) -> int:
         """Try and fetch source id from API, create it if it does not exist"""
         try:
-            return util.get_source_id(query="thefullhelping")
+            return api.get_source_id(query="thefullhelping")
         except ValueError:
             payload: types.Source = {
                 "name": "TheFullHelping",
                 "url": "http://thefullhelping.com",
             }
-            return util.create_source_id(payload)
+            return api.create_source_id(payload)
 
     @classmethod
     def get_image_url(cls, response: HtmlResponse) -> str:
