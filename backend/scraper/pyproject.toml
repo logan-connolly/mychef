@@ -22,7 +22,3 @@ exclude = '''
 [tool.isort]
 profile = "black"
 multi_line_output = 3
-
-[tool.mypy]
-plugins = 'sqlalchemy.ext.mypy.plugin'
-exclude = ['app/db/migrations/', 'tests/']
