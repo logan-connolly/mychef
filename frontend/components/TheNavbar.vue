@@ -14,17 +14,25 @@
         >
 
         <v-card-text class="headline font-weight-light">
-          MyChef takes a variety of plant-based recipes and ranks them based on
-          the ingredients you have in the kitchen. No Ads, no tracking, just
-          helping you decide what to eat.
+          <div>
+            MyChef takes a variety of plant-based recipes and ranks them based
+            on the ingredients you have in the kitchen. No Ads, no tracking,
+            just helping you decide what to eat. Recipe sources that are
+            currently supported:
+            <ul>
+              <li>
+                <a href="https://www.thefullhelping.com/" target="_blank"
+                  >The Full Helping</a
+                >
+              </li>
+            </ul>
+          </div>
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="primary" text @click="dialog = false">
-            Close
-          </v-btn>
+          <v-btn color="primary" text @click="dialog = false">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
