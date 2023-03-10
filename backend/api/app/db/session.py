@@ -1,6 +1,6 @@
 from typing import AsyncGenerator
 
-import meilisearch
+import meilisearch_python_async
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.core.config import settings
@@ -16,6 +16,7 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
         await session.commit()
 
 
-def get_mc() -> meilisearch.Client:
+async def get_mc() -> AsyncGenerator[meilisearch_python_async.Client, None]:
     """Get meiliseach client to interact with server."""
-    return meilisearch.Client(url=settings.meili_url)
+    async with meilisearch_python_async.Client(url=settings.meili_url) as client:
+        yield client

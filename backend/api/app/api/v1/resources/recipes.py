@@ -1,4 +1,4 @@
-import meilisearch
+import meilisearch_python_async
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi_pagination import Page, paginate
 from loguru import logger
@@ -44,7 +44,7 @@ async def add_recipe(
     req: Request,
     payload: InRecipeSchemaRaw,
     db: AsyncSession = Depends(get_db),
-    mc: meilisearch.Client = Depends(get_mc),
+    mc: meilisearch_python_async.Client = Depends(get_mc),
 ):
     _payload = extract_ingredients(req, payload)
 
@@ -54,7 +54,7 @@ async def add_recipe(
         raise HTTPException(HTTP_400_BAD_REQUEST, "Recipe exists")
 
     await register_recipe_ingredients(db, recipe)
-    mc.index("recipes").add_documents(documents=[recipe.dict()], primary_key="id")
+    await mc.index("recipes").add_documents(documents=[recipe.dict()], primary_key="id")
 
     return recipe
 
