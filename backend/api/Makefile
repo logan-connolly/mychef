@@ -17,6 +17,9 @@ prodserver: # Launch prod gunicorn server locally
 mypy: # Run mypy static analysis tests
 	mypy --ignore-missing-imports app
 
+test: # Run test suite
+	PYTHONPATH=. pytest .
+
 reqs: # Export dependency requirements files
 	pip-compile -o ./requirements/requirements.txt ./requirements/requirements.in
 
